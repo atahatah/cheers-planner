@@ -17,7 +17,12 @@ brew install asdf
 asdf install
 ```
 
-3. 実行しましょう
+3. Firebaseに関するプログラムをインストールしましょう
+```sh
+npm install -g firebase-tools
+```
+
+4. 実行しましょう
 VSCodeなら`F5`キーを押せば起動します。
 コマンドならこんな感じ
 ```sh
