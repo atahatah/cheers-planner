@@ -1,3 +1,4 @@
+export 'app/index.dart';
 export 'auth/index.dart';
 export 'components/index.dart';
 export 'entities/index.dart';
