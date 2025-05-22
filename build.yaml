@@ -16,21 +16,15 @@ targets:
           format: false
         generate_for:
           include:
-            - lib/entities/**/*.dart
-            - lib/firebase/*/entities/*.dart
-            - lib/features/**/entities/*.dart
+            - lib/**/entities/**/*.dart
+            - lib/**/entities/*.dart
       riverpod_generator:
         generate_for:
           include:
-            - lib/firebase/*.dart
-            - lib/firebase/**/*.dart
-            - lib/features/**/repositories/*.dart
-            - lib/features/**/use_cases/*.dart
+            - lib/**/repositories/**/*.dart
+            - lib/**/use_cases/**/*.dart
             - lib/repositories/**/*.dart
-            - lib/router/*.dart
-            - lib/router/**/*.dart
-            - lib/use_cases/*.dart
-            - lib/use_cases/**/*.dart
+            - lib/core/router/root.dart
       flutter_gen:
         options:
-          output: lib/res/gen
+          output: lib/core/res/gen

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class CounterScreen extends StatefulWidget {
+  const CounterScreen({super.key, this.title = 'title'});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -15,10 +15,10 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<CounterScreen> createState() => _CounterScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _CounterScreenState extends State<CounterScreen> {
   var _counter = 0;
 
   void _incrementCounter() {
