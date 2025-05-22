@@ -1,0 +1,36 @@
+targets:
+  $default:
+    builders:
+      json_serializable:
+        options:
+          checked: true # false -> true
+          explicit_to_json: true # false -> true
+          field_rename: snake
+        generate_for:
+          include:
+            - lib/entities/**/*.dart
+            - lib/firebase/*/entities/*.dart
+            - lib/features/**/entities/*.dart
+      freezed:
+        options: 
+          format: false
+        generate_for:
+          include:
+            - lib/entities/**/*.dart
+            - lib/firebase/*/entities/*.dart
+            - lib/features/**/entities/*.dart
+      riverpod_generator:
+        generate_for:
+          include:
+            - lib/firebase/*.dart
+            - lib/firebase/**/*.dart
+            - lib/features/**/repositories/*.dart
+            - lib/features/**/use_cases/*.dart
+            - lib/repositories/**/*.dart
+            - lib/router/*.dart
+            - lib/router/**/*.dart
+            - lib/use_cases/*.dart
+            - lib/use_cases/**/*.dart
+      flutter_gen:
+        options:
+          output: lib/res/gen
