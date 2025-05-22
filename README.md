@@ -1,16 +1,25 @@
-# cheers_planner
+# Cheers Planner
 
-A new Flutter project.
+## Install
+1. `asdf`をインストールしましょう
 
-## Getting Started
+[こちら](https://asdf-vm.com/ja-jp/guide/getting-started.html)を参考に。
 
-This project is a starting point for a Flutter application.
+多分みんなMac/Zshだと思うので多分こんな感じ。
 
-A few resources to get you started if this is your first Flutter project:
+brewでインストール
+```sh
+brew install asdf
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+2. Flutterなどをインストールしましょう
+```sh
+asdf install
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+3. 実行しましょう
+VSCodeなら`F5`キーを押せば起動します。
+コマンドならこんな感じ
+```sh
+flutter run -d chrome
+```
