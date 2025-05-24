@@ -1,0 +1,29 @@
+name: Setup Flutter
+description: |
+  This action sets up Flutter for use in GitHub Actions workflows with cache support.
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Read flutter version from asdf config"
+      uses: wasabeef/import-asdf-tool-versions-action@v1
+      id: asdf
+    - name: "Setup Flutter"
+      uses: subosito/flutter-action@v2
+      with:
+        channel: stable
+        flutter-version: ${{ steps.asdf.outputs.flutter }}
+        cache: true
+    - name: "Pub Get Cache"
+      uses: actions/cache@v4
+      id: pub-cache
+      with:
+        path: |
+          flutter/.pub-cache
+          **/.packages
+          **/.flutter-plugins
+          **/.flutter-plugin-dependencies
+          **/.dart_tool/package_config.json
+        key: build-pubspec-${{ hashFiles('**/pubspec.lock') }}
+        restore-keys: build-pubspec-
+        working-directory: flutter
