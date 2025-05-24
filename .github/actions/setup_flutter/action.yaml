@@ -6,7 +6,7 @@ runs:
   using: "composite"
   steps:
     - name: "Read flutter version from asdf config"
-      uses: wasabeef/import-asdf-tool-versions-action@v1
+      uses: wasabeef/import-asdf-tool-versions-action@v1.0.3
       id: asdf
     - name: "Setup Flutter"
       uses: subosito/flutter-action@v2
@@ -15,7 +15,7 @@ runs:
         flutter-version: ${{ steps.asdf.outputs.flutter }}
         cache: true
     - name: "Pub Get Cache"
-      uses: actions/cache@v4
+      uses: actions/cache@v4.2.3
       id: pub-cache
       with:
         path: |
