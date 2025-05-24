@@ -37,7 +37,25 @@
 <body>
   <script src="flutter_bootstrap.js" async></script>
   <script>
-    self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+    (async function () {
+      let token = false;
+      if (/\?firstIssue=true/.test(window.location.search)) {
+        token = true;
+      }
+      try {
+        const response = await fetch('.env');
+        if (response.ok) {
+          const text = await response.text();
+          const match = text.match(/^FIREBASE_APPCHECK_DEBUG_TOKEN=(.*)$/m);
+          if (match && match[1].trim() !== '') {
+            token = match[1].trim();
+          }
+        }
+      } catch (e) {
+        // ignore errors
+      }
+      self.FIREBASE_APPCHECK_DEBUG_TOKEN = token;
+    })();
   </script>
 </body>
 
