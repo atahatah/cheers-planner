@@ -4,6 +4,7 @@ part of '../root.dart';
   path: '/auth',
   routes: <TypedGoRoute<GoRouteData>>[
     TypedGoRoute<SignInRoute>(path: 'signin'),
+    TypedGoRoute<RegisterRoute>(path: 'register'),
   ],
 )
 class SignUpRoute extends GoRouteData {
@@ -21,5 +22,14 @@ class SignInRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const SignInScreen();
+  }
+}
+
+class RegisterRoute extends GoRouteData {
+  const RegisterRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const RegisterScreen();
   }
 }

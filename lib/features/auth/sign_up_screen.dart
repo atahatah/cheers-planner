@@ -1,4 +1,4 @@
-import 'package:cheers_planner/index.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart' as firebase_ui_auth;
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -7,18 +7,8 @@ class SignUpScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            const Text('Sign Up Screen'),
-            ElevatedButton(
-              onPressed: () => const CounterRoute().go(context),
-              child: const Text('Go to Counter'),
-            ),
-          ],
-        ),
-      ),
+    return firebase_ui_auth.SignInScreen(
+      providers: [firebase_ui_auth.EmailAuthProvider()],
     );
   }
 }
