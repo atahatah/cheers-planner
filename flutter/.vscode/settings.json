@@ -1,0 +1,8 @@
+{
+    "dart.flutterSdkPath": "~/.asdf/installs/flutter/3.32.0-stable",
+    "[dart]": {
+        "editor.rulers": [
+            80
+        ]
+    }
+}
