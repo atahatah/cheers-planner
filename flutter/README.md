@@ -88,9 +88,12 @@ flowchart TB
 ```json
 {
     "editor.formatOnSave": true,
-    "editor.formatOnType": true,
     "editor.codeActionsOnSave": {
         "source.fixAll": "always",
         "source.organizeImports": "always",
     },
+    "explorer.fileNesting.patterns": {
+        "*.dart": "$(capture).g.dart, $(capture).freezed.dart",
+        "pubspec.yaml": ".flutter-plugins, .packages, .dart_tool, .flutter-plugins-dependencies, .metadata, .packages, pubspec.lock, build.yaml, analysis_options.yaml, all_lint_rules.yaml, devtools_options.yaml, l10n.yaml, dart_test.yaml, custom_lint.log, untranslated_messages_file.txt, flutter*.yaml",
+    }
 }
