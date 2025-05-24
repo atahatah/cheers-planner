@@ -21,18 +21,19 @@ GoRouter router(Ref ref) {
     debugLogDiagnostics: kDebugMode,
     redirect: (context, state) {
       final asyncAuthState = ref.read(appAuthControllerProvider);
+      final path = state.fullPath;
       switch (asyncAuthState) {
         case AsyncData(value: final authState):
           switch (authState) {
             case SignedIn():
-              if (state.path?.startsWith('/auth') ?? false) {
+              if (path?.startsWith('/auth') ?? false) {
                 return const CounterRoute().location;
               }
               return null;
             case NotRegistered():
               return const RegisterRoute().location;
             case NotSignedIn():
-              if (state.path?.startsWith('/auth') ?? false) {
+              if (path?.startsWith('/auth') ?? false) {
                 return null;
               }
               return const SignUpRoute().location;

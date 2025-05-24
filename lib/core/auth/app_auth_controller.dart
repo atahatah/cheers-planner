@@ -33,6 +33,14 @@ class AppAuthController extends _$AppAuthController {
     }
   }
 
+  Future<void> register(DateTime? birthday) async {
+    final user = ref.read(requireUserProvider);
+    await ref
+        .read(userEntryRepoProvider(user.uid))
+        .set(UserEntry(birthday: birthday));
+    ref.invalidateSelf();
+  }
+
   Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
     if (kDebugMode) {

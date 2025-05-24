@@ -33,3 +33,34 @@ class UpdatedAtField implements JsonConverter<DateTime?, dynamic> {
     return FieldValue.serverTimestamp();
   }
 }
+
+class DateTimeToTimestampConverter implements JsonConverter<DateTime, dynamic> {
+  const DateTimeToTimestampConverter();
+
+  @override
+  DateTime fromJson(dynamic timestamp) {
+    timestamp as Timestamp;
+    return timestamp.toDate();
+  }
+
+  @override
+  Timestamp toJson(DateTime date) {
+    return Timestamp.fromDate(date);
+  }
+}
+
+class NullableDateTimeToTimestampConverter
+    implements JsonConverter<DateTime?, dynamic> {
+  const NullableDateTimeToTimestampConverter();
+
+  @override
+  DateTime? fromJson(dynamic timestamp) {
+    timestamp as Timestamp?;
+    return timestamp?.toDate();
+  }
+
+  @override
+  Timestamp? toJson(DateTime? date) {
+    return date == null ? null : Timestamp.fromDate(date);
+  }
+}

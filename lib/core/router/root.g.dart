@@ -134,7 +134,7 @@ extension $SettingsRouteExtension on SettingsRoute {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'a5596ce556cc9d674655b409311ca15396f229ab';
+String _$routerHash() => r'de5461e5b482d16073818e7b143b115a9912052d';
 
 /// See also [router].
 @ProviderFor(router)
