@@ -2,11 +2,62 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Flutter",
+            "name": "debug",
             "request": "launch",
             "type": "dart",
-            "program": "flutter/lib/main.dart",
-            "args": []
+            "program": "lib/main.dart",
+            "args": [
+                "--dart-define=USE_FIREBASE_EMULATORS=false"
+            ]
+        },
+        {
+            "name": "debug with emulator",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--dart-define=USE_FIREBASE_EMULATORS=true"
+            ]
+        },
+        {
+            "name": "profile",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--profile",
+                "--dart-define=USE_FIREBASE_EMULATORS=false"
+            ]
+        },
+        {
+            "name": "profile with emulator",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--profile",
+                "--dart-define=USE_FIREBASE_EMULATORS=true",
+            ]
+        },
+        {
+            "name": "release",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--release",
+                "--dart-define=USE_FIREBASE_EMULATORS=false"
+            ]
+        },
+        {
+            "name": "release with emulator",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--release",
+                "--dart-define=USE_FIREBASE_EMULATORS=true",
+            ]
         },
     ]
 }

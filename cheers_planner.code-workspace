@@ -1,0 +1,16 @@
+{
+    "folders": [
+        {
+            "path": "flutter"
+        },
+        {
+            "path": "firebase/functions"
+        },
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        // 以下に共通設定や拡張機能ごとの設定を追加
+    }
+}
