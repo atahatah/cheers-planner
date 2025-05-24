@@ -11,6 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2 # https://github.com/subosito/flutter-action
+        with:
+          channel: 'stable'
+          flutter-version: 3.32.0
+      - name: Get Flutter dependencies
+        run: flutter pub get
+        working-directory: flutter
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
