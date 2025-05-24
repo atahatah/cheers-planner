@@ -13,13 +13,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2 # https://github.com/subosito/flutter-action
         with:
-          node-version: 22
-      - name: Install Functions dependencies
-        run: npm ci
-        working-directory: firebase/functions
+          channel: 'stable'
+          flutter-version: 3.32.0
+      - name: Get Flutter dependencies
+        run: flutter pub get
+        working-directory: flutter
+      - run: flutter build web
+        working-directory: flutter
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
@@ -29,4 +32,4 @@ jobs:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
     defaults:
       run:
-        working-directory: ../flutter
+        working-directory: flutter
