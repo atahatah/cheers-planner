@@ -1,1 +1,1 @@
-export 'screens/counter.dart';
+export 'counter_screen.dart';
