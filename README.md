@@ -28,3 +28,8 @@ VSCodeなら`F5`キーを押せば起動します。
 ```sh
 flutter run -d chrome
 ```
+
+5. `App Check`を突破しましょう
+Geminiとか使うので、セキュリティ高めでいきましょう。
+FirebaseのAPIが正しくアプリからアクセスされているかをチェックしてくれるそうです。
+[こちら](https://firebase.google.com/docs/app-check/flutter/debug-provider?hl=ja#web)の2, 3を参考にデバッグトークンを登録してください。
