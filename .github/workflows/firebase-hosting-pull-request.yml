@@ -13,7 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm ci
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+      - name: Install Functions dependencies
+        run: npm ci
+        working-directory: firebase/functions
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
@@ -23,4 +29,4 @@ jobs:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
     defaults:
       run:
-        working-directory: flutter
+        working-directory: ../flutter
