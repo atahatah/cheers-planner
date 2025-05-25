@@ -84,6 +84,11 @@ flowchart TB
   Controller -->|Sateの更新| Screen
 ```
 
+## 注意点
+Freezedは3系を使っているが、 AIは3系に詳しくないようなので注意。
+主に起きる問題点としてはFreezedのクラスを作成させると、`sealed`クラス
+にするのを忘れる。
+
 ## おすすめの設定
 ```json
 {
