@@ -3,17 +3,15 @@
 ## Install
 1. `asdf`をインストールしましょう
 
-[こちら](https://asdf-vm.com/ja-jp/guide/getting-started.html)を参考に。
+`xxxenv`みたいな感じで、ディレクトリごとにさまざまなソフトウェアのバージョンを管理してくれます。
+[こちら](https://asdf-vm.com/ja-jp/guide/getting-started.html)を参考にインストールしてください。
 
-多分みんなMac/Zshだと思うので多分こんな感じ。
-
-brewでインストール
-```sh
-brew install asdf
-```
 
 2. Flutterなどをインストールしましょう
 ```sh
+asdf plugin add flutter
+asdf plugin add java
+asdf plugin add nodejs
 asdf install
 ```
 
@@ -41,8 +39,8 @@ FirebaseのAPIが正しくアプリからアクセスされているかをチェ
 
 その後、`F12`を押すなどして開発者モードを開き、`Console`開いてください。
 そこに、tokenの情報があるはずなので、それをコピーしてください。
-
 Firebase コンソールの [App Check](https://console.firebase.google.com/project/cheers-planner/appcheck/apps?hl=ja) セクションで、アプリのオーバーフロー メニューから [デバッグ トークンを管理] を選択します。前の手順でロギングされたデバッグ トークンを登録します。
+このtokenの情報の取得と登録は[こちら](https://firebase.google.com/docs/app-check/flutter/debug-provider?hl=ja#web)の`2.`, `3.`も参考にしてください。
 
 次回以降も同様のトークンが使えるように`flutter/.env`に保存してください。
 キーは`FIREBASE_APPCHECK_DEBUG_TOKEN`です。
