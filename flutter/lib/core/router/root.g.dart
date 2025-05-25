@@ -86,6 +86,15 @@ RouteBase get $mainShellRouteData => StatefulShellRouteData.$route(
     StatefulShellBranchData.$branch(
       routes: [
         GoRouteData.$route(
+          path: '/chat',
+
+          factory: $ChatRouteExtension._fromState,
+        ),
+      ],
+    ),
+    StatefulShellBranchData.$branch(
+      routes: [
+        GoRouteData.$route(
           path: '/settings',
 
           factory: $SettingsRouteExtension._fromState,
@@ -104,6 +113,21 @@ extension $CounterRouteExtension on CounterRoute {
   static CounterRoute _fromState(GoRouterState state) => const CounterRoute();
 
   String get location => GoRouteData.$location('/counter');
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $ChatRouteExtension on ChatRoute {
+  static ChatRoute _fromState(GoRouterState state) => const ChatRoute();
+
+  String get location => GoRouteData.$location('/chat');
 
   void go(BuildContext context) => context.go(location);
 

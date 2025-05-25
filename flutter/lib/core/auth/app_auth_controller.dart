@@ -9,9 +9,6 @@ part 'app_auth_controller.g.dart';
 class AppAuthController extends _$AppAuthController {
   @override
   Future<AppAuthState> build() async {
-    listenSelf(
-      (_, next) => debugPrint('AppAuthController state changed: $next'),
-    );
     final asyncUser = ref.watch(authStateChangesProvider);
     switch (asyncUser) {
       case final AsyncData<User?> userData:
