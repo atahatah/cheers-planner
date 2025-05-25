@@ -7,6 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'root.g.dart';
 part 'routes/auth.dart';
+part 'routes/shell_routes/chat.dart';
 part 'routes/shell_routes/counter.dart';
 part 'routes/shell_routes/settings.dart';
 part 'routes/shell_routes/shell_route.dart';

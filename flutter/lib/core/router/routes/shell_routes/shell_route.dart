@@ -7,6 +7,9 @@ part of '../../root.dart';
         TypedGoRoute<CounterRoute>(path: '/counter'),
       ],
     ),
+    TypedStatefulShellBranch<ChatShellBranchData>(
+      routes: <TypedRoute<RouteData>>[TypedGoRoute<ChatRoute>(path: '/chat')],
+    ),
     TypedStatefulShellBranch<SettingsShellBranchData>(
       routes: <TypedRoute<RouteData>>[
         TypedGoRoute<SettingsRoute>(path: '/settings'),
@@ -44,6 +47,7 @@ class ShellScreen extends StatelessWidget {
         },
         destinations: const <Widget>[
           NavigationDestination(icon: Icon(Icons.add), label: 'Counter'),
+          NavigationDestination(icon: Icon(Icons.chat), label: 'Chat'),
           NavigationDestination(icon: Icon(Icons.settings), label: 'Settings'),
         ],
       ),
