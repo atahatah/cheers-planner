@@ -57,7 +57,7 @@ class ChatController extends _$ChatController {
         ...state.messages.sublist(0, state.messages.length - 1),
         ChatMessage.completedMessage(
           role: Role.model,
-          message: state.messages.last.message,
+          message: wholeResponseMessage.toString(),
           sentAt: DateTime.now(),
         ),
       ],
