@@ -52,7 +52,8 @@ Firebaseのプロジェクトには私のクレカが登録されています。
 私を助ける意味でもチームの予算を越さないためにも本当のFirebaseを使うのはできるだけ控え、ローカルのエミュレーターを使用しましょう。
 ```sh
 cd firebase
-firebase emulator:start
+firebase login
+firebase emulators:start
 ```
 これでエミュレーターが起動するはずです。
 ローカルのエミュレーターを使った開発をする場合はこれをずっと動かしたままにします。
