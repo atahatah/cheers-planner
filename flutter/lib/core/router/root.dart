@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cheers_planner/index.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -28,23 +30,27 @@ GoRouter router(Ref ref) {
           switch (authState) {
             case SignedIn():
               if (path?.startsWith('/auth') ?? false) {
+                final token = state.uri.queryParameters['redirect'] ?? '';
+                if (token.isNotEmpty) {
+                  final decoded = utf8.decode(base64Url.decode(token));
+                  return decoded;
+                }
                 return const CounterRoute().location;
               }
               return null;
             case NotRegistered():
-              return const RegisterRoute().location;
+              return '${const RegisterRoute().location}?redirect=${base64Url.encode(utf8.encode(path!))}';
             case NotSignedIn():
               if (path?.startsWith('/auth') ?? false) {
                 return null;
               }
-              return const SignUpRoute().location;
+              return '${const SignUpRoute().location}?redirect=${base64Url.encode(utf8.encode(path!))}';
           }
         case AsyncLoading():
-          return null;
         case AsyncError():
+        default:
           return null;
       }
-      return null;
     },
   );
 }
