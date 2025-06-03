@@ -1,6 +1,13 @@
 import 'dart:convert';
 
-import 'package:cheers_planner/index.dart';
+import 'package:cheers_planner/core/auth/app_auth_controller.dart';
+import 'package:cheers_planner/core/auth/app_auth_state.dart';
+import 'package:cheers_planner/features/auth/register_screen.dart';
+import 'package:cheers_planner/features/auth/sign_in_screen.dart';
+import 'package:cheers_planner/features/auth/sign_up_screen.dart';
+import 'package:cheers_planner/features/chat/chat_screen.dart';
+import 'package:cheers_planner/features/counter/counter_screen.dart';
+import 'package:cheers_planner/features/settings/settings_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

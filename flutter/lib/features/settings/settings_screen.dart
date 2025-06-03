@@ -1,4 +1,4 @@
-import 'package:cheers_planner/core/auth/index.dart';
+import 'package:cheers_planner/core/auth/app_auth_controller.dart';
 import 'package:cheers_planner/core/firebase/firebase_ai_repo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

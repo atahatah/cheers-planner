@@ -34,13 +34,9 @@ feature-firstが私の最近のお気に入りなのと、割と流行りなの�
     - chat/ (サンプルプログラム)
     - settings/ (設定画面)
 ```
-各ディレクトリには`index.dart`を用意しましょう。
-上位のディレクトリから下位の`index.dart`を読み込んでいるので、`'package:cheers_planner/index.dart';`
-さえインポートすればプログラム全体にアクセスできます。
 
 基本的に困ったら`features/featureXXX/`におけば問題ないです。
 `features/featureXXX/`には次のような感じでファイルを配置してください。
-- index.dart (全てのファイルをエクスポートするためのファイル)
 - xxx_screen.dart (画面に関するファイル)
 - xxx.dart (freezedを使ったモデル)
 - xxx_controller.dart (ロジック)

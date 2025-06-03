@@ -1,4 +1,4 @@
-import 'package:cheers_planner/index.dart';
+import 'package:cheers_planner/core/app/app.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';

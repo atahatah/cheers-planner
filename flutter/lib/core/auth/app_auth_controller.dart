@@ -1,4 +1,7 @@
-import 'package:cheers_planner/index.dart';
+import 'package:cheers_planner/core/auth/app_auth_state.dart';
+import 'package:cheers_planner/core/auth/user_entry.dart';
+import 'package:cheers_planner/core/auth/user_entry_repo.dart';
+import 'package:cheers_planner/core/firebase/auth_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

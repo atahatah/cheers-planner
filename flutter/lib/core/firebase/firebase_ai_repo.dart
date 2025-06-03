@@ -1,4 +1,5 @@
-import 'package:cheers_planner/index.dart';
+import 'package:cheers_planner/core/firebase/app_check_repo.dart';
+import 'package:cheers_planner/core/firebase/auth_repo.dart';
 import 'package:firebase_ai/firebase_ai.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

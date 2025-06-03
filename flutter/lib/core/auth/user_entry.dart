@@ -1,4 +1,4 @@
-import 'package:cheers_planner/index.dart';
+import 'package:cheers_planner/core/firebase/firestore_converters.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_entry.freezed.dart';

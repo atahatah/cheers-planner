@@ -1,4 +1,4 @@
-import 'package:cheers_planner/index.dart';
+import 'package:cheers_planner/core/firebase/auth_exception.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

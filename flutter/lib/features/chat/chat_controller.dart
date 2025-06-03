@@ -1,4 +1,6 @@
-import 'package:cheers_planner/index.dart';
+import 'package:cheers_planner/core/firebase/firebase_ai_repo.dart';
+import 'package:cheers_planner/features/chat/chat.dart';
+import 'package:cheers_planner/features/chat/chat_exception.dart';
 import 'package:firebase_ai/firebase_ai.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

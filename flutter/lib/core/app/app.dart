@@ -1,4 +1,4 @@
-import 'package:cheers_planner/index.dart';
+import 'package:cheers_planner/core/router/root.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
