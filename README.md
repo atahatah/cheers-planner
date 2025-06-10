@@ -64,3 +64,13 @@ flutterは次のように起動してください。
 ```sh
 flutter run -d chrome --dart-define=USE_FIREBASE_EMULATORS=true
 ```
+
+### Appendix: hostingをローカルで試す
+
+通常の開発でHostingエミュレーターを動かす必要はありませんが、ローカルで挙動を確
+認したい場合は次のコマンドを実行してください。
+
+```sh
+cd hosting
+firebase emulators:start
+```
