@@ -1,56 +1,44 @@
 # AGENTS.md
-このドキュメントは、AI（特にOpenAI Codex）がこのリポジトリのコードを理解し、効果的にコード生成や編集を行うためのガイドラインです。
+このドキュメントは、OpenAI Codex がこのリポジトリで作業するときに従うべきルールをまとめたものです。プロジェクトの理解と効率的なタスク実行に役立ててください。
 
 ## プロジェクト概要
-このプロジェクトは、FlutterとFirebaseを使用したアプリケーション「Cheers Planner」です。
+Flutter と Firebase を利用した **Cheers Planner** というアプリケーションのコードです。Riverpod、Freezed、GoRouter などを採用しています。
 
 ### 技術スタック
-このプロジェクトでは、以下の技術スタックを採用しています。コードを生成・編集する際は、これらの技術と考え方に沿ってください。
+- **Flutter**：バージョンは `.tool-versions` に記載。UI 構築に使用します。
+  - **Riverpod**：状態管理および DI。`riverpod_generator` を利用します。
+  - **Freezed**：イミュータブルなモデル生成に使用します。
+  - **GoRouter**：画面遷移を管理し、`go_router_builder` でコード生成します。
+- **Firebase**：Authentication、Firestore、Cloud Functions、Storage、App Check などを利用します。
 
-#### 全体
-- Flutter: UIフレームワークとして使用しています。バージョンは.tool-versionsファイルで管理されています。
-  - Riverpod: 状態管理およびDI（Dependency Injection）ライブラリとして使用しています。riverpod_generatorによるコード生成を前提としています。
-  - Freezed: イミュータブル（不変）なモデルクラスを作成するために使用しています。
-  - GoRouter: 画面遷移を管理するために使用しています。go_router_builderによるコード生成を前提としています。
-- Firebase: バックエンドサービスとして使用しています。
-  - Authentication: ユーザー認証
-  - Firestore: データベース
-  - Cloud Functions: サーバーレス関数
-  - Cloud Storage: ファイルストレージ
-  - App Check: アプリのセキュリティ
-#### ディレクトリ構成
-- feature-first: 機能ごとにディレクトリを分割するアーキテクチャを採用しています。
-新しい機能は flutter/lib/features/ 以下に新しいディレクトリを作成して実装します。
-各機能ディレクトリ内には、xxx_screen.dart (画面)、xxx_controller.dart (ロジック)、xxx_repo.dart (データアクセス) などを配置します。
-- core: アプリ全体で共通して利用する機能（認証、ルーティング、共通コンポーネントなど）は flutter/lib/core/ 以下に配置します。
+### ディレクトリ構成
+- `flutter/lib/features/`：機能ごとにディレクトリを作成し、`xxx_screen.dart`、`xxx_controller.dart`、`xxx_repo.dart` などを配置します。
+- `flutter/lib/core/`：認証や共通コンポーネントなど、アプリ全体で使うコードをまとめます。
+
 ## コーディング規約
-- 状態管理: Riverpodを使用します。UIコンポーネントはHookConsumerWidgetを継承し、状態の変更はController経由で行います。
-- モデルクラス: Freezedを使用して、イミュータブルなクラスを定義します。
-- ビルド: build_runnerを使用して、*.g.dartや*.freezed.dartなどのファイルを自動生成します。これらのファイルは直接編集しないでください。
-- Firebaseとの連携:
-- Firestore: withConverterを使用して、型安全なデータのやり取りを行います。
-- 認証: FirebaseUI (firebase_ui_auth) を使用しています。
-## AIへの指示（プロンプトの例）
-### 新機能の追加
-「featuresディレクトリにplanningという名前で新しい機能を追加してください。planning_screen.dart、planning_controller.dart、planning_repo.dartを作成し、GoRouterの設定に新しいルートを追加してください。」
-
-### Riverpod Providerの作成
-「features/counter/counter_controller.dart のような形で、新しいControllerを作成してください。@riverpodアノテーションを使い、状態としてintを保持し、それをインクリメントするメソッドを実装してください。」
-
-### Freezedモデルの作成
-「UserEntryモデル(flutter/lib/core/auth/user_entry.dart)を参考に、新しいEventモデルを作成してください。id, name, dateのフィールドを持たせてください。dateはDateTime型で、FirestoreのTimestampと相互変換できるようにしてください。」
-
-## 注意点
-Freezed 3系: このプロジェクトではFreezedの3系を使用しています。AIはまだこのバージョンに詳しくない可能性があるため、生成されたコードがsealed classかabstract classを使用しているか確認してください。
-
-自動生成ファイル: *.g.dartや*.freezed.dartで終わるファイルは、flutter pub run build_runner buildコマンドで自動生成されます。これらのファイルを直接編集するような指示は避けてください。
-
-## Test
-Flutterアプリに関して正しくコーディングができているか、次の手順で調べてください。
+1. **状態管理**：UI コンポーネントは `HookConsumerWidget` を継承し、状態変更は Controller 経由で行います。
+2. **モデル定義**：`Freezed` を使って `*.g.dart` と `*.freezed.dart` を自動生成します。これらのファイルは手動で編集しません。
+3. **Firestore 連携**：`withConverter` を用いて型安全なデータ操作を行います。
+4. **テスト**：変更後は次の手順でビルドが成功するか確認してください。
 ```sh
 cd flutter
-# コード自動生成
 flutter pub run build_runner build --delete-conflicting-outputs
-# ビルド
 flutter build web
 ```
+
+## Git 運用
+- **ブランチ名**：英語で記述すること。
+- **コミットメッセージ**：日本語で簡潔にまとめること。
+- **プルリクエスト**：タイトル・本文とも日本語で記載し、変更点と確認方法を明記すること。
+
+## AI への指示例
+- 新機能追加時は `flutter/lib/features/<name>/` に必要なファイルを作成し、`GoRouter` のルートも更新してください。
+- Provider を定義する際は `@riverpod` アノテーションを使用し、必要に応じて `freezed` と組み合わせてください。
+- モデル追加時は `flutter/lib/core/auth/user_entry.dart` を参考に、`fromJson`/`toJson` で `Timestamp` 変換を実装してください。
+
+## 注意点
+- `Freezed` 3 系を使用しているため、生成クラスが `sealed class` または `abstract class` になっているか確認してください。
+- `flutter/.env.example` をコピーして `.env` を作成し、必要な環境変数を設定します。
+- Firebase 本番環境へのアクセスは控え、基本はエミュレーターを使用します。`firebase emulators:start` で起動可能です。
+
+
