@@ -15,10 +15,6 @@
       "host": "0.0.0.0",
       "port": 8081
     },
-    "hosting": {
-      "host": "0.0.0.0",
-      "port": 5002
-    },
     "storage": {
       "host": "0.0.0.0",
       "port": 9199
@@ -29,17 +25,6 @@
       "port": 4000
     },
     "singleProjectMode": true
-  },
-  "hosting": {
-    "source": "../flutter",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "frameworksBackend": {
-      "region": "asia-east1"
-    }
   },
   "functions": [
     {
