@@ -30,6 +30,19 @@ class MainShellRouteData extends StatefulShellRouteData {
   }
 }
 
+class _NavItem {
+  const _NavItem(this.icon, this.label);
+
+  final IconData icon;
+  final String label;
+}
+
+const _navItems = <_NavItem>[
+  _NavItem(Icons.add, 'Counter'),
+  _NavItem(Icons.chat, 'Chat'),
+  _NavItem(Icons.settings, 'Settings'),
+];
+
 class ShellScreen extends StatelessWidget {
   const ShellScreen({super.key, required this.navigator});
 
@@ -38,11 +51,14 @@ class ShellScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final useRail = MediaQuery.of(context).size.width >= 600;
-    final destinations = const <NavigationDestination>[
-      NavigationDestination(icon: Icon(Icons.add), label: 'Counter'),
-      NavigationDestination(icon: Icon(Icons.chat), label: 'Chat'),
-      NavigationDestination(icon: Icon(Icons.settings), label: 'Settings'),
-    ];
+    final destinations = _navItems
+        .map(
+          (item) => NavigationDestination(
+            icon: Icon(item.icon),
+            label: item.label,
+          ),
+        )
+        .toList();
 
     void onSelect(int index) {
       navigator.goBranch(
@@ -59,20 +75,14 @@ class ShellScreen extends StatelessWidget {
               selectedIndex: navigator.currentIndex,
               onDestinationSelected: onSelect,
               labelType: NavigationRailLabelType.selected,
-              destinations: const <NavigationRailDestination>[
-                NavigationRailDestination(
-                  icon: Icon(Icons.add),
-                  label: Text('Counter'),
-                ),
-                NavigationRailDestination(
-                  icon: Icon(Icons.chat),
-                  label: Text('Chat'),
-                ),
-                NavigationRailDestination(
-                  icon: Icon(Icons.settings),
-                  label: Text('Settings'),
-                ),
-              ],
+              destinations: _navItems
+                  .map(
+                    (item) => NavigationRailDestination(
+                      icon: Icon(item.icon),
+                      label: Text(item.label),
+                    ),
+                  )
+                  .toList(),
             ),
             Expanded(child: navigator),
           ],
