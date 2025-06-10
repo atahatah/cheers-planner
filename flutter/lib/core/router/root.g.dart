@@ -77,6 +77,22 @@ RouteBase get $mainShellRouteData => StatefulShellRouteData.$route(
     StatefulShellBranchData.$branch(
       routes: [
         GoRouteData.$route(
+          path: '/events',
+
+          factory: $EventListRouteExtension._fromState,
+          routes: [
+            GoRouteData.$route(
+              path: 'create',
+
+              factory: $CreateEventRouteExtension._fromState,
+            ),
+          ],
+        ),
+      ],
+    ),
+    StatefulShellBranchData.$branch(
+      routes: [
+        GoRouteData.$route(
           path: '/counter',
 
           factory: $CounterRouteExtension._fromState,
@@ -107,6 +123,38 @@ RouteBase get $mainShellRouteData => StatefulShellRouteData.$route(
 extension $MainShellRouteDataExtension on MainShellRouteData {
   static MainShellRouteData _fromState(GoRouterState state) =>
       const MainShellRouteData();
+}
+
+extension $EventListRouteExtension on EventListRoute {
+  static EventListRoute _fromState(GoRouterState state) =>
+      const EventListRoute();
+
+  String get location => GoRouteData.$location('/events');
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $CreateEventRouteExtension on CreateEventRoute {
+  static CreateEventRoute _fromState(GoRouterState state) =>
+      const CreateEventRoute();
+
+  String get location => GoRouteData.$location('/events/create');
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }
 
 extension $CounterRouteExtension on CounterRoute {

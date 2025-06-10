@@ -2,6 +2,16 @@ part of '../../root.dart';
 
 @TypedStatefulShellRoute<MainShellRouteData>(
   branches: [
+    TypedStatefulShellBranch<EventShellBranchData>(
+      routes: <TypedRoute<RouteData>>[
+        TypedGoRoute<EventListRoute>(
+          path: '/events',
+          routes: <TypedRoute<RouteData>>[
+            TypedGoRoute<CreateEventRoute>(path: 'create'),
+          ],
+        ),
+      ],
+    ),
     TypedStatefulShellBranch<CounterShellBranchData>(
       routes: <TypedRoute<RouteData>>[
         TypedGoRoute<CounterRoute>(path: '/counter'),
@@ -38,6 +48,7 @@ class _NavItem {
 }
 
 const _navItems = <_NavItem>[
+  _NavItem(Icons.event, 'Events'),
   _NavItem(Icons.add, 'Counter'),
   _NavItem(Icons.chat, 'Chat'),
   _NavItem(Icons.settings, 'Settings'),
@@ -53,10 +64,8 @@ class ShellScreen extends StatelessWidget {
     final useRail = MediaQuery.of(context).size.width >= 600;
     final destinations = _navItems
         .map(
-          (item) => NavigationDestination(
-            icon: Icon(item.icon),
-            label: item.label,
-          ),
+          (item) =>
+              NavigationDestination(icon: Icon(item.icon), label: item.label),
         )
         .toList();
 
