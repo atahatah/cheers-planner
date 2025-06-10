@@ -43,8 +43,10 @@
         token = true;
       }
       try {
-        const head = await fetch('.env', { method: 'HEAD' });
-        if (head.ok) {
+        if (
+          window.location.hostname === 'localhost' ||
+          window.location.hostname === '127.0.0.1'
+        ) {
           const response = await fetch('.env');
           if (response.ok) {
             const text = await response.text();
