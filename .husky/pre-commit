@@ -1,0 +1,9 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Flutter format check and analyze
+(cd flutter && dart format . --set-exit-if-changed && flutter analyze)
+
+# Firebase functions lint and format check
+npm --prefix firebase/functions run lint
+npm --prefix firebase/functions run format:check
