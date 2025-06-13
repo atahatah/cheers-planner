@@ -24,12 +24,14 @@ Flutter と Firebase を利用した **Cheers Planner** というアプリケー
 ```sh
 cd flutter
 flutter pub run build_runner build --delete-conflicting-outputs # コード生成
+flutter analyze || flutter fix --apply # lint
 dart format . # フォーマット
 ```
 
    コミット前にはフォーマットチェックとビルド確認を行います。
 ```sh
 cd flutter
+flutter analyze # lint
 dart format . --set-exit-if-changed # 正しくフォーマットができているか確認
 flutter build web # ビルドが通るか確認
 ```
