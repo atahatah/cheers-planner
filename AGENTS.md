@@ -19,11 +19,19 @@ Flutter と Firebase を利用した **Cheers Planner** というアプリケー
 1. **状態管理**：UI コンポーネントは `HookConsumerWidget` を継承し、状態変更は Controller 経由で行います。
 2. **モデル定義**：`Freezed` を使って `*.g.dart` と `*.freezed.dart` を自動生成します。これらのファイルは手動で編集しません。
 3. **Firestore 連携**：`withConverter` を用いて型安全なデータ操作を行います。
-4. **テスト**：変更後は次の手順でビルドが成功するか確認してください。
+4. **テスト・フォーマット手順**：
+   コーディング後からコミット前までに、次のコマンドでコードを整えてください。
 ```sh
 cd flutter
-flutter pub run build_runner build --delete-conflicting-outputs
-flutter build web
+flutter pub run build_runner build --delete-conflicting-outputs # コード生成
+dart format . # フォーマット
+```
+
+   コミット前にはフォーマットチェックとビルド確認を行います。
+```sh
+cd flutter
+dart format . --set-exit-if-changed # 正しくフォーマットができているか確認
+flutter build web # ビルドが通るか確認
 ```
 
 ## Git 運用

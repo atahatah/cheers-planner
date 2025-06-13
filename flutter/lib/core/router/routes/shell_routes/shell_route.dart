@@ -53,10 +53,8 @@ class ShellScreen extends StatelessWidget {
     final useRail = MediaQuery.of(context).size.width >= 600;
     final destinations = _navItems
         .map(
-          (item) => NavigationDestination(
-            icon: Icon(item.icon),
-            label: item.label,
-          ),
+          (item) =>
+              NavigationDestination(icon: Icon(item.icon), label: item.label),
         )
         .toList();
 
