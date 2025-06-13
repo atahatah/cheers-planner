@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$EventEntry {
 
- String? get id; String get eventName;@DateTimeToTimestampConverter() DateTime get dueDate; List<(DateTime start, DateTime end)> get candidateDateTimes; List<String> get candidateAreas; String get allergiesEtc; List<String> get organizerId; List<String> get participantId;
+ String? get id; String get eventName;@DateTimeToTimestampConverter() DateTime get dueDate; List<(DateTime start, DateTime end)> get candidateDateTimes; List<CandidateArea> get candidateAreas; String get allergiesEtc; List<String> get organizerId; List<String> get participantId;
 /// Create a copy of EventEntry
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $EventEntryCopyWith<$Res>  {
   factory $EventEntryCopyWith(EventEntry value, $Res Function(EventEntry) _then) = _$EventEntryCopyWithImpl;
 @useResult
 $Res call({
- String? id, String eventName,@DateTimeToTimestampConverter() DateTime dueDate, List<(DateTime start, DateTime end)> candidateDateTimes, List<String> candidateAreas, String allergiesEtc, List<String> organizerId, List<String> participantId
+ String? id, String eventName,@DateTimeToTimestampConverter() DateTime dueDate, List<(DateTime start, DateTime end)> candidateDateTimes, List<CandidateArea> candidateAreas, String allergiesEtc, List<String> organizerId, List<String> participantId
 });
 
 
@@ -73,7 +73,7 @@ as String?,eventName: null == eventName ? _self.eventName : eventName // ignore:
 as String,dueDate: null == dueDate ? _self.dueDate : dueDate // ignore: cast_nullable_to_non_nullable
 as DateTime,candidateDateTimes: null == candidateDateTimes ? _self.candidateDateTimes : candidateDateTimes // ignore: cast_nullable_to_non_nullable
 as List<(DateTime start, DateTime end)>,candidateAreas: null == candidateAreas ? _self.candidateAreas : candidateAreas // ignore: cast_nullable_to_non_nullable
-as List<String>,allergiesEtc: null == allergiesEtc ? _self.allergiesEtc : allergiesEtc // ignore: cast_nullable_to_non_nullable
+as List<CandidateArea>,allergiesEtc: null == allergiesEtc ? _self.allergiesEtc : allergiesEtc // ignore: cast_nullable_to_non_nullable
 as String,organizerId: null == organizerId ? _self.organizerId : organizerId // ignore: cast_nullable_to_non_nullable
 as List<String>,participantId: null == participantId ? _self.participantId : participantId // ignore: cast_nullable_to_non_nullable
 as List<String>,
@@ -87,7 +87,7 @@ as List<String>,
 @JsonSerializable()
 
 class _EventEntry implements EventEntry {
-  const _EventEntry({this.id, required this.eventName, @DateTimeToTimestampConverter() required this.dueDate, required final  List<(DateTime start, DateTime end)> candidateDateTimes, required final  List<String> candidateAreas, required this.allergiesEtc, required final  List<String> organizerId, required final  List<String> participantId}): _candidateDateTimes = candidateDateTimes,_candidateAreas = candidateAreas,_organizerId = organizerId,_participantId = participantId;
+  const _EventEntry({this.id, required this.eventName, @DateTimeToTimestampConverter() required this.dueDate, required final  List<(DateTime start, DateTime end)> candidateDateTimes, required final  List<CandidateArea> candidateAreas, required this.allergiesEtc, required final  List<String> organizerId, required final  List<String> participantId}): _candidateDateTimes = candidateDateTimes,_candidateAreas = candidateAreas,_organizerId = organizerId,_participantId = participantId;
   factory _EventEntry.fromJson(Map<String, dynamic> json) => _$EventEntryFromJson(json);
 
 @override final  String? id;
@@ -100,8 +100,8 @@ class _EventEntry implements EventEntry {
   return EqualUnmodifiableListView(_candidateDateTimes);
 }
 
- final  List<String> _candidateAreas;
-@override List<String> get candidateAreas {
+ final  List<CandidateArea> _candidateAreas;
+@override List<CandidateArea> get candidateAreas {
   if (_candidateAreas is EqualUnmodifiableListView) return _candidateAreas;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_candidateAreas);
@@ -156,7 +156,7 @@ abstract mixin class _$EventEntryCopyWith<$Res> implements $EventEntryCopyWith<$
   factory _$EventEntryCopyWith(_EventEntry value, $Res Function(_EventEntry) _then) = __$EventEntryCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String eventName,@DateTimeToTimestampConverter() DateTime dueDate, List<(DateTime start, DateTime end)> candidateDateTimes, List<String> candidateAreas, String allergiesEtc, List<String> organizerId, List<String> participantId
+ String? id, String eventName,@DateTimeToTimestampConverter() DateTime dueDate, List<(DateTime start, DateTime end)> candidateDateTimes, List<CandidateArea> candidateAreas, String allergiesEtc, List<String> organizerId, List<String> participantId
 });
 
 
@@ -180,7 +180,7 @@ as String?,eventName: null == eventName ? _self.eventName : eventName // ignore:
 as String,dueDate: null == dueDate ? _self.dueDate : dueDate // ignore: cast_nullable_to_non_nullable
 as DateTime,candidateDateTimes: null == candidateDateTimes ? _self._candidateDateTimes : candidateDateTimes // ignore: cast_nullable_to_non_nullable
 as List<(DateTime start, DateTime end)>,candidateAreas: null == candidateAreas ? _self._candidateAreas : candidateAreas // ignore: cast_nullable_to_non_nullable
-as List<String>,allergiesEtc: null == allergiesEtc ? _self.allergiesEtc : allergiesEtc // ignore: cast_nullable_to_non_nullable
+as List<CandidateArea>,allergiesEtc: null == allergiesEtc ? _self.allergiesEtc : allergiesEtc // ignore: cast_nullable_to_non_nullable
 as String,organizerId: null == organizerId ? _self._organizerId : organizerId // ignore: cast_nullable_to_non_nullable
 as List<String>,participantId: null == participantId ? _self._participantId : participantId // ignore: cast_nullable_to_non_nullable
 as List<String>,
