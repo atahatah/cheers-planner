@@ -1,53 +1,56 @@
 # Flutter App
+
+このディレクトリには Cheers Planner の Flutter プロジェクトが含まれています。
+
 ## Coding
-Flutterでは自動コード生成をよく用います。
-これを行なってくれるのがBuild Runnerです。
-riverpodやfreezedを使うクラスをいじった後は場合は次のコマンドを実行しましょう。
+
+自動コード生成には **Build Runner** を利用します。Riverpod や Freezed を使うファイルを編集した後は、次のコマンドでコードを生成してください。
+
 ```sh
 flutter pub run build_runner build --delete-conflicting-outputs
 ```
-毎回実行するのは面倒だし時間もかかるので、次のコマンドを常時実行していれば問題ないです。
+
+毎回手動で実行するのが面倒な場合は、ウォッチモードが便利です。
+
 ```sh
 flutter pub run build_runner watch --delete-conflicting-outputs
 ```
-もしくは[Build Runner](https://marketplace.visualstudio.com/items?itemName=GaetSchwartz.build-runner)という拡張機能を使うこともできます。
-`Ctrl-shift-B`で自動コード生成して自動コード生成してくれます。
-もしくは、左下に`(目のアイコン) Watch`があると思うのでコードを書き始めたらそれをクリックしておけば、常時ファイルの変更を監視してコード生成してくれます。
-コード生成がうまくいっているかはエディターの`出力>Build Runner`から確認できます。
+
+VSCode を利用している場合は [Build Runner 拡張](https://marketplace.visualstudio.com/items?itemName=GaetSchwartz.build-runner) を導入すると、`Ctrl+Shift+B` でコード生成を実行できます。左下の「👁 Watch」をクリックしておけば常にファイルを監視し、自動生成してくれます。生成結果は「出力 > Build Runner」で確認できます。
 
 ### コードスタイルガイド
 #### 主要ディレクトリ構成
-feature-firstが私の最近のお気に入りなのと、割と流行りなのでこれを取り入れています
+Feature-First の構成を採用しています。迷ったら `features/<feature>/` に配置してください。
+
 ```
-- src/ (Dartプログラムは必ずこの下に置かれる)
-  - core/ (アプリ全体に関わるファイル群)
-    - app/ (アプリ最上位のwidget置き場)
-    - auth/ (アプリ全体の認証の状態の管理)
-    - components/ (アプリ共通のwidget)
-    - hooks/ (custom hooks)
-    - res/ (assetsなどの自動生成されるファイル)
-    - router/ (ルーティング関連)
-    - utils/ (その他)
+- src/
+  - core/        # アプリ全体に関わるファイル
+    - app/       # 最上位のWidget
+    - auth/      # 認証状態の管理
+    - components/# 共通Widget
+    - hooks/     # Custom hooks
+    - res/       # 自動生成ファイル
+    - router/    # ルーティング
+    - utils/     # その他
   - features/
-    - auth/ (アプリの認証機能など)
-    - counter/ (サンプルプログラム)
-    - chat/ (サンプルプログラム)
-    - settings/ (設定画面)
+    - auth/      # 認証機能
+    - counter/   # サンプル
+    - chat/      # サンプル
+    - settings/  # 設定画面
 ```
 
-基本的に困ったら`features/featureXXX/`におけば問題ないです。
-`features/featureXXX/`には次のような感じでファイルを配置してください。
-- xxx_screen.dart (画面に関するファイル)
-- xxx.dart (freezedを使ったモデル)
-- xxx_controller.dart (ロジック)
-- xxx_repo.dart (firebaseやローカルの機能などにアクセスする部分のラッパープログラム)
-あんまり具体的にこれといったアーキテクチャをそのまま落とし込んでいるわけではないので申し訳ないですが、
-ChatGPT曰く、「Clean Architecture を簡易化した MVVM＋Feature-First 構成」らしいです。
+`features/<feature>/` には次のようなファイルを置きます。
 
+- `<name>_screen.dart` : 画面
+- `<name>.dart` : Freezed で定義するモデル
+- `<name>_controller.dart` : ロジック
+- `<name>_repo.dart` : Firebase やローカル機能へのラッパー
+
+厳密なアーキテクチャに依存しているわけではありませんが、ChatGPT によると「Clean Architecture を簡易化した MVVM + Feature-First 構成」に近いそうです。
 
 #### アーキテクチャ図
 
-以下の図は、Repository・Controller・Screen と Firebase/ローカルサービスの関係性を示しています。
+以下は Repository・Controller・Screen と Firebase/ローカルサービスの関係を示す図です。
 
 ```mermaid
 flowchart TB
@@ -77,13 +80,11 @@ flowchart TB
   Repo -->|特定の機能でしか使わないとき| FS
   Controller -->|メソッド呼び出し| Repo
   Screen -->|メソッド呼び出し| Controller
-  Controller -->|Sateの更新| Screen
+  Controller -->|State の更新| Screen
 ```
 
 ## 注意点
-Freezedは3系を使っているが、 AIは3系に詳しくないようなので注意。
-主に起きる問題点としてはFreezedのクラスを作成させると、`sealed`クラス
-にするのを忘れる。
+Freezed は 3 系を使用しています。AI が 3 系に詳しくない場合もあるので、`sealed` クラスの付け忘れなどに注意してください。
 
 ## おすすめの設定
 ```json
@@ -91,10 +92,11 @@ Freezedは3系を使っているが、 AIは3系に詳しくないようなの�
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
         "source.fixAll": "always",
-        "source.organizeImports": "always",
+        "source.organizeImports": "always"
     },
     "explorer.fileNesting.patterns": {
         "*.dart": "$(capture).g.dart, $(capture).freezed.dart",
-        "pubspec.yaml": ".flutter-plugins, .packages, .dart_tool, .flutter-plugins-dependencies, .metadata, .packages, pubspec.lock, build.yaml, analysis_options.yaml, all_lint_rules.yaml, devtools_options.yaml, l10n.yaml, dart_test.yaml, custom_lint.log, untranslated_messages_file.txt, flutter*.yaml",
+        "pubspec.yaml": ".flutter-plugins, .packages, .dart_tool, .flutter-plugins-dependencies, .metadata, .packages, pubspec.lock, build.yaml, analysis_options.yaml, all_lint_rules.yaml, devtools_options.yaml, l10n.yaml, dart_test.yaml, custom_lint.log, untranslated_messages_file.txt, flutter*.yaml"
     }
 }
+```
