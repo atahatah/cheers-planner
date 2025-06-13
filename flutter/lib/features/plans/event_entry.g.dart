@@ -31,7 +31,9 @@ _EventEntry _$EventEntryFromJson(Map<String, dynamic> json) =>
         ),
         candidateAreas: $checkedConvert(
           'candidateAreas',
-          (v) => (v as List<dynamic>).map((e) => e as String).toList(),
+          (v) => (v as List<dynamic>)
+              .map((e) => CandidateArea.fromJson(e as Map<String, dynamic>))
+              .toList(),
         ),
         allergiesEtc: $checkedConvert('allergiesEtc', (v) => v as String),
         organizerId: $checkedConvert(
@@ -59,7 +61,7 @@ Map<String, dynamic> _$EventEntryToJson(_EventEntry instance) =>
             },
           )
           .toList(),
-      'candidateAreas': instance.candidateAreas,
+      'candidateAreas': instance.candidateAreas.map((e) => e.toJson()).toList(),
       'allergiesEtc': instance.allergiesEtc,
       'organizerId': instance.organizerId,
       'participantId': instance.participantId,

@@ -2,9 +2,13 @@ import 'package:cheers_planner/core/app/snackbar_repo.dart';
 import 'package:cheers_planner/core/firebase/auth_exception.dart';
 import 'package:cheers_planner/core/firebase/auth_repo.dart';
 import 'package:cheers_planner/core/router/root.dart';
+import 'package:cheers_planner/core/map/candidate_area.dart';
+import 'package:cheers_planner/core/map/map_hooks.dart';
+import 'package:cheers_planner/core/map/map_repo.dart';
 import 'package:cheers_planner/features/plans/event_entry.dart';
 import 'package:cheers_planner/features/plans/event_entry_repo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -20,8 +24,9 @@ class CreateEventScreen extends HookConsumerWidget {
     final candidateDateTimes = useState<List<(DateTime start, DateTime end)>>(
       [],
     );
-    final candidateAreas = useState<List<String>>([]);
+    final candidateAreas = useCandidateAreas();
     final allergiesEtc = useTextEditingController();
+    final mapRepo = ref.watch(mapRepoProvider);
 
     final selectDeadline = useCallback(() async {
       final selected = await showDatePicker(
@@ -46,7 +51,7 @@ class CreateEventScreen extends HookConsumerWidget {
                 eventName: eventName.text,
                 dueDate: deadline.value ?? DateTime.now(),
                 candidateDateTimes: candidateDateTimes.value,
-                candidateAreas: candidateAreas.value,
+                candidateAreas: candidateAreas.areas,
                 allergiesEtc: allergiesEtc.text,
                 organizerId: [uid],
                 participantId: [uid],
@@ -87,20 +92,124 @@ class CreateEventScreen extends HookConsumerWidget {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {
-                  // Logic to add candidate date times
-                  // For example, you can show a dialog to select start and end times
-                  // and then add them to candidateDateTimes.value
+                onPressed: () async {
+                  final startDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                  );
+                  if (startDate == null) return;
+                  final startTime = await showTimePicker(
+                    context: context,
+                    initialTime: TimeOfDay.now(),
+                  );
+                  if (startTime == null) return;
+                  final endDate = await showDatePicker(
+                    context: context,
+                    initialDate: startDate,
+                    firstDate: startDate,
+                    lastDate: DateTime(2100),
+                  );
+                  if (endDate == null) return;
+                  final endTime = await showTimePicker(
+                    context: context,
+                    initialTime: TimeOfDay.fromDateTime(
+                      DateTime.now().add(const Duration(hours: 1)),
+                    ),
+                  );
+                  if (endTime == null) return;
+                  final start = DateTime(
+                    startDate.year,
+                    startDate.month,
+                    startDate.day,
+                    startTime.hour,
+                    startTime.minute,
+                  );
+                  final end = DateTime(
+                    endDate.year,
+                    endDate.month,
+                    endDate.day,
+                    endTime.hour,
+                    endTime.minute,
+                  );
+                  if (!end.isBefore(start)) {
+                    candidateDateTimes.value = [
+                      ...candidateDateTimes.value,
+                      (start, end),
+                    ];
+                  } else {
+                    ref.read(snackBarRepoProvider).show('終了日時は開始日時より後にしてください');
+                  }
                 },
                 child: const Text('Add Candidate Date Times'),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  // Logic to add candidate areas
-                  // For example, you can show a dialog to select areas
-                  // and then add them to candidateAreas.value
-                },
-                child: const Text('Add Candidate Areas'),
+              SizedBox(
+                height: 200,
+                child: GoogleMap(
+                  initialCameraPosition: const CameraPosition(
+                    target: LatLng(35.681236, 139.767125),
+                    zoom: 10,
+                  ),
+                  markers: {
+                    for (var i = 0; i < candidateAreas.areas.length; i++)
+                      Marker(
+                        markerId: MarkerId('$i'),
+                        position: candidateAreas.areas[i].latLng,
+                      ),
+                  },
+                  circles: {
+                    for (var i = 0; i < candidateAreas.areas.length; i++)
+                      Circle(
+                        circleId: CircleId('$i'),
+                        center: candidateAreas.areas[i].latLng,
+                        radius: candidateAreas.areas[i].radius,
+                        strokeWidth: 1,
+                        fillColor: Colors.blue.withOpacity(0.2),
+                      ),
+                  },
+                  onTap: (pos) async {
+                    var radius = 500.0;
+                    final result = await showDialog<double>(
+                      context: context,
+                      builder: (context) {
+                        var temp = radius;
+                        return AlertDialog(
+                          title: const Text('半径を選択'),
+                          content: StatefulBuilder(
+                            builder: (context, setState) {
+                              return Slider(
+                                value: temp,
+                                min: 100,
+                                max: 5000,
+                                divisions: 49,
+                                label: '${temp.round()}m',
+                                onChanged: (v) => setState(() => temp = v),
+                              );
+                            },
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('キャンセル'),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, temp),
+                              child: const Text('追加'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                    if (result != null) {
+                      radius = result;
+                      candidateAreas.add(pos, radius);
+                    }
+                  },
+                  onMapCreated: (controller) {
+                    // API key may be required for web. Use mapRepo.apiKey as needed.
+                  },
+                ),
               ),
               Expanded(
                 child: ListView.builder(
@@ -117,9 +226,18 @@ class CreateEventScreen extends HookConsumerWidget {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: candidateAreas.value.length,
+                  itemCount: candidateAreas.areas.length,
                   itemBuilder: (context, index) {
-                    return ListTile(title: Text(candidateAreas.value[index]));
+                    final area = candidateAreas.areas[index];
+                    return ListTile(
+                      title: Text(
+                        '(${area.latitude.toStringAsFixed(4)}, ${area.longitude.toStringAsFixed(4)}) - ${area.radius.round()}m',
+                      ),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () => candidateAreas.removeAt(index),
+                      ),
+                    );
                   },
                 ),
               ),
