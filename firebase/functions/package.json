@@ -4,6 +4,7 @@
     "lint": "eslint --ext .js,.ts .",
     "format": "prettier --write \"src/**/*.ts\"",
     "format:check": "prettier --check \"src/**/*.ts\"",
+    "lint-staged": "lint-staged",
     "build": "tsc",
     "build:watch": "tsc --watch",
     "serve": "npm run build && firebase emulators:start --only functions",
@@ -28,7 +29,8 @@
     "eslint-plugin-import": "^2.25.4",
     "firebase-functions-test": "^3.1.0",
     "typescript": "^4.9.0",
-    "prettier": "^3.1.0"
+    "prettier": "^3.1.0",
+    "lint-staged": "^15.2.0"
   },
   "private": true
 }

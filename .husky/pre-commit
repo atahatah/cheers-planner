@@ -3,7 +3,5 @@
 
 # Flutter format check and analyze
 (cd flutter && dart format . --set-exit-if-changed && flutter analyze)
-
-# Firebase functions lint and format check
-npm --prefix firebase/functions run lint
-npm --prefix firebase/functions run format:check
+# Firebase functions lint staged
+npm --prefix firebase/functions run lint-staged
