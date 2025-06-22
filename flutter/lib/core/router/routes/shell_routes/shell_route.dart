@@ -24,6 +24,11 @@ part of '../../root.dart';
         ),
       ],
     ),
+    TypedStatefulShellBranch<ExecAiShellBranchData>(
+      routes: <TypedRoute<RouteData>>[
+        TypedGoRoute<ExecAiRoute>(path: '/execAi'),
+      ],
+    ),
     TypedStatefulShellBranch<SettingsShellBranchData>(
       routes: <TypedRoute<RouteData>>[
         TypedGoRoute<SettingsRoute>(path: '/settings'),
