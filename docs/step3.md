@@ -11,7 +11,7 @@
 必須内容
 
 - `name` (String)
-- `phoneNumber` (Number)
+- `phoneNumber` (String)
 - `positionOrGrade` (String)
 - `desiredBudget` (Number)
 - `desiredDates` (Array<timestamp>)
@@ -33,7 +33,7 @@
 - `organizerId` (Array<String>)
 - `eventName` (String)
 - `dueDate` (Timestamp)
-- `minuites` (Number: 分)
+- `minutes` (Number: 分)
 - `budgetUpperLimit` (Number: 円)
 - `fixedQuestion` (Array<String>)
 - `candidateDateTimes/{dateTimeId}`
@@ -71,11 +71,11 @@
 - **Firestore**
     - `events/{eventId}`
         - `budgetUpperLimit` (Number)
-        - `length` (Number: 分)
-        - `purpose` (String: “歓迎会”など)
+        - `minutes` (Number: 分)
+        - `purpose` (String: "歓迎会"など)
     - `events/{eventId}/participants/*`
         - `desiredLocations` (Array<String>)
-        - `desiredDates` (Array<String: “YYYY-MM-DD”>)
+        - `desiredDates` (Array<Timestamp>)
         - `positionOrGrade`, `allergiesEtc`, `desiredBudget`…
 - **外部API**
     - **Google Geocoding API**：住所→緯度経度
@@ -90,32 +90,66 @@
 ### 2-1. データ取得
 
 1. Firestore から `desiredLocations` を集約。
-2. Geocoding API で各 `desiredLocation` → `(lat, lng)` を算出。
+2. 参加者の属性情報（`positionOrGrade`、`desiredBudget`、`allergiesEtc`等）も併せて取得。
 
-### 2-2. クラスタリング & 候補抽出
+### 2-2. LLM による場所候補生成
 
-1. すべての `(lat, lng)` をクラスタリング（例：K-means, DBSCAN）し、代表中心点を取得。
-2. 各クラスタ中心点に対して、固定半径（例：3km）で検索可能なエリア候補を作成。
-
-### 2-3. 生成AI による絞り込み
+参加者の希望場所と属性情報をもとに、LLMで直接最適な場所候補を生成します。
 
 - **プロンプト例**
     
-    > 「以下の地理座標クラスタ中心点をもとに、アクセス（駅からの距離）、治安、エリアの雰囲気などを加味して、飲み会に最適な 3 つの開催エリア を選んでください。JSON 配列で { name, center: {lat,lng}, reason } を返してください。」
+    > 「以下の参加者情報をもとに、飲み会開催に最適な 3つの場所候補 を提案してください。
     > 
-- **Gemini の返却例**
+    > **参加者情報:**
+    > - 希望場所: ${desiredLocations}（例：["新宿", "渋谷駅近く", "会社付近"]）
+    > - 参加者構成: ${positionOrGrade}（例：["新入社員", "課長", "部長"]）
+    > - 予算範囲: ${budgetRange}円/人
+    > - 目的: ${purpose}（例："歓迎会"）
+    > - 特別な考慮事項: ${allergiesEtc}
+    > 
+    > **選定基準:**
+    > - 交通アクセスの良さ（複数路線利用可能）
+    > - 参加者の年齢層・立場に適した雰囲気
+    > - 予算に見合った店舗密度
+    > - エリアの治安・安全性
+    > 
+    > JSON配列で以下の形式で返してください：
+    > `{ "name": "エリア名", "center": {"lat": 緯度, "lng": 経度}, "radius": 検索半径(m), "reason": "選定理由", "suitableFor": "適している参加者層" }`」
+    > 
+- **LLM の返却例**
     
     ```json
-    json
-    コピーする編集する
     [
-      {"name":"渋谷駅周辺","center":{"lat":35.6595,"lng":139.7005},"reason":"主要路線が集まる交通の要所"},
-      {"name":"新宿三丁目","center":{"lat":35.6938,"lng":139.7034},"reason":"飲食店が多く予算内に選択肢豊富"},
-      {"name":"恵比寿","center":{"lat":35.6467,"lng":139.7101},"reason":"落ち着いた雰囲気でビールバーが充実"}
+      {
+        "name": "新宿三丁目エリア", 
+        "center": {"lat": 35.6938, "lng": 139.7034},
+        "radius": 2000,
+        "reason": "JR・私鉄・地下鉄が集中し全員がアクセスしやすく、予算帯に応じた店舗が豊富",
+        "suitableFor": "多世代混在の歓迎会"
+      },
+      {
+        "name": "恵比寿駅周辺",
+        "center": {"lat": 35.6467, "lng": 139.7101}, 
+        "radius": 1500,
+        "reason": "落ち着いた大人の雰囲気で上司部下の距離感を保ちやすく、品質の高い店舗が多い",
+        "suitableFor": "年齢層高め・格式重視"
+      },
+      {
+        "name": "渋谷センター街周辺",
+        "center": {"lat": 35.6595, "lng": 139.7005},
+        "radius": 1800, 
+        "reason": "若手社員に人気のエリアで活気があり、カジュアルな雰囲気作りに最適",
+        "suitableFor": "新入社員中心・カジュアル"
+      }
     ]
-    
     ```
-    
+
+### 2-3. 地理情報の補完
+
+LLMが提案した場所候補について、必要に応じてGeocoding APIで座標の精度を向上：
+
+1. LLMが提案した座標が大まかな場合、Geocoding APIで「{エリア名} 駅」等の具体的な座標を取得
+2. 提案された `radius` が適切かを検証し、店舗密度に応じて調整
 
 ---
 
@@ -128,7 +162,7 @@
 1. **Places API 検索**
     - `location`＝center, `radius`＝radius,
     - `minprice`＝0, `maxprice`＝ceil(budgetUpperLimit ÷ participantCount / 1000)
-    - `keyword`＝`purpose` + “飲み会”
+    - `keyword`＝`purpose` + "飲み会"
 2. **取得項目**
     - `name`, `place_id`, `rating`, `user_ratings_total`,
     - `opening_hours`, `price_level`
@@ -156,7 +190,7 @@
     > 
     > `{ name, placeId, rating, priceLevel, menuHighlights, accessInfo, recommendedTimeSlot, reason }` の JSON 配列で返してください。
     > 
-    > `recommendedTimeSlot` は各店舗の営業時間と参加者の希望日程を突き合わせた “YYYY-MM-DD HH:MM〜” 形式でお願いします。」
+    > `recommendedTimeSlot` は各店舗の営業時間と参加者の希望日程を突き合わせた "YYYY-MM-DD HH:MM〜" 形式でお願いします。」
     > 
 - **AI の返却例**
     
@@ -204,10 +238,10 @@
 ```mermaid
 flowchart TB
   subgraph BE[Firebase Functions]
-    CF1["場所候補選定\n(Geocoding→Clustering→Gemini)"]
+    CF1["場所候補選定\n(LLM による統合判断)"]
     CF2["予備店舗取得\n(Places API)"]
     CF3["メニュー取得\n(Place Details)"]
-    CF4["最終絞込\n(Gemini)"]
+    CF4["最終絞込\n(LLM)"]
     CF5["DB更新＋通知"]
   end
   ParticipantData[(Firestore: participants)]
@@ -215,11 +249,15 @@ flowchart TB
   GeoAPI[Google Geocoding API]
   Places[Google Places API]
   Details[Place Details API]
-  Gemini[Gemini API]
+  LLM[LLM API]
   Slack[Slack Webhook]
 
   EventData --> CF1
   ParticipantData --> CF1
+  CF1 --> LLM
+  LLM --> CF1
+  CF1 -->|座標補完| GeoAPI
+  GeoAPI --> CF1
   CF1 -->|areas| CF2
   CF2 --> Places
   Places --> CF2
@@ -227,8 +265,8 @@ flowchart TB
   CF3 --> Details
   Details --> CF3
   CF3 -->|with menu| CF4
-  CF4 --> Gemini
-  Gemini --> CF4
+  CF4 --> LLM
+  LLM --> CF4
   CF4 --> CF5
   CF5 --> EventData
   CF5 --> Slack
