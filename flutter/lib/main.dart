@@ -14,6 +14,10 @@ import 'core/firebase/firebase_options.dart';
 void main() async {
   usePathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Web環境では index.html で .env ファイルを読み込み済み
+  print('🌐 Environment variables loaded via web/index.html');
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseAppCheck.instance.activate(
     webProvider: ReCaptchaV3Provider(

@@ -43,9 +43,11 @@
   <script src="flutter_bootstrap.js" async></script>
   <script>
     (async function () {
-      let token = false;
+      let appCheckToken = false;
+      let googlePlacesApiKey = null;
+      
       if (/\?firstIssue=true/.test(window.location.search)) {
-        token = true;
+        appCheckToken = true;
       }
       try {
         if (
@@ -55,16 +57,31 @@
           const response = await fetch('.env');
           if (response.ok) {
             const text = await response.text();
-            const match = text.match(/^FIREBASE_APPCHECK_DEBUG_TOKEN=(.*)$/m);
-            if (match && match[1].trim() !== '') {
-              token = match[1].trim();
+            
+            // Firebase App Check Debug Token
+            const appCheckMatch = text.match(/^FIREBASE_APPCHECK_DEBUG_TOKEN=(.*)$/m);
+            if (appCheckMatch && appCheckMatch[1].trim() !== '') {
+              appCheckToken = appCheckMatch[1].trim();
             }
+            
+            // Google Places API Key
+            const placesApiMatch = text.match(/^GOOGLE_PLACES_API_KEY=(.*)$/m);
+            if (placesApiMatch && placesApiMatch[1].trim() !== '') {
+              googlePlacesApiKey = placesApiMatch[1].trim();
+            }
+            
+            console.log('✅ Environment variables loaded from .env');
+            console.log('🔑 Firebase App Check token:', appCheckToken ? 'Found' : 'Not found');
+            console.log('🔑 Google Places API key:', googlePlacesApiKey ? 'Found' : 'Not found');
           }
         }
       } catch (e) {
-        // ignore errors
+        console.log('⚠️ Warning: .env file not accessible:', e);
       }
-      self.FIREBASE_APPCHECK_DEBUG_TOKEN = token;
+      
+      // Global variables for Flutter app
+      self.FIREBASE_APPCHECK_DEBUG_TOKEN = appCheckToken;
+      self.GOOGLE_PLACES_API_KEY = googlePlacesApiKey;
     })();
   </script>
 </body>
