@@ -103,9 +103,14 @@ RouteBase get $mainShellRouteData => StatefulShellRouteData.$route(
           factory: $VotedListRouteExtension._fromState,
           routes: [
             GoRouteData.$route(
-              path: ':eventId',
+              path: 'voting/:eventId',
 
               factory: $VoteRouteExtension._fromState,
+            ),
+            GoRouteData.$route(
+              path: 'result/:eventId',
+
+              factory: $ResultRouteExtension._fromState,
             ),
           ],
         ),
@@ -199,7 +204,24 @@ extension $VoteRouteExtension on VoteRoute {
       VoteRoute(state.pathParameters['eventId']!);
 
   String get location =>
-      GoRouteData.$location('/vote/${Uri.encodeComponent(eventId)}');
+      GoRouteData.$location('/vote/voting/${Uri.encodeComponent(eventId)}');
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $ResultRouteExtension on ResultRoute {
+  static ResultRoute _fromState(GoRouterState state) =>
+      ResultRoute(state.pathParameters['eventId']!);
+
+  String get location =>
+      GoRouteData.$location('/vote/result/${Uri.encodeComponent(eventId)}');
 
   void go(BuildContext context) => context.go(location);
 

@@ -20,7 +20,7 @@ class VotedListScreen extends HookConsumerWidget {
           final event = snapshot.data();
           return ListTile(
             title: Text(event.purpose),
-            onTap: () => VoteRoute(event.id!).go(context),
+            onTap: () => ResultRoute(event.id!).go(context),
           );
         },
         emptyBuilder: (context) =>

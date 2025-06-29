@@ -22,3 +22,13 @@ class VotedListRoute extends GoRouteData {
     return const VotedListScreen();
   }
 }
+
+class ResultRoute extends GoRouteData {
+  const ResultRoute(this.eventId);
+  final String eventId;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return ResultScreen(eventId: eventId);
+  }
+}

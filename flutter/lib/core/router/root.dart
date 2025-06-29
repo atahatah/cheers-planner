@@ -9,6 +9,7 @@ import 'package:cheers_planner/features/create/create_event_screen.dart';
 import 'package:cheers_planner/features/create/event_list_screen.dart';
 import 'package:cheers_planner/features/create/management_screen.dart';
 import 'package:cheers_planner/features/settings/settings_screen.dart';
+import 'package:cheers_planner/features/vote/result_screen.dart';
 import 'package:cheers_planner/features/vote/vote_screen.dart';
 import 'package:cheers_planner/features/vote/voted_list_screen.dart';
 import 'package:flutter/foundation.dart';
