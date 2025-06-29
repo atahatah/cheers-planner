@@ -1,8 +1,6 @@
 import 'package:cheers_planner/core/app/snackbar_repo.dart';
 import 'package:cheers_planner/core/firebase/auth_exception.dart';
 import 'package:cheers_planner/core/firebase/auth_repo.dart';
-import 'package:cheers_planner/core/hooks/google_map_controller_hook.dart';
-import 'package:cheers_planner/core/hooks/use_areas_selection.dart';
 import 'package:cheers_planner/core/router/root.dart';
 import 'package:cheers_planner/features/create/event_entry.dart';
 import 'package:cheers_planner/features/create/event_entry_repo.dart';
@@ -10,7 +8,6 @@ import 'package:cheers_planner/features/create/geolocator_repo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CreateEventScreen extends HookConsumerWidget {
@@ -24,8 +21,6 @@ class CreateEventScreen extends HookConsumerWidget {
     final allergiesEtc = useTextEditingController();
     final budgetUpperLimit = useTextEditingController();
     final minutes = useTextEditingController(text: '60');
-    final areasController = useAreasSelection();
-    final map = useGoogleMapController();
     // 固定質問用のTextEditingControllerリスト
     final questionControllers = useState<List<TextEditingController>>([]);
 
@@ -88,7 +83,6 @@ class CreateEventScreen extends HookConsumerWidget {
                 candidateDateTimes: candidateDateTimes.value
                     .map((e) => CandidateDateTime(start: e))
                     .toList(),
-                candidateAreas: areasController.areas,
                 allergiesEtc: allergiesEtc.text,
                 organizerId: [uid],
                 budgetUpperLimit: int.tryParse(budgetUpperLimit.text) ?? 0,
@@ -140,68 +134,6 @@ class CreateEventScreen extends HookConsumerWidget {
               ElevatedButton(
                 onPressed: addCandidateDateTime,
                 child: const Text('日程候補を追加'),
-              ),
-              SizedBox(
-                height: 300,
-                width: double.infinity,
-                child: currentPosition.connectionState == ConnectionState.done
-                    ? GoogleMap(
-                        initialCameraPosition: CameraPosition(
-                          target:
-                              currentPosition.data ??
-                              const LatLng(35.681236, 139.767125),
-                          zoom: 10,
-                        ),
-                        mapType: MapType.hybrid,
-                        onMapCreated: map.onMapCreated,
-                        onTap: areasController.add,
-                        markers: {
-                          for (var i = 0; i < areasController.areas.length; i++)
-                            Marker(
-                              markerId: MarkerId(i.toString()),
-                              position: LatLng(
-                                areasController.areas[i].location.latitude,
-                                areasController.areas[i].location.longitude,
-                              ),
-                            ),
-                        },
-                        circles: {
-                          for (var i = 0; i < areasController.areas.length; i++)
-                            Circle(
-                              circleId: CircleId(i.toString()),
-                              center: LatLng(
-                                areasController.areas[i].location.latitude,
-                                areasController.areas[i].location.longitude,
-                              ),
-                              radius: areasController.areas[i].radius
-                                  .toDouble(),
-                              strokeWidth: 2,
-                              strokeColor: Colors.blue,
-                              fillColor: Colors.blue.withOpacity(0.15),
-                            ),
-                        },
-                      )
-                    : const Center(child: CircularProgressIndicator()),
-              ),
-              // panel for adjusting each selected area
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  for (var i = 0; i < areasController.areas.length; i++)
-                    ListTile(
-                      title: Text('R = ${areasController.areas[i].radius} m'),
-                      subtitle: Slider(
-                        min: 100,
-                        max: 3000,
-                        value: areasController.areas[i].radius.toDouble(),
-                        onChanged: (v) => areasController.update(i, v),
-                      ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () => areasController.remove(i),
-                      ),
-                    ),
-                ],
               ),
               TextField(
                 controller: budgetUpperLimit,
