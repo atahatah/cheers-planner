@@ -50,9 +50,12 @@ GoRouter router(Ref ref) {
               }
               return null;
             case NotRegistered():
+              if (path?.startsWith(const RegisterRoute().location) ?? false) {
+                return null;
+              }
               return '${const RegisterRoute().location}?redirect=${base64Url.encode(utf8.encode(state.uri.toString()))}';
             case NotSignedIn():
-              if (path?.startsWith('/auth') ?? false) {
+              if (path?.startsWith(const SignUpRoute().location) ?? false) {
                 return null;
               }
               return '${const SignUpRoute().location}?redirect=${base64Url.encode(utf8.encode(state.uri.toString()))}';

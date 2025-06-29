@@ -46,11 +46,15 @@ class ManagementBody extends HookConsumerWidget {
             child: const Text('リンクをコピー'),
             onPressed: () {
               Clipboard.setData(
-                ClipboardData(text: '${Uri.base.origin}/vote/${value.id}'),
+                ClipboardData(
+                  text: '${Uri.base.origin}/vote/voting/${value.id}',
+                ),
               );
               ref
                   .read(snackBarRepoProvider)
-                  .show('リンクをコピーしました: ${Uri.base.origin}/vote/${value.id}');
+                  .show(
+                    'リンクをコピーしました: ${Uri.base.origin}/vote/voting/${value.id}',
+                  );
             },
           ),
           ElevatedButton(
