@@ -23,8 +23,8 @@ class ParticipantRepo {
         .orderBy('createdAt', descending: true);
   }
 
-  Future<void> add(EventParticipant participant) {
-    return _col.add(participant);
+  Future<void> set(String id, EventParticipant participant) {
+    return _col.doc(id).set(participant);
   }
 
   Future<EventParticipant?> get(String id) async {

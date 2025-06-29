@@ -1,3 +1,4 @@
+import 'package:cheers_planner/core/firebase/auth_repo.dart';
 import 'package:cheers_planner/core/router/root.dart';
 import 'package:cheers_planner/features/create/event_entry_repo.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
@@ -10,10 +11,11 @@ class VotedListScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final eventEntriesRepo = ref.watch(eventEntriesRepoProvider);
+    final uid = ref.watch(requireUserProvider).uid;
     return Scaffold(
       appBar: AppBar(title: const Text('投票に参加したイベント')),
       body: FirestoreListView(
-        query: eventEntriesRepo.listViewQuery(),
+        query: eventEntriesRepo.votedEventListQuery(uid),
         itemBuilder: (context, snapshot) {
           final event = snapshot.data();
           return ListTile(

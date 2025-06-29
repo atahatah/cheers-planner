@@ -1,4 +1,5 @@
 import 'package:cheers_planner/core/app/snackbar_repo.dart';
+import 'package:cheers_planner/core/firebase/auth_repo.dart';
 import 'package:cheers_planner/core/router/root.dart';
 import 'package:cheers_planner/features/create/event_entry.dart';
 import 'package:cheers_planner/features/create/event_entry_repo.dart';
@@ -94,7 +95,9 @@ class VoteBody extends HookConsumerWidget {
       );
       // 参加者情報を Firestore に保存
       final eid = value.id!;
-      await ref.read(participantRepoProvider(eid)).add(participant);
+      final uid = ref.read(requireUserProvider).uid;
+      await ref.read(participantRepoProvider(eid)).set(uid, participant);
+      await ref.read(eventEntryRepoProvider(eid)).addParticipant(eid, uid);
       ref.read(snackBarRepoProvider).show('投票が完了しました！');
       const VotedListRoute().go(context);
     }

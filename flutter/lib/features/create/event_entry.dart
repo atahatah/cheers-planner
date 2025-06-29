@@ -19,6 +19,7 @@ sealed class EventEntry with _$EventEntry {
     required List<CandidateArea> candidateAreas,
     required String allergiesEtc,
     required List<String> organizerId,
+    @Default([]) List<String> participantId,
     required int budgetUpperLimit,
     required List<String> fixedQuestion,
     required int minutes,

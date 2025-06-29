@@ -34,8 +34,12 @@ class EventEntriesRepo {
 
   final CollectionReference<EventEntry> _col;
 
-  Query<EventEntry> listViewQuery() {
-    return _col.orderBy('dueDate', descending: true);
+  Query<EventEntry> organizeEventListQuery(String uid) {
+    return _col.where('organizerId', arrayContains: uid);
+  }
+
+  Query<EventEntry> votedEventListQuery(String uid) {
+    return _col.where('participantId', arrayContains: uid);
   }
 
   Future<String> add(EventEntry event) {
@@ -62,6 +66,12 @@ class EventEntryRepo {
   Future<EventEntry?> get() async {
     final snapshot = await _doc.get();
     return snapshot.data();
+  }
+
+  Future<void> addParticipant(String eventId, String participantId) {
+    return _doc.update({
+      'participantId': FieldValue.arrayUnion([participantId]),
+    });
   }
 
   Future<void> delete() => _doc.delete();

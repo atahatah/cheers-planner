@@ -1,3 +1,4 @@
+import 'package:cheers_planner/core/firebase/auth_repo.dart';
 import 'package:cheers_planner/core/router/root.dart';
 import 'package:cheers_planner/features/create/event_entry_repo.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
@@ -9,11 +10,12 @@ class EventListScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final uid = ref.watch(requireUserProvider).uid;
     final eventEntriesRepo = ref.watch(eventEntriesRepoProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('作成したイベント')),
       body: FirestoreListView(
-        query: eventEntriesRepo.listViewQuery(),
+        query: eventEntriesRepo.organizeEventListQuery(uid),
         itemBuilder: (context, snapshot) {
           final event = snapshot.data();
           return ListTile(
