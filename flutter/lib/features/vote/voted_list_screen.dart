@@ -18,7 +18,6 @@ class VotedListScreen extends HookConsumerWidget {
           final event = snapshot.data();
           return ListTile(
             title: Text(event.purpose),
-            subtitle: Text('Due: ${event.dueDate.toLocal()}'),
             onTap: () => VoteRoute(event.id!).go(context),
           );
         },

@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$EventEntry {
 
- String? get id; String? get aiRecArea; String? get aiRecDate; String? get aiRecStore; String get purpose;@DateTimeToTimestampConverter() DateTime get dueDate;@ListToMapConverter<CandidateDateTime>(prefix: 'datetime') List<CandidateDateTime> get candidateDateTimes;@ListToMapConverter<CandidateArea>(prefix: 'area') List<CandidateArea> get candidateAreas; String get allergiesEtc; List<String> get organizerId; List<String> get participantId; int get budgetUpperLimit; List<String> get fixedQuestion; int get minutes;
+ String? get id; String? get aiRecArea; String? get aiRecDate; String? get aiRecStore; String get purpose;@ListToMapConverter<CandidateDateTime>(prefix: 'datetime') List<CandidateDateTime> get candidateDateTimes;@ListToMapConverter<CandidateArea>(prefix: 'area') List<CandidateArea> get candidateAreas; String get allergiesEtc; List<String> get organizerId; List<String> get participantId; int get budgetUpperLimit; List<String> get fixedQuestion; int get minutes;
 /// Create a copy of EventEntry
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $EventEntryCopyWith<EventEntry> get copyWith => _$EventEntryCopyWithImpl<EventEn
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EventEntry&&(identical(other.id, id) || other.id == id)&&(identical(other.aiRecArea, aiRecArea) || other.aiRecArea == aiRecArea)&&(identical(other.aiRecDate, aiRecDate) || other.aiRecDate == aiRecDate)&&(identical(other.aiRecStore, aiRecStore) || other.aiRecStore == aiRecStore)&&(identical(other.purpose, purpose) || other.purpose == purpose)&&(identical(other.dueDate, dueDate) || other.dueDate == dueDate)&&const DeepCollectionEquality().equals(other.candidateDateTimes, candidateDateTimes)&&const DeepCollectionEquality().equals(other.candidateAreas, candidateAreas)&&(identical(other.allergiesEtc, allergiesEtc) || other.allergiesEtc == allergiesEtc)&&const DeepCollectionEquality().equals(other.organizerId, organizerId)&&const DeepCollectionEquality().equals(other.participantId, participantId)&&(identical(other.budgetUpperLimit, budgetUpperLimit) || other.budgetUpperLimit == budgetUpperLimit)&&const DeepCollectionEquality().equals(other.fixedQuestion, fixedQuestion)&&(identical(other.minutes, minutes) || other.minutes == minutes));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EventEntry&&(identical(other.id, id) || other.id == id)&&(identical(other.aiRecArea, aiRecArea) || other.aiRecArea == aiRecArea)&&(identical(other.aiRecDate, aiRecDate) || other.aiRecDate == aiRecDate)&&(identical(other.aiRecStore, aiRecStore) || other.aiRecStore == aiRecStore)&&(identical(other.purpose, purpose) || other.purpose == purpose)&&const DeepCollectionEquality().equals(other.candidateDateTimes, candidateDateTimes)&&const DeepCollectionEquality().equals(other.candidateAreas, candidateAreas)&&(identical(other.allergiesEtc, allergiesEtc) || other.allergiesEtc == allergiesEtc)&&const DeepCollectionEquality().equals(other.organizerId, organizerId)&&const DeepCollectionEquality().equals(other.participantId, participantId)&&(identical(other.budgetUpperLimit, budgetUpperLimit) || other.budgetUpperLimit == budgetUpperLimit)&&const DeepCollectionEquality().equals(other.fixedQuestion, fixedQuestion)&&(identical(other.minutes, minutes) || other.minutes == minutes));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,aiRecArea,aiRecDate,aiRecStore,purpose,dueDate,const DeepCollectionEquality().hash(candidateDateTimes),const DeepCollectionEquality().hash(candidateAreas),allergiesEtc,const DeepCollectionEquality().hash(organizerId),const DeepCollectionEquality().hash(participantId),budgetUpperLimit,const DeepCollectionEquality().hash(fixedQuestion),minutes);
+int get hashCode => Object.hash(runtimeType,id,aiRecArea,aiRecDate,aiRecStore,purpose,const DeepCollectionEquality().hash(candidateDateTimes),const DeepCollectionEquality().hash(candidateAreas),allergiesEtc,const DeepCollectionEquality().hash(organizerId),const DeepCollectionEquality().hash(participantId),budgetUpperLimit,const DeepCollectionEquality().hash(fixedQuestion),minutes);
 
 @override
 String toString() {
-  return 'EventEntry(id: $id, aiRecArea: $aiRecArea, aiRecDate: $aiRecDate, aiRecStore: $aiRecStore, purpose: $purpose, dueDate: $dueDate, candidateDateTimes: $candidateDateTimes, candidateAreas: $candidateAreas, allergiesEtc: $allergiesEtc, organizerId: $organizerId, participantId: $participantId, budgetUpperLimit: $budgetUpperLimit, fixedQuestion: $fixedQuestion, minutes: $minutes)';
+  return 'EventEntry(id: $id, aiRecArea: $aiRecArea, aiRecDate: $aiRecDate, aiRecStore: $aiRecStore, purpose: $purpose, candidateDateTimes: $candidateDateTimes, candidateAreas: $candidateAreas, allergiesEtc: $allergiesEtc, organizerId: $organizerId, participantId: $participantId, budgetUpperLimit: $budgetUpperLimit, fixedQuestion: $fixedQuestion, minutes: $minutes)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $EventEntryCopyWith<$Res>  {
   factory $EventEntryCopyWith(EventEntry value, $Res Function(EventEntry) _then) = _$EventEntryCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? aiRecArea, String? aiRecDate, String? aiRecStore, String purpose,@DateTimeToTimestampConverter() DateTime dueDate,@ListToMapConverter<CandidateDateTime>(prefix: 'datetime') List<CandidateDateTime> candidateDateTimes,@ListToMapConverter<CandidateArea>(prefix: 'area') List<CandidateArea> candidateAreas, String allergiesEtc, List<String> organizerId, List<String> participantId, int budgetUpperLimit, List<String> fixedQuestion, int minutes
+ String? id, String? aiRecArea, String? aiRecDate, String? aiRecStore, String purpose,@ListToMapConverter<CandidateDateTime>(prefix: 'datetime') List<CandidateDateTime> candidateDateTimes,@ListToMapConverter<CandidateArea>(prefix: 'area') List<CandidateArea> candidateAreas, String allergiesEtc, List<String> organizerId, List<String> participantId, int budgetUpperLimit, List<String> fixedQuestion, int minutes
 });
 
 
@@ -66,15 +66,14 @@ class _$EventEntryCopyWithImpl<$Res>
 
 /// Create a copy of EventEntry
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? aiRecArea = freezed,Object? aiRecDate = freezed,Object? aiRecStore = freezed,Object? purpose = null,Object? dueDate = null,Object? candidateDateTimes = null,Object? candidateAreas = null,Object? allergiesEtc = null,Object? organizerId = null,Object? participantId = null,Object? budgetUpperLimit = null,Object? fixedQuestion = null,Object? minutes = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? aiRecArea = freezed,Object? aiRecDate = freezed,Object? aiRecStore = freezed,Object? purpose = null,Object? candidateDateTimes = null,Object? candidateAreas = null,Object? allergiesEtc = null,Object? organizerId = null,Object? participantId = null,Object? budgetUpperLimit = null,Object? fixedQuestion = null,Object? minutes = null,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,aiRecArea: freezed == aiRecArea ? _self.aiRecArea : aiRecArea // ignore: cast_nullable_to_non_nullable
 as String?,aiRecDate: freezed == aiRecDate ? _self.aiRecDate : aiRecDate // ignore: cast_nullable_to_non_nullable
 as String?,aiRecStore: freezed == aiRecStore ? _self.aiRecStore : aiRecStore // ignore: cast_nullable_to_non_nullable
 as String?,purpose: null == purpose ? _self.purpose : purpose // ignore: cast_nullable_to_non_nullable
-as String,dueDate: null == dueDate ? _self.dueDate : dueDate // ignore: cast_nullable_to_non_nullable
-as DateTime,candidateDateTimes: null == candidateDateTimes ? _self.candidateDateTimes : candidateDateTimes // ignore: cast_nullable_to_non_nullable
+as String,candidateDateTimes: null == candidateDateTimes ? _self.candidateDateTimes : candidateDateTimes // ignore: cast_nullable_to_non_nullable
 as List<CandidateDateTime>,candidateAreas: null == candidateAreas ? _self.candidateAreas : candidateAreas // ignore: cast_nullable_to_non_nullable
 as List<CandidateArea>,allergiesEtc: null == allergiesEtc ? _self.allergiesEtc : allergiesEtc // ignore: cast_nullable_to_non_nullable
 as String,organizerId: null == organizerId ? _self.organizerId : organizerId // ignore: cast_nullable_to_non_nullable
@@ -93,7 +92,7 @@ as int,
 @JsonSerializable()
 
 class _EventEntry implements EventEntry {
-  const _EventEntry({this.id, this.aiRecArea, this.aiRecDate, this.aiRecStore, required this.purpose, @DateTimeToTimestampConverter() required this.dueDate, @ListToMapConverter<CandidateDateTime>(prefix: 'datetime') required final  List<CandidateDateTime> candidateDateTimes, @ListToMapConverter<CandidateArea>(prefix: 'area') required final  List<CandidateArea> candidateAreas, required this.allergiesEtc, required final  List<String> organizerId, required final  List<String> participantId, required this.budgetUpperLimit, required final  List<String> fixedQuestion, required this.minutes}): _candidateDateTimes = candidateDateTimes,_candidateAreas = candidateAreas,_organizerId = organizerId,_participantId = participantId,_fixedQuestion = fixedQuestion;
+  const _EventEntry({this.id, this.aiRecArea, this.aiRecDate, this.aiRecStore, required this.purpose, @ListToMapConverter<CandidateDateTime>(prefix: 'datetime') required final  List<CandidateDateTime> candidateDateTimes, @ListToMapConverter<CandidateArea>(prefix: 'area') required final  List<CandidateArea> candidateAreas, required this.allergiesEtc, required final  List<String> organizerId, required final  List<String> participantId, required this.budgetUpperLimit, required final  List<String> fixedQuestion, required this.minutes}): _candidateDateTimes = candidateDateTimes,_candidateAreas = candidateAreas,_organizerId = organizerId,_participantId = participantId,_fixedQuestion = fixedQuestion;
   factory _EventEntry.fromJson(Map<String, dynamic> json) => _$EventEntryFromJson(json);
 
 @override final  String? id;
@@ -101,7 +100,6 @@ class _EventEntry implements EventEntry {
 @override final  String? aiRecDate;
 @override final  String? aiRecStore;
 @override final  String purpose;
-@override@DateTimeToTimestampConverter() final  DateTime dueDate;
  final  List<CandidateDateTime> _candidateDateTimes;
 @override@ListToMapConverter<CandidateDateTime>(prefix: 'datetime') List<CandidateDateTime> get candidateDateTimes {
   if (_candidateDateTimes is EqualUnmodifiableListView) return _candidateDateTimes;
@@ -154,16 +152,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EventEntry&&(identical(other.id, id) || other.id == id)&&(identical(other.aiRecArea, aiRecArea) || other.aiRecArea == aiRecArea)&&(identical(other.aiRecDate, aiRecDate) || other.aiRecDate == aiRecDate)&&(identical(other.aiRecStore, aiRecStore) || other.aiRecStore == aiRecStore)&&(identical(other.purpose, purpose) || other.purpose == purpose)&&(identical(other.dueDate, dueDate) || other.dueDate == dueDate)&&const DeepCollectionEquality().equals(other._candidateDateTimes, _candidateDateTimes)&&const DeepCollectionEquality().equals(other._candidateAreas, _candidateAreas)&&(identical(other.allergiesEtc, allergiesEtc) || other.allergiesEtc == allergiesEtc)&&const DeepCollectionEquality().equals(other._organizerId, _organizerId)&&const DeepCollectionEquality().equals(other._participantId, _participantId)&&(identical(other.budgetUpperLimit, budgetUpperLimit) || other.budgetUpperLimit == budgetUpperLimit)&&const DeepCollectionEquality().equals(other._fixedQuestion, _fixedQuestion)&&(identical(other.minutes, minutes) || other.minutes == minutes));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EventEntry&&(identical(other.id, id) || other.id == id)&&(identical(other.aiRecArea, aiRecArea) || other.aiRecArea == aiRecArea)&&(identical(other.aiRecDate, aiRecDate) || other.aiRecDate == aiRecDate)&&(identical(other.aiRecStore, aiRecStore) || other.aiRecStore == aiRecStore)&&(identical(other.purpose, purpose) || other.purpose == purpose)&&const DeepCollectionEquality().equals(other._candidateDateTimes, _candidateDateTimes)&&const DeepCollectionEquality().equals(other._candidateAreas, _candidateAreas)&&(identical(other.allergiesEtc, allergiesEtc) || other.allergiesEtc == allergiesEtc)&&const DeepCollectionEquality().equals(other._organizerId, _organizerId)&&const DeepCollectionEquality().equals(other._participantId, _participantId)&&(identical(other.budgetUpperLimit, budgetUpperLimit) || other.budgetUpperLimit == budgetUpperLimit)&&const DeepCollectionEquality().equals(other._fixedQuestion, _fixedQuestion)&&(identical(other.minutes, minutes) || other.minutes == minutes));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,aiRecArea,aiRecDate,aiRecStore,purpose,dueDate,const DeepCollectionEquality().hash(_candidateDateTimes),const DeepCollectionEquality().hash(_candidateAreas),allergiesEtc,const DeepCollectionEquality().hash(_organizerId),const DeepCollectionEquality().hash(_participantId),budgetUpperLimit,const DeepCollectionEquality().hash(_fixedQuestion),minutes);
+int get hashCode => Object.hash(runtimeType,id,aiRecArea,aiRecDate,aiRecStore,purpose,const DeepCollectionEquality().hash(_candidateDateTimes),const DeepCollectionEquality().hash(_candidateAreas),allergiesEtc,const DeepCollectionEquality().hash(_organizerId),const DeepCollectionEquality().hash(_participantId),budgetUpperLimit,const DeepCollectionEquality().hash(_fixedQuestion),minutes);
 
 @override
 String toString() {
-  return 'EventEntry(id: $id, aiRecArea: $aiRecArea, aiRecDate: $aiRecDate, aiRecStore: $aiRecStore, purpose: $purpose, dueDate: $dueDate, candidateDateTimes: $candidateDateTimes, candidateAreas: $candidateAreas, allergiesEtc: $allergiesEtc, organizerId: $organizerId, participantId: $participantId, budgetUpperLimit: $budgetUpperLimit, fixedQuestion: $fixedQuestion, minutes: $minutes)';
+  return 'EventEntry(id: $id, aiRecArea: $aiRecArea, aiRecDate: $aiRecDate, aiRecStore: $aiRecStore, purpose: $purpose, candidateDateTimes: $candidateDateTimes, candidateAreas: $candidateAreas, allergiesEtc: $allergiesEtc, organizerId: $organizerId, participantId: $participantId, budgetUpperLimit: $budgetUpperLimit, fixedQuestion: $fixedQuestion, minutes: $minutes)';
 }
 
 
@@ -174,7 +172,7 @@ abstract mixin class _$EventEntryCopyWith<$Res> implements $EventEntryCopyWith<$
   factory _$EventEntryCopyWith(_EventEntry value, $Res Function(_EventEntry) _then) = __$EventEntryCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? aiRecArea, String? aiRecDate, String? aiRecStore, String purpose,@DateTimeToTimestampConverter() DateTime dueDate,@ListToMapConverter<CandidateDateTime>(prefix: 'datetime') List<CandidateDateTime> candidateDateTimes,@ListToMapConverter<CandidateArea>(prefix: 'area') List<CandidateArea> candidateAreas, String allergiesEtc, List<String> organizerId, List<String> participantId, int budgetUpperLimit, List<String> fixedQuestion, int minutes
+ String? id, String? aiRecArea, String? aiRecDate, String? aiRecStore, String purpose,@ListToMapConverter<CandidateDateTime>(prefix: 'datetime') List<CandidateDateTime> candidateDateTimes,@ListToMapConverter<CandidateArea>(prefix: 'area') List<CandidateArea> candidateAreas, String allergiesEtc, List<String> organizerId, List<String> participantId, int budgetUpperLimit, List<String> fixedQuestion, int minutes
 });
 
 
@@ -191,15 +189,14 @@ class __$EventEntryCopyWithImpl<$Res>
 
 /// Create a copy of EventEntry
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? aiRecArea = freezed,Object? aiRecDate = freezed,Object? aiRecStore = freezed,Object? purpose = null,Object? dueDate = null,Object? candidateDateTimes = null,Object? candidateAreas = null,Object? allergiesEtc = null,Object? organizerId = null,Object? participantId = null,Object? budgetUpperLimit = null,Object? fixedQuestion = null,Object? minutes = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? aiRecArea = freezed,Object? aiRecDate = freezed,Object? aiRecStore = freezed,Object? purpose = null,Object? candidateDateTimes = null,Object? candidateAreas = null,Object? allergiesEtc = null,Object? organizerId = null,Object? participantId = null,Object? budgetUpperLimit = null,Object? fixedQuestion = null,Object? minutes = null,}) {
   return _then(_EventEntry(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,aiRecArea: freezed == aiRecArea ? _self.aiRecArea : aiRecArea // ignore: cast_nullable_to_non_nullable
 as String?,aiRecDate: freezed == aiRecDate ? _self.aiRecDate : aiRecDate // ignore: cast_nullable_to_non_nullable
 as String?,aiRecStore: freezed == aiRecStore ? _self.aiRecStore : aiRecStore // ignore: cast_nullable_to_non_nullable
 as String?,purpose: null == purpose ? _self.purpose : purpose // ignore: cast_nullable_to_non_nullable
-as String,dueDate: null == dueDate ? _self.dueDate : dueDate // ignore: cast_nullable_to_non_nullable
-as DateTime,candidateDateTimes: null == candidateDateTimes ? _self._candidateDateTimes : candidateDateTimes // ignore: cast_nullable_to_non_nullable
+as String,candidateDateTimes: null == candidateDateTimes ? _self._candidateDateTimes : candidateDateTimes // ignore: cast_nullable_to_non_nullable
 as List<CandidateDateTime>,candidateAreas: null == candidateAreas ? _self._candidateAreas : candidateAreas // ignore: cast_nullable_to_non_nullable
 as List<CandidateArea>,allergiesEtc: null == allergiesEtc ? _self.allergiesEtc : allergiesEtc // ignore: cast_nullable_to_non_nullable
 as String,organizerId: null == organizerId ? _self._organizerId : organizerId // ignore: cast_nullable_to_non_nullable

@@ -18,7 +18,6 @@ class EventListScreen extends HookConsumerWidget {
           final event = snapshot.data();
           return ListTile(
             title: Text(event.purpose),
-            subtitle: Text('Due: ${event.dueDate.toLocal()}'),
             onTap: () => ManagementRoute(event.id!).go(context),
           );
         },

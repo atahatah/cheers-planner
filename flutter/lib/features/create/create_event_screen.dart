@@ -20,7 +20,6 @@ class CreateEventScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final loading = useState(false);
     final eventName = useTextEditingController();
-    final deadline = useState<DateTime?>(null);
     final candidateDateTimes = useState<List<DateTime>>([]);
     final allergiesEtc = useTextEditingController();
     final budgetUpperLimit = useTextEditingController();
@@ -32,18 +31,6 @@ class CreateEventScreen extends HookConsumerWidget {
 
     final getCurrentLocation = useMemoized(getCurrentLatLng);
     final currentPosition = useFuture(getCurrentLocation);
-
-    final selectDeadline = useCallback(() async {
-      final selected = await showDatePicker(
-        context: context,
-        initialDate: deadline.value ?? DateTime.now(),
-        firstDate: DateTime.now(),
-        lastDate: DateTime(2100),
-      );
-      if (selected != null) {
-        deadline.value = selected;
-      }
-    }, [context, deadline]);
 
     final deleteCandidateDateTime = useCallback((DateTime candidateDateTime) {
       candidateDateTimes.value = List.from(candidateDateTimes.value)
@@ -98,7 +85,6 @@ class CreateEventScreen extends HookConsumerWidget {
             .add(
               EventEntry(
                 purpose: eventName.text,
-                dueDate: deadline.value ?? DateTime.now(),
                 candidateDateTimes: candidateDateTimes.value
                     .map((e) => CandidateDateTime(start: e))
                     .toList(),
@@ -136,14 +122,6 @@ class CreateEventScreen extends HookConsumerWidget {
               TextField(
                 controller: eventName,
                 decoration: const InputDecoration(labelText: 'イベント名'),
-              ),
-              ElevatedButton(
-                onPressed: selectDeadline,
-                child: Text(
-                  deadline.value == null
-                      ? '締切を選択'
-                      : '締切: ${deadline.value!.toLocal()}',
-                ),
               ),
               Column(
                 children: [

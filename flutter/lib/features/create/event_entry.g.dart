@@ -14,10 +14,6 @@ _EventEntry _$EventEntryFromJson(Map<String, dynamic> json) =>
         aiRecDate: $checkedConvert('aiRecDate', (v) => v as String?),
         aiRecStore: $checkedConvert('aiRecStore', (v) => v as String?),
         purpose: $checkedConvert('purpose', (v) => v as String),
-        dueDate: $checkedConvert(
-          'dueDate',
-          (v) => const DateTimeToTimestampConverter().fromJson(v),
-        ),
         candidateDateTimes: $checkedConvert(
           'candidateDateTimes',
           (v) => (v as List<dynamic>)
@@ -59,7 +55,6 @@ Map<String, dynamic> _$EventEntryToJson(_EventEntry instance) =>
       'aiRecDate': instance.aiRecDate,
       'aiRecStore': instance.aiRecStore,
       'purpose': instance.purpose,
-      'dueDate': const DateTimeToTimestampConverter().toJson(instance.dueDate),
       'candidateDateTimes': instance.candidateDateTimes
           .map((e) => e.toJson())
           .toList(),

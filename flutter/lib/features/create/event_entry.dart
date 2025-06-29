@@ -13,7 +13,6 @@ sealed class EventEntry with _$EventEntry {
     String? aiRecDate,
     String? aiRecStore,
     required String purpose,
-    @DateTimeToTimestampConverter() required DateTime dueDate,
     @ListToMapConverter<CandidateDateTime>(prefix: 'datetime')
     required List<CandidateDateTime> candidateDateTimes,
     @ListToMapConverter<CandidateArea>(prefix: 'area')
