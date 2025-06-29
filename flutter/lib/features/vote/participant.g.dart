@@ -30,8 +30,8 @@ _EventParticipant _$EventParticipantFromJson(
           .map((e) => QuestionAnswer.fromJson(e as Map<String, dynamic>))
           .toList(),
     ),
-    questions: $checkedConvert(
-      'questions',
+    fixedQuestionAnswers: $checkedConvert(
+      'fixedQuestionAnswers',
       (v) => (v as List<dynamic>)
           .map((e) => QuestionAnswer.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -63,7 +63,9 @@ Map<String, dynamic> _$EventParticipantToJson(
   ),
   'desiredLocations': instance.desiredLocations,
   'customQuestions': instance.customQuestions.map((e) => e.toJson()).toList(),
-  'questions': instance.questions.map((e) => e.toJson()).toList(),
+  'fixedQuestionAnswers': instance.fixedQuestionAnswers
+      .map((e) => e.toJson())
+      .toList(),
   'allergiesEtc': instance.allergiesEtc,
   'submittedAt': const CreatedAtField().toJson(instance.submittedAt),
   'updatedAt': const UpdatedAtField().toJson(instance.updatedAt),

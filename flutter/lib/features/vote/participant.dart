@@ -19,7 +19,7 @@ sealed class EventParticipant with _$EventParticipant {
     @ListToMapConverter<QuestionAnswer>(prefix: 'custom-')
     required List<QuestionAnswer> customQuestions,
     @ListToMapConverter<QuestionAnswer>(prefix: 'question-')
-    required List<QuestionAnswer> questions,
+    required List<QuestionAnswer> fixedQuestionAnswers,
     required String allergiesEtc,
     @CreatedAtField() DateTime? submittedAt,
     @UpdatedAtField() DateTime? updatedAt,

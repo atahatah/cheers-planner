@@ -218,7 +218,7 @@ as int,
 /// @nodoc
 mixin _$CandidateDateTime {
 
- String? get id; String? get eventId;@DateTimeToTimestampConverter() DateTime get start;@DateTimeToTimestampConverter() DateTime get end;
+@DateTimeToTimestampConverter() DateTime get start;@DateTimeToTimestampConverter() DateTime get end;
 /// Create a copy of CandidateDateTime
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -231,16 +231,16 @@ $CandidateDateTimeCopyWith<CandidateDateTime> get copyWith => _$CandidateDateTim
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CandidateDateTime&&(identical(other.id, id) || other.id == id)&&(identical(other.eventId, eventId) || other.eventId == eventId)&&(identical(other.start, start) || other.start == start)&&(identical(other.end, end) || other.end == end));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CandidateDateTime&&(identical(other.start, start) || other.start == start)&&(identical(other.end, end) || other.end == end));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,eventId,start,end);
+int get hashCode => Object.hash(runtimeType,start,end);
 
 @override
 String toString() {
-  return 'CandidateDateTime(id: $id, eventId: $eventId, start: $start, end: $end)';
+  return 'CandidateDateTime(start: $start, end: $end)';
 }
 
 
@@ -251,7 +251,7 @@ abstract mixin class $CandidateDateTimeCopyWith<$Res>  {
   factory $CandidateDateTimeCopyWith(CandidateDateTime value, $Res Function(CandidateDateTime) _then) = _$CandidateDateTimeCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? eventId,@DateTimeToTimestampConverter() DateTime start,@DateTimeToTimestampConverter() DateTime end
+@DateTimeToTimestampConverter() DateTime start,@DateTimeToTimestampConverter() DateTime end
 });
 
 
@@ -268,11 +268,9 @@ class _$CandidateDateTimeCopyWithImpl<$Res>
 
 /// Create a copy of CandidateDateTime
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? eventId = freezed,Object? start = null,Object? end = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? start = null,Object? end = null,}) {
   return _then(_self.copyWith(
-id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String?,eventId: freezed == eventId ? _self.eventId : eventId // ignore: cast_nullable_to_non_nullable
-as String?,start: null == start ? _self.start : start // ignore: cast_nullable_to_non_nullable
+start: null == start ? _self.start : start // ignore: cast_nullable_to_non_nullable
 as DateTime,end: null == end ? _self.end : end // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));
@@ -285,11 +283,9 @@ as DateTime,
 @JsonSerializable()
 
 class _CandidateDateTime implements CandidateDateTime {
-  const _CandidateDateTime({this.id, this.eventId, @DateTimeToTimestampConverter() required this.start, @DateTimeToTimestampConverter() required this.end});
+  const _CandidateDateTime({@DateTimeToTimestampConverter() required this.start, @DateTimeToTimestampConverter() required this.end});
   factory _CandidateDateTime.fromJson(Map<String, dynamic> json) => _$CandidateDateTimeFromJson(json);
 
-@override final  String? id;
-@override final  String? eventId;
 @override@DateTimeToTimestampConverter() final  DateTime start;
 @override@DateTimeToTimestampConverter() final  DateTime end;
 
@@ -306,16 +302,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CandidateDateTime&&(identical(other.id, id) || other.id == id)&&(identical(other.eventId, eventId) || other.eventId == eventId)&&(identical(other.start, start) || other.start == start)&&(identical(other.end, end) || other.end == end));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CandidateDateTime&&(identical(other.start, start) || other.start == start)&&(identical(other.end, end) || other.end == end));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,eventId,start,end);
+int get hashCode => Object.hash(runtimeType,start,end);
 
 @override
 String toString() {
-  return 'CandidateDateTime(id: $id, eventId: $eventId, start: $start, end: $end)';
+  return 'CandidateDateTime(start: $start, end: $end)';
 }
 
 
@@ -326,7 +322,7 @@ abstract mixin class _$CandidateDateTimeCopyWith<$Res> implements $CandidateDate
   factory _$CandidateDateTimeCopyWith(_CandidateDateTime value, $Res Function(_CandidateDateTime) _then) = __$CandidateDateTimeCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? eventId,@DateTimeToTimestampConverter() DateTime start,@DateTimeToTimestampConverter() DateTime end
+@DateTimeToTimestampConverter() DateTime start,@DateTimeToTimestampConverter() DateTime end
 });
 
 
@@ -343,11 +339,9 @@ class __$CandidateDateTimeCopyWithImpl<$Res>
 
 /// Create a copy of CandidateDateTime
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? eventId = freezed,Object? start = null,Object? end = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? start = null,Object? end = null,}) {
   return _then(_CandidateDateTime(
-id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String?,eventId: freezed == eventId ? _self.eventId : eventId // ignore: cast_nullable_to_non_nullable
-as String?,start: null == start ? _self.start : start // ignore: cast_nullable_to_non_nullable
+start: null == start ? _self.start : start // ignore: cast_nullable_to_non_nullable
 as DateTime,end: null == end ? _self.end : end // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));
@@ -360,7 +354,7 @@ as DateTime,
 /// @nodoc
 mixin _$CandidateArea {
 
- String? get id;@GeoPointToJsonConverter() GeoPoint get location;/// 半径 m
+@GeoPointToJsonConverter() GeoPoint get location;/// 半径 m
  int get radius;
 /// Create a copy of CandidateArea
 /// with the given fields replaced by the non-null parameter values.
@@ -374,16 +368,16 @@ $CandidateAreaCopyWith<CandidateArea> get copyWith => _$CandidateAreaCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CandidateArea&&(identical(other.id, id) || other.id == id)&&(identical(other.location, location) || other.location == location)&&(identical(other.radius, radius) || other.radius == radius));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CandidateArea&&(identical(other.location, location) || other.location == location)&&(identical(other.radius, radius) || other.radius == radius));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,location,radius);
+int get hashCode => Object.hash(runtimeType,location,radius);
 
 @override
 String toString() {
-  return 'CandidateArea(id: $id, location: $location, radius: $radius)';
+  return 'CandidateArea(location: $location, radius: $radius)';
 }
 
 
@@ -394,7 +388,7 @@ abstract mixin class $CandidateAreaCopyWith<$Res>  {
   factory $CandidateAreaCopyWith(CandidateArea value, $Res Function(CandidateArea) _then) = _$CandidateAreaCopyWithImpl;
 @useResult
 $Res call({
- String? id,@GeoPointToJsonConverter() GeoPoint location, int radius
+@GeoPointToJsonConverter() GeoPoint location, int radius
 });
 
 
@@ -411,10 +405,9 @@ class _$CandidateAreaCopyWithImpl<$Res>
 
 /// Create a copy of CandidateArea
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? location = null,Object? radius = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? location = null,Object? radius = null,}) {
   return _then(_self.copyWith(
-id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String?,location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
 as GeoPoint,radius: null == radius ? _self.radius : radius // ignore: cast_nullable_to_non_nullable
 as int,
   ));
@@ -427,10 +420,9 @@ as int,
 @JsonSerializable()
 
 class _CandidateArea implements CandidateArea {
-  const _CandidateArea({this.id, @GeoPointToJsonConverter() required this.location, required this.radius});
+  const _CandidateArea({@GeoPointToJsonConverter() required this.location, required this.radius});
   factory _CandidateArea.fromJson(Map<String, dynamic> json) => _$CandidateAreaFromJson(json);
 
-@override final  String? id;
 @override@GeoPointToJsonConverter() final  GeoPoint location;
 /// 半径 m
 @override final  int radius;
@@ -448,16 +440,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CandidateArea&&(identical(other.id, id) || other.id == id)&&(identical(other.location, location) || other.location == location)&&(identical(other.radius, radius) || other.radius == radius));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CandidateArea&&(identical(other.location, location) || other.location == location)&&(identical(other.radius, radius) || other.radius == radius));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,location,radius);
+int get hashCode => Object.hash(runtimeType,location,radius);
 
 @override
 String toString() {
-  return 'CandidateArea(id: $id, location: $location, radius: $radius)';
+  return 'CandidateArea(location: $location, radius: $radius)';
 }
 
 
@@ -468,7 +460,7 @@ abstract mixin class _$CandidateAreaCopyWith<$Res> implements $CandidateAreaCopy
   factory _$CandidateAreaCopyWith(_CandidateArea value, $Res Function(_CandidateArea) _then) = __$CandidateAreaCopyWithImpl;
 @override @useResult
 $Res call({
- String? id,@GeoPointToJsonConverter() GeoPoint location, int radius
+@GeoPointToJsonConverter() GeoPoint location, int radius
 });
 
 
@@ -485,10 +477,9 @@ class __$CandidateAreaCopyWithImpl<$Res>
 
 /// Create a copy of CandidateArea
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? location = null,Object? radius = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? location = null,Object? radius = null,}) {
   return _then(_CandidateArea(
-id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String?,location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
 as GeoPoint,radius: null == radius ? _self.radius : radius // ignore: cast_nullable_to_non_nullable
 as int,
   ));

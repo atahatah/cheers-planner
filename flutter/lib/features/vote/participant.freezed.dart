@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$EventParticipant {
 
- String? get id; String? get eventId; String get name; String get phoneNumber; String? get positionOrGrade; int get desiredBudget;@DateTimeListToTimestampListConverter() List<DateTime> get desiredDates; List<String> get desiredLocations;@ListToMapConverter<QuestionAnswer>(prefix: 'custom-') List<QuestionAnswer> get customQuestions;@ListToMapConverter<QuestionAnswer>(prefix: 'question-') List<QuestionAnswer> get questions; String get allergiesEtc;@CreatedAtField() DateTime? get submittedAt;@UpdatedAtField() DateTime? get updatedAt;
+ String? get id; String? get eventId; String get name; String get phoneNumber; String? get positionOrGrade; int get desiredBudget;@DateTimeListToTimestampListConverter() List<DateTime> get desiredDates; List<String> get desiredLocations;@ListToMapConverter<QuestionAnswer>(prefix: 'custom-') List<QuestionAnswer> get customQuestions;@ListToMapConverter<QuestionAnswer>(prefix: 'question-') List<QuestionAnswer> get fixedQuestionAnswers; String get allergiesEtc;@CreatedAtField() DateTime? get submittedAt;@UpdatedAtField() DateTime? get updatedAt;
 /// Create a copy of EventParticipant
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $EventParticipantCopyWith<EventParticipant> get copyWith => _$EventParticipantCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EventParticipant&&(identical(other.id, id) || other.id == id)&&(identical(other.eventId, eventId) || other.eventId == eventId)&&(identical(other.name, name) || other.name == name)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.positionOrGrade, positionOrGrade) || other.positionOrGrade == positionOrGrade)&&(identical(other.desiredBudget, desiredBudget) || other.desiredBudget == desiredBudget)&&const DeepCollectionEquality().equals(other.desiredDates, desiredDates)&&const DeepCollectionEquality().equals(other.desiredLocations, desiredLocations)&&const DeepCollectionEquality().equals(other.customQuestions, customQuestions)&&const DeepCollectionEquality().equals(other.questions, questions)&&(identical(other.allergiesEtc, allergiesEtc) || other.allergiesEtc == allergiesEtc)&&(identical(other.submittedAt, submittedAt) || other.submittedAt == submittedAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EventParticipant&&(identical(other.id, id) || other.id == id)&&(identical(other.eventId, eventId) || other.eventId == eventId)&&(identical(other.name, name) || other.name == name)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.positionOrGrade, positionOrGrade) || other.positionOrGrade == positionOrGrade)&&(identical(other.desiredBudget, desiredBudget) || other.desiredBudget == desiredBudget)&&const DeepCollectionEquality().equals(other.desiredDates, desiredDates)&&const DeepCollectionEquality().equals(other.desiredLocations, desiredLocations)&&const DeepCollectionEquality().equals(other.customQuestions, customQuestions)&&const DeepCollectionEquality().equals(other.fixedQuestionAnswers, fixedQuestionAnswers)&&(identical(other.allergiesEtc, allergiesEtc) || other.allergiesEtc == allergiesEtc)&&(identical(other.submittedAt, submittedAt) || other.submittedAt == submittedAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,eventId,name,phoneNumber,positionOrGrade,desiredBudget,const DeepCollectionEquality().hash(desiredDates),const DeepCollectionEquality().hash(desiredLocations),const DeepCollectionEquality().hash(customQuestions),const DeepCollectionEquality().hash(questions),allergiesEtc,submittedAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,eventId,name,phoneNumber,positionOrGrade,desiredBudget,const DeepCollectionEquality().hash(desiredDates),const DeepCollectionEquality().hash(desiredLocations),const DeepCollectionEquality().hash(customQuestions),const DeepCollectionEquality().hash(fixedQuestionAnswers),allergiesEtc,submittedAt,updatedAt);
 
 @override
 String toString() {
-  return 'EventParticipant(id: $id, eventId: $eventId, name: $name, phoneNumber: $phoneNumber, positionOrGrade: $positionOrGrade, desiredBudget: $desiredBudget, desiredDates: $desiredDates, desiredLocations: $desiredLocations, customQuestions: $customQuestions, questions: $questions, allergiesEtc: $allergiesEtc, submittedAt: $submittedAt, updatedAt: $updatedAt)';
+  return 'EventParticipant(id: $id, eventId: $eventId, name: $name, phoneNumber: $phoneNumber, positionOrGrade: $positionOrGrade, desiredBudget: $desiredBudget, desiredDates: $desiredDates, desiredLocations: $desiredLocations, customQuestions: $customQuestions, fixedQuestionAnswers: $fixedQuestionAnswers, allergiesEtc: $allergiesEtc, submittedAt: $submittedAt, updatedAt: $updatedAt)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $EventParticipantCopyWith<$Res>  {
   factory $EventParticipantCopyWith(EventParticipant value, $Res Function(EventParticipant) _then) = _$EventParticipantCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? eventId, String name, String phoneNumber, String? positionOrGrade, int desiredBudget,@DateTimeListToTimestampListConverter() List<DateTime> desiredDates, List<String> desiredLocations,@ListToMapConverter<QuestionAnswer>(prefix: 'custom-') List<QuestionAnswer> customQuestions,@ListToMapConverter<QuestionAnswer>(prefix: 'question-') List<QuestionAnswer> questions, String allergiesEtc,@CreatedAtField() DateTime? submittedAt,@UpdatedAtField() DateTime? updatedAt
+ String? id, String? eventId, String name, String phoneNumber, String? positionOrGrade, int desiredBudget,@DateTimeListToTimestampListConverter() List<DateTime> desiredDates, List<String> desiredLocations,@ListToMapConverter<QuestionAnswer>(prefix: 'custom-') List<QuestionAnswer> customQuestions,@ListToMapConverter<QuestionAnswer>(prefix: 'question-') List<QuestionAnswer> fixedQuestionAnswers, String allergiesEtc,@CreatedAtField() DateTime? submittedAt,@UpdatedAtField() DateTime? updatedAt
 });
 
 
@@ -66,7 +66,7 @@ class _$EventParticipantCopyWithImpl<$Res>
 
 /// Create a copy of EventParticipant
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? eventId = freezed,Object? name = null,Object? phoneNumber = null,Object? positionOrGrade = freezed,Object? desiredBudget = null,Object? desiredDates = null,Object? desiredLocations = null,Object? customQuestions = null,Object? questions = null,Object? allergiesEtc = null,Object? submittedAt = freezed,Object? updatedAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? eventId = freezed,Object? name = null,Object? phoneNumber = null,Object? positionOrGrade = freezed,Object? desiredBudget = null,Object? desiredDates = null,Object? desiredLocations = null,Object? customQuestions = null,Object? fixedQuestionAnswers = null,Object? allergiesEtc = null,Object? submittedAt = freezed,Object? updatedAt = freezed,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,eventId: freezed == eventId ? _self.eventId : eventId // ignore: cast_nullable_to_non_nullable
@@ -77,7 +77,7 @@ as String?,desiredBudget: null == desiredBudget ? _self.desiredBudget : desiredB
 as int,desiredDates: null == desiredDates ? _self.desiredDates : desiredDates // ignore: cast_nullable_to_non_nullable
 as List<DateTime>,desiredLocations: null == desiredLocations ? _self.desiredLocations : desiredLocations // ignore: cast_nullable_to_non_nullable
 as List<String>,customQuestions: null == customQuestions ? _self.customQuestions : customQuestions // ignore: cast_nullable_to_non_nullable
-as List<QuestionAnswer>,questions: null == questions ? _self.questions : questions // ignore: cast_nullable_to_non_nullable
+as List<QuestionAnswer>,fixedQuestionAnswers: null == fixedQuestionAnswers ? _self.fixedQuestionAnswers : fixedQuestionAnswers // ignore: cast_nullable_to_non_nullable
 as List<QuestionAnswer>,allergiesEtc: null == allergiesEtc ? _self.allergiesEtc : allergiesEtc // ignore: cast_nullable_to_non_nullable
 as String,submittedAt: freezed == submittedAt ? _self.submittedAt : submittedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
@@ -92,7 +92,7 @@ as DateTime?,
 @JsonSerializable()
 
 class _EventParticipant implements EventParticipant {
-  const _EventParticipant({this.id, this.eventId, required this.name, required this.phoneNumber, required this.positionOrGrade, required this.desiredBudget, @DateTimeListToTimestampListConverter() required final  List<DateTime> desiredDates, required final  List<String> desiredLocations, @ListToMapConverter<QuestionAnswer>(prefix: 'custom-') required final  List<QuestionAnswer> customQuestions, @ListToMapConverter<QuestionAnswer>(prefix: 'question-') required final  List<QuestionAnswer> questions, required this.allergiesEtc, @CreatedAtField() this.submittedAt, @UpdatedAtField() this.updatedAt}): _desiredDates = desiredDates,_desiredLocations = desiredLocations,_customQuestions = customQuestions,_questions = questions;
+  const _EventParticipant({this.id, this.eventId, required this.name, required this.phoneNumber, required this.positionOrGrade, required this.desiredBudget, @DateTimeListToTimestampListConverter() required final  List<DateTime> desiredDates, required final  List<String> desiredLocations, @ListToMapConverter<QuestionAnswer>(prefix: 'custom-') required final  List<QuestionAnswer> customQuestions, @ListToMapConverter<QuestionAnswer>(prefix: 'question-') required final  List<QuestionAnswer> fixedQuestionAnswers, required this.allergiesEtc, @CreatedAtField() this.submittedAt, @UpdatedAtField() this.updatedAt}): _desiredDates = desiredDates,_desiredLocations = desiredLocations,_customQuestions = customQuestions,_fixedQuestionAnswers = fixedQuestionAnswers;
   factory _EventParticipant.fromJson(Map<String, dynamic> json) => _$EventParticipantFromJson(json);
 
 @override final  String? id;
@@ -122,11 +122,11 @@ class _EventParticipant implements EventParticipant {
   return EqualUnmodifiableListView(_customQuestions);
 }
 
- final  List<QuestionAnswer> _questions;
-@override@ListToMapConverter<QuestionAnswer>(prefix: 'question-') List<QuestionAnswer> get questions {
-  if (_questions is EqualUnmodifiableListView) return _questions;
+ final  List<QuestionAnswer> _fixedQuestionAnswers;
+@override@ListToMapConverter<QuestionAnswer>(prefix: 'question-') List<QuestionAnswer> get fixedQuestionAnswers {
+  if (_fixedQuestionAnswers is EqualUnmodifiableListView) return _fixedQuestionAnswers;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_questions);
+  return EqualUnmodifiableListView(_fixedQuestionAnswers);
 }
 
 @override final  String allergiesEtc;
@@ -146,16 +146,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EventParticipant&&(identical(other.id, id) || other.id == id)&&(identical(other.eventId, eventId) || other.eventId == eventId)&&(identical(other.name, name) || other.name == name)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.positionOrGrade, positionOrGrade) || other.positionOrGrade == positionOrGrade)&&(identical(other.desiredBudget, desiredBudget) || other.desiredBudget == desiredBudget)&&const DeepCollectionEquality().equals(other._desiredDates, _desiredDates)&&const DeepCollectionEquality().equals(other._desiredLocations, _desiredLocations)&&const DeepCollectionEquality().equals(other._customQuestions, _customQuestions)&&const DeepCollectionEquality().equals(other._questions, _questions)&&(identical(other.allergiesEtc, allergiesEtc) || other.allergiesEtc == allergiesEtc)&&(identical(other.submittedAt, submittedAt) || other.submittedAt == submittedAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EventParticipant&&(identical(other.id, id) || other.id == id)&&(identical(other.eventId, eventId) || other.eventId == eventId)&&(identical(other.name, name) || other.name == name)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.positionOrGrade, positionOrGrade) || other.positionOrGrade == positionOrGrade)&&(identical(other.desiredBudget, desiredBudget) || other.desiredBudget == desiredBudget)&&const DeepCollectionEquality().equals(other._desiredDates, _desiredDates)&&const DeepCollectionEquality().equals(other._desiredLocations, _desiredLocations)&&const DeepCollectionEquality().equals(other._customQuestions, _customQuestions)&&const DeepCollectionEquality().equals(other._fixedQuestionAnswers, _fixedQuestionAnswers)&&(identical(other.allergiesEtc, allergiesEtc) || other.allergiesEtc == allergiesEtc)&&(identical(other.submittedAt, submittedAt) || other.submittedAt == submittedAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,eventId,name,phoneNumber,positionOrGrade,desiredBudget,const DeepCollectionEquality().hash(_desiredDates),const DeepCollectionEquality().hash(_desiredLocations),const DeepCollectionEquality().hash(_customQuestions),const DeepCollectionEquality().hash(_questions),allergiesEtc,submittedAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,eventId,name,phoneNumber,positionOrGrade,desiredBudget,const DeepCollectionEquality().hash(_desiredDates),const DeepCollectionEquality().hash(_desiredLocations),const DeepCollectionEquality().hash(_customQuestions),const DeepCollectionEquality().hash(_fixedQuestionAnswers),allergiesEtc,submittedAt,updatedAt);
 
 @override
 String toString() {
-  return 'EventParticipant(id: $id, eventId: $eventId, name: $name, phoneNumber: $phoneNumber, positionOrGrade: $positionOrGrade, desiredBudget: $desiredBudget, desiredDates: $desiredDates, desiredLocations: $desiredLocations, customQuestions: $customQuestions, questions: $questions, allergiesEtc: $allergiesEtc, submittedAt: $submittedAt, updatedAt: $updatedAt)';
+  return 'EventParticipant(id: $id, eventId: $eventId, name: $name, phoneNumber: $phoneNumber, positionOrGrade: $positionOrGrade, desiredBudget: $desiredBudget, desiredDates: $desiredDates, desiredLocations: $desiredLocations, customQuestions: $customQuestions, fixedQuestionAnswers: $fixedQuestionAnswers, allergiesEtc: $allergiesEtc, submittedAt: $submittedAt, updatedAt: $updatedAt)';
 }
 
 
@@ -166,7 +166,7 @@ abstract mixin class _$EventParticipantCopyWith<$Res> implements $EventParticipa
   factory _$EventParticipantCopyWith(_EventParticipant value, $Res Function(_EventParticipant) _then) = __$EventParticipantCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? eventId, String name, String phoneNumber, String? positionOrGrade, int desiredBudget,@DateTimeListToTimestampListConverter() List<DateTime> desiredDates, List<String> desiredLocations,@ListToMapConverter<QuestionAnswer>(prefix: 'custom-') List<QuestionAnswer> customQuestions,@ListToMapConverter<QuestionAnswer>(prefix: 'question-') List<QuestionAnswer> questions, String allergiesEtc,@CreatedAtField() DateTime? submittedAt,@UpdatedAtField() DateTime? updatedAt
+ String? id, String? eventId, String name, String phoneNumber, String? positionOrGrade, int desiredBudget,@DateTimeListToTimestampListConverter() List<DateTime> desiredDates, List<String> desiredLocations,@ListToMapConverter<QuestionAnswer>(prefix: 'custom-') List<QuestionAnswer> customQuestions,@ListToMapConverter<QuestionAnswer>(prefix: 'question-') List<QuestionAnswer> fixedQuestionAnswers, String allergiesEtc,@CreatedAtField() DateTime? submittedAt,@UpdatedAtField() DateTime? updatedAt
 });
 
 
@@ -183,7 +183,7 @@ class __$EventParticipantCopyWithImpl<$Res>
 
 /// Create a copy of EventParticipant
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? eventId = freezed,Object? name = null,Object? phoneNumber = null,Object? positionOrGrade = freezed,Object? desiredBudget = null,Object? desiredDates = null,Object? desiredLocations = null,Object? customQuestions = null,Object? questions = null,Object? allergiesEtc = null,Object? submittedAt = freezed,Object? updatedAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? eventId = freezed,Object? name = null,Object? phoneNumber = null,Object? positionOrGrade = freezed,Object? desiredBudget = null,Object? desiredDates = null,Object? desiredLocations = null,Object? customQuestions = null,Object? fixedQuestionAnswers = null,Object? allergiesEtc = null,Object? submittedAt = freezed,Object? updatedAt = freezed,}) {
   return _then(_EventParticipant(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,eventId: freezed == eventId ? _self.eventId : eventId // ignore: cast_nullable_to_non_nullable
@@ -194,7 +194,7 @@ as String?,desiredBudget: null == desiredBudget ? _self.desiredBudget : desiredB
 as int,desiredDates: null == desiredDates ? _self._desiredDates : desiredDates // ignore: cast_nullable_to_non_nullable
 as List<DateTime>,desiredLocations: null == desiredLocations ? _self._desiredLocations : desiredLocations // ignore: cast_nullable_to_non_nullable
 as List<String>,customQuestions: null == customQuestions ? _self._customQuestions : customQuestions // ignore: cast_nullable_to_non_nullable
-as List<QuestionAnswer>,questions: null == questions ? _self._questions : questions // ignore: cast_nullable_to_non_nullable
+as List<QuestionAnswer>,fixedQuestionAnswers: null == fixedQuestionAnswers ? _self._fixedQuestionAnswers : fixedQuestionAnswers // ignore: cast_nullable_to_non_nullable
 as List<QuestionAnswer>,allergiesEtc: null == allergiesEtc ? _self.allergiesEtc : allergiesEtc // ignore: cast_nullable_to_non_nullable
 as String,submittedAt: freezed == submittedAt ? _self.submittedAt : submittedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable

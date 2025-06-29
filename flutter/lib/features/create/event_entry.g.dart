@@ -75,8 +75,6 @@ Map<String, dynamic> _$EventEntryToJson(_EventEntry instance) =>
 _CandidateDateTime _$CandidateDateTimeFromJson(Map<String, dynamic> json) =>
     $checkedCreate('_CandidateDateTime', json, ($checkedConvert) {
       final val = _CandidateDateTime(
-        id: $checkedConvert('id', (v) => v as String?),
-        eventId: $checkedConvert('eventId', (v) => v as String?),
         start: $checkedConvert(
           'start',
           (v) => const DateTimeToTimestampConverter().fromJson(v),
@@ -91,8 +89,6 @@ _CandidateDateTime _$CandidateDateTimeFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$CandidateDateTimeToJson(_CandidateDateTime instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'eventId': instance.eventId,
       'start': const DateTimeToTimestampConverter().toJson(instance.start),
       'end': const DateTimeToTimestampConverter().toJson(instance.end),
     };
@@ -100,7 +96,6 @@ Map<String, dynamic> _$CandidateDateTimeToJson(_CandidateDateTime instance) =>
 _CandidateArea _$CandidateAreaFromJson(Map<String, dynamic> json) =>
     $checkedCreate('_CandidateArea', json, ($checkedConvert) {
       final val = _CandidateArea(
-        id: $checkedConvert('id', (v) => v as String?),
         location: $checkedConvert(
           'location',
           (v) => const GeoPointToJsonConverter().fromJson(v as GeoPoint),
@@ -112,7 +107,6 @@ _CandidateArea _$CandidateAreaFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$CandidateAreaToJson(_CandidateArea instance) =>
     <String, dynamic>{
-      'id': instance.id,
       'location': const GeoPointToJsonConverter().toJson(instance.location),
       'radius': instance.radius,
     };
