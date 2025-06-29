@@ -109,17 +109,18 @@ class GeoPointListToJsonConverter
   }
 }
 
-class ListToMapConverter<T> implements JsonConverter<List<T>, Map<String, T>> {
+class ListToMapConverter<T>
+    implements JsonConverter<List<T>, Map<String, dynamic>> {
   const ListToMapConverter({required this.prefix});
   final String prefix;
 
   @override
-  List<T> fromJson(Map<String, T> map) {
-    return map.values.toList();
+  List<T> fromJson(Map<String, dynamic> map) {
+    return map.values.cast<T>().toList();
   }
 
   @override
-  Map<String, T> toJson(List<T> list) {
+  Map<String, dynamic> toJson(List<T> list) {
     return {for (var i = 0; i < list.length; i++) '$prefix$i': list[i]};
   }
 }
