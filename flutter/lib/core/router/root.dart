@@ -49,12 +49,12 @@ GoRouter router(Ref ref) {
               }
               return null;
             case NotRegistered():
-              return '${const RegisterRoute().location}?redirect=${base64Url.encode(utf8.encode(path!))}';
+              return '${const RegisterRoute().location}?redirect=${base64Url.encode(utf8.encode(state.uri.toString()))}';
             case NotSignedIn():
               if (path?.startsWith('/auth') ?? false) {
                 return null;
               }
-              return '${const SignUpRoute().location}?redirect=${base64Url.encode(utf8.encode(path!))}';
+              return '${const SignUpRoute().location}?redirect=${base64Url.encode(utf8.encode(state.uri.toString()))}';
           }
         case AsyncLoading():
         case AsyncError():
