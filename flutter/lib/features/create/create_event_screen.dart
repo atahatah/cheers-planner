@@ -25,7 +25,7 @@ class CreateEventScreen extends HookConsumerWidget {
     final allergiesEtc = useTextEditingController();
     final budgetUpperLimit = useTextEditingController();
     final fixedQuestion = useState<List<String>>([]);
-    final minutes = useTextEditingController();
+    final minutes = useTextEditingController(text: '60');
     final areasController = useAreasSelection();
     final map = useGoogleMapController();
 
@@ -126,7 +126,7 @@ class CreateEventScreen extends HookConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Create Plan')),
+      appBar: AppBar(title: const Text('イベント作成')),
       body: Stack(
         alignment: Alignment.center,
         children: [
@@ -134,14 +134,14 @@ class CreateEventScreen extends HookConsumerWidget {
             children: [
               TextField(
                 controller: eventName,
-                decoration: const InputDecoration(labelText: 'Event Name'),
+                decoration: const InputDecoration(labelText: 'イベント名'),
               ),
               ElevatedButton(
                 onPressed: selectDeadline,
                 child: Text(
                   deadline.value == null
-                      ? 'Select Deadline'
-                      : 'Deadline: ${deadline.value!.toLocal()}',
+                      ? '締切を選択'
+                      : '締切: ${deadline.value!.toLocal()}',
                 ),
               ),
               ValueListenableBuilder(
@@ -235,23 +235,18 @@ class CreateEventScreen extends HookConsumerWidget {
               TextField(
                 controller: budgetUpperLimit,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: 'Budget Upper Limit',
-                ),
+                decoration: const InputDecoration(labelText: '予算の上限(円)'),
               ),
               TextField(
                 controller: minutes,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: 'Minutes'),
+                decoration: const InputDecoration(labelText: '長さ(分)'),
               ),
               TextField(
                 controller: allergiesEtc,
-                decoration: const InputDecoration(labelText: 'Allergies, etc.'),
+                decoration: const InputDecoration(labelText: 'その他のアレルギー等'),
               ),
-              ElevatedButton(
-                onPressed: submit,
-                child: const Text('Submit Plan'),
-              ),
+              ElevatedButton(onPressed: submit, child: const Text('イベントを作成')),
             ],
           ),
           if (loading.value) ...[
