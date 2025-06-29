@@ -11,7 +11,7 @@ class EventListScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final eventEntriesRepo = ref.watch(eventEntriesRepoProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Event List')),
+      appBar: AppBar(title: const Text('作成したイベント')),
       body: FirestoreListView(
         query: eventEntriesRepo.listViewQuery(),
         itemBuilder: (context, snapshot) {
@@ -22,6 +22,8 @@ class EventListScreen extends HookConsumerWidget {
             onTap: () => ManagementRoute(event.id!).go(context),
           );
         },
+        emptyBuilder: (context) =>
+            const Center(child: Text('作成したイベントはまだありません。')),
         loadingBuilder: (context) =>
             const Center(child: CircularProgressIndicator()),
         errorBuilder: (context, error, stackTrace) =>

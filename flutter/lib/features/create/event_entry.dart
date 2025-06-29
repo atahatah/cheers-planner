@@ -33,8 +33,6 @@ sealed class EventEntry with _$EventEntry {
 @freezed
 sealed class CandidateDateTime with _$CandidateDateTime {
   const factory CandidateDateTime({
-    String? id,
-    String? eventId,
     @DateTimeToTimestampConverter() required DateTime start,
     @DateTimeToTimestampConverter() required DateTime end,
   }) = _CandidateDateTime;
@@ -46,7 +44,6 @@ sealed class CandidateDateTime with _$CandidateDateTime {
 @freezed
 sealed class CandidateArea with _$CandidateArea {
   const factory CandidateArea({
-    String? id,
     @GeoPointToJsonConverter() required GeoPoint location,
 
     /// 半径 m
