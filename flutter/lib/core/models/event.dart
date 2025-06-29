@@ -10,13 +10,14 @@ sealed class Event with _$Event {
   const factory Event({
     required String id,
     required List<String> organizerId,
+    required List<String> participantId,
     required String eventName,
     @DateTimeToTimestampConverter() required DateTime dueDate,
     required int minutes,
     required int budgetUpperLimit,
     required String purpose,
     required List<String> fixedQuestion,
-    Map<String, CandidateDateTime>? candidateDateTimes,
+    List<CandidateDateTime>? candidateDateTimes,
     Map<String, CandidateArea>? candidateAreas,
     String? aiRecArea,
     @NullableDateTimeToTimestampConverter() DateTime? aiRecDate,
@@ -32,7 +33,6 @@ sealed class Event with _$Event {
 sealed class CandidateDateTime with _$CandidateDateTime {
   const factory CandidateDateTime({
     @DateTimeToTimestampConverter() required DateTime start,
-    @DateTimeToTimestampConverter() required DateTime end,
   }) = _CandidateDateTime;
 
   factory CandidateDateTime.fromJson(Map<String, dynamic> json) =>
@@ -62,8 +62,8 @@ sealed class Participant with _$Participant {
     required List<String> desiredLocations,
     required String allergiesEtc,
     @DateTimeToTimestampConverter() required DateTime submittedAt,
-    Map<String, FixedQuestionAnswer>? fixedQuestionAnswers,
-    Map<String, CustomQuestionAnswer>? customQuestionAnswers,
+    List<FixedQuestionAnswer>? fixedQuestionAnswers,
+    List<CustomQuestionAnswer>? customQuestionAnswers,
     @CreatedAtField() DateTime? createdAt,
     @UpdatedAtField() DateTime? updatedAt,
   }) = _Participant;
@@ -115,9 +115,20 @@ sealed class Restaurant with _$Restaurant {
     required String formattedAddress,
     required double rating,
     required int priceLevel,
-    required String menuHighlights,
-    required String accessInfo,
     required String placeId,
+    String? menuHighlights,
+    String? accessInfo,
+    String? vicinity,
+    Map<String, double>? location,
+    String? businessStatus,
+    List<String>? types,
+    Map<String, dynamic>? openingHours,
+    List<Map<String, dynamic>>? photos,
+    int? userRatingsTotal,
+    Map<String, dynamic>? drinkingInfo,
+    Map<String, dynamic>? reviewAnalysis,
+    String? website,
+    String? phoneNumber,
   }) = _Restaurant;
 
   factory Restaurant.fromJson(Map<String, dynamic> json) =>

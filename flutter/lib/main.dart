@@ -26,13 +26,21 @@ void main() async {
     // androidProvider: AndroidProvider.debug,
     // appleProvider: AppleProvider.appAttest,
   );
+
   // エミュレーター利用フラグ: dart-defineで切り替え可能
   const useEmulators = bool.fromEnvironment('USE_FIREBASE_EMULATORS');
+  print('🔧 USE_FIREBASE_EMULATORS: $useEmulators');
+
   if (useEmulators) {
+    print('🚀 Setting up Firebase Emulators...');
     FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8081);
     await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
     FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
     await FirebaseStorage.instance.useStorageEmulator('localhost', 9199);
+    print('✅ Firebase Emulators configured successfully');
+  } else {
+    print('🌐 Using Firebase Production Environment');
   }
+
   runApp(const ProviderScope(child: MyApp()));
 }

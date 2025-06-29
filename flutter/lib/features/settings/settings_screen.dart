@@ -10,34 +10,26 @@ class SettingsScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final generativeAIModel = ref.watch(generativeAIModelProvider);
-    final isGeminiEchoMock = ref.watch(isGeminiEchoMockProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
       body: Center(
         child: Column(
           children: [
             const Text('Gemini Settings'),
-            SwitchListTile(
-              title: const Text('Gemini Echo Mock'),
-              value: isGeminiEchoMock,
-              onChanged: (value) =>
-                  ref.read(isGeminiEchoMockProvider.notifier).set(value),
+            DropdownButton<GenerativeAIModels>(
+              value: generativeAIModel,
+              items: GenerativeAIModels.values.map((model) {
+                return DropdownMenuItem(
+                  value: model,
+                  child: Text(model.displayName),
+                );
+              }).toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  ref.read(generativeAIModelProvider.notifier).set(value);
+                }
+              },
             ),
-            if (!isGeminiEchoMock)
-              DropdownButton<GenerativeAIModels>(
-                value: generativeAIModel,
-                items: GenerativeAIModels.values.map((model) {
-                  return DropdownMenuItem(
-                    value: model,
-                    child: Text(model.displayName),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    ref.read(generativeAIModelProvider.notifier).set(value);
-                  }
-                },
-              ),
             const Text('test'),
             ElevatedButton(
               onPressed: () {

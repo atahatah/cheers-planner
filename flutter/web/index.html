@@ -33,9 +33,9 @@
   <title>cheers_planner</title>
   <link rel="manifest" href="manifest.json">
 
-  <!-- Google Map-->
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmaxj4ytFk7_TsdH60wTFQmM13hzyUruQ&libraries=drawing">
+  <!-- Flutter Web Renderer Configuration for CORS -->
+  <script type="text/javascript">
+    window.flutterWebRenderer = "html";
   </script>
 </head>
 
@@ -44,7 +44,6 @@
   <script>
     (async function () {
       let appCheckToken = false;
-      let googlePlacesApiKey = null;
       
       if (/\?firstIssue=true/.test(window.location.search)) {
         appCheckToken = true;
@@ -64,15 +63,10 @@
               appCheckToken = appCheckMatch[1].trim();
             }
             
-            // Google Places API Key
-            const placesApiMatch = text.match(/^GOOGLE_PLACES_API_KEY=(.*)$/m);
-            if (placesApiMatch && placesApiMatch[1].trim() !== '') {
-              googlePlacesApiKey = placesApiMatch[1].trim();
-            }
             
             console.log('✅ Environment variables loaded from .env');
             console.log('🔑 Firebase App Check token:', appCheckToken ? 'Found' : 'Not found');
-            console.log('🔑 Google Places API key:', googlePlacesApiKey ? 'Found' : 'Not found');
+
           }
         }
       } catch (e) {
@@ -81,7 +75,6 @@
       
       // Global variables for Flutter app
       self.FIREBASE_APPCHECK_DEBUG_TOKEN = appCheckToken;
-      self.GOOGLE_PLACES_API_KEY = googlePlacesApiKey;
     })();
   </script>
 </body>
