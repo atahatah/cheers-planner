@@ -7,9 +7,11 @@ import 'package:cheers_planner/features/auth/sign_in_screen.dart';
 import 'package:cheers_planner/features/auth/sign_up_screen.dart';
 import 'package:cheers_planner/features/chat/chat_screen.dart';
 import 'package:cheers_planner/features/counter/counter_screen.dart';
-import 'package:cheers_planner/features/plans/create_event_screen.dart';
-import 'package:cheers_planner/features/plans/event_list_screen.dart';
+import 'package:cheers_planner/features/create/create_event_screen.dart';
+import 'package:cheers_planner/features/create/event_list_screen.dart';
 import 'package:cheers_planner/features/settings/settings_screen.dart';
+import 'package:cheers_planner/features/vote/vote_screen.dart';
+import 'package:cheers_planner/features/vote/voted_list_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -20,9 +22,10 @@ part 'root.g.dart';
 part 'routes/auth.dart';
 part 'routes/shell_routes/chat.dart';
 part 'routes/shell_routes/counter.dart';
-part 'routes/shell_routes/plans.dart';
+part 'routes/shell_routes/create.dart';
 part 'routes/shell_routes/settings.dart';
 part 'routes/shell_routes/shell_route.dart';
+part 'routes/shell_routes/vote.dart';
 
 @riverpod
 GoRouter router(Ref ref) {
@@ -45,7 +48,7 @@ GoRouter router(Ref ref) {
                   final decoded = utf8.decode(base64Url.decode(token));
                   return decoded;
                 }
-                return const CounterRoute().location;
+                return const VotedListRoute().location;
               }
               return null;
             case NotRegistered():

@@ -93,18 +93,14 @@ RouteBase get $mainShellRouteData => StatefulShellRouteData.$route(
     StatefulShellBranchData.$branch(
       routes: [
         GoRouteData.$route(
-          path: '/counter',
+          path: '/vote',
 
-          factory: $CounterRouteExtension._fromState,
+          factory: $VotedListRouteExtension._fromState,
         ),
-      ],
-    ),
-    StatefulShellBranchData.$branch(
-      routes: [
         GoRouteData.$route(
-          path: '/chat',
+          path: 'vote/:eventId',
 
-          factory: $ChatRouteExtension._fromState,
+          factory: $VoteRouteExtension._fromState,
         ),
       ],
     ),
@@ -157,10 +153,11 @@ extension $CreateEventRouteExtension on CreateEventRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $CounterRouteExtension on CounterRoute {
-  static CounterRoute _fromState(GoRouterState state) => const CounterRoute();
+extension $VotedListRouteExtension on VotedListRoute {
+  static VotedListRoute _fromState(GoRouterState state) =>
+      const VotedListRoute();
 
-  String get location => GoRouteData.$location('/counter');
+  String get location => GoRouteData.$location('/vote');
 
   void go(BuildContext context) => context.go(location);
 
@@ -172,10 +169,12 @@ extension $CounterRouteExtension on CounterRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $ChatRouteExtension on ChatRoute {
-  static ChatRoute _fromState(GoRouterState state) => const ChatRoute();
+extension $VoteRouteExtension on VoteRoute {
+  static VoteRoute _fromState(GoRouterState state) =>
+      VoteRoute(state.pathParameters['eventId']!);
 
-  String get location => GoRouteData.$location('/chat');
+  String get location =>
+      GoRouteData.$location('vote/${Uri.encodeComponent(eventId)}');
 
   void go(BuildContext context) => context.go(location);
 
@@ -206,7 +205,7 @@ extension $SettingsRouteExtension on SettingsRoute {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'164520009d12e9b8bbce32d3bd1edc6954ee62cc';
+String _$routerHash() => r'6b16981f7d7622a236a89a41af1a3cd0e80d471b';
 
 /// See also [router].
 @ProviderFor(router)

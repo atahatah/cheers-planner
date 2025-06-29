@@ -1,5 +1,5 @@
 import 'package:cheers_planner/core/router/root.dart';
-import 'package:cheers_planner/features/plans/event_entry_repo.dart';
+import 'package:cheers_planner/features/create/event_entry_repo.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

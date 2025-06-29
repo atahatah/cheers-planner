@@ -12,13 +12,19 @@ part of '../../root.dart';
         ),
       ],
     ),
-    TypedStatefulShellBranch<CounterShellBranchData>(
+    // TypedStatefulShellBranch<CounterShellBranchData>(
+    //   routes: <TypedRoute<RouteData>>[
+    //     TypedGoRoute<CounterRoute>(path: '/counter'),
+    //   ],
+    // ),
+    // TypedStatefulShellBranch<ChatShellBranchData>(
+    //   routes: <TypedRoute<RouteData>>[TypedGoRoute<ChatRoute>(path: '/chat')],
+    // ),
+    TypedStatefulShellBranch<VoteShellBranchData>(
       routes: <TypedRoute<RouteData>>[
-        TypedGoRoute<CounterRoute>(path: '/counter'),
+        TypedGoRoute<VotedListRoute>(path: '/vote'),
+        TypedGoRoute<VoteRoute>(path: 'vote/:eventId'),
       ],
-    ),
-    TypedStatefulShellBranch<ChatShellBranchData>(
-      routes: <TypedRoute<RouteData>>[TypedGoRoute<ChatRoute>(path: '/chat')],
     ),
     TypedStatefulShellBranch<SettingsShellBranchData>(
       routes: <TypedRoute<RouteData>>[
@@ -48,9 +54,10 @@ class _NavItem {
 }
 
 const _navItems = <_NavItem>[
-  _NavItem(Icons.event, 'Events'),
-  _NavItem(Icons.add, 'Counter'),
-  _NavItem(Icons.chat, 'Chat'),
+  _NavItem(Icons.event, 'Create'),
+  // _NavItem(Icons.add, 'Counter'),
+  // _NavItem(Icons.chat, 'Chat'),
+  _NavItem(Icons.padding, 'Vote'),
   _NavItem(Icons.settings, 'Settings'),
 ];
 
