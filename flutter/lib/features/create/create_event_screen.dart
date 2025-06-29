@@ -24,10 +24,11 @@ class CreateEventScreen extends HookConsumerWidget {
     final candidateDateTimes = useState<List<DateTime>>([]);
     final allergiesEtc = useTextEditingController();
     final budgetUpperLimit = useTextEditingController();
-    final fixedQuestion = useState<List<String>>([]);
     final minutes = useTextEditingController(text: '60');
     final areasController = useAreasSelection();
     final map = useGoogleMapController();
+    // 固定質問用のTextEditingControllerリスト
+    final questionControllers = useState<List<TextEditingController>>([]);
 
     final getCurrentLocation = useMemoized(getCurrentLatLng);
     final currentPosition = useFuture(getCurrentLocation);
@@ -87,6 +88,11 @@ class CreateEventScreen extends HookConsumerWidget {
         loading.value = true;
         final parsedMinutes = int.parse(minutes.text);
         final uid = ref.read(requireUserProvider).uid;
+        // 固定質問リストを取得
+        final fixedQuestions = questionControllers.value
+            .map((c) => c.text)
+            .where((t) => t.isNotEmpty)
+            .toList();
         final id = await ref
             .read(eventEntriesRepoProvider)
             .add(
@@ -106,7 +112,7 @@ class CreateEventScreen extends HookConsumerWidget {
                 organizerId: [uid],
                 participantId: [uid],
                 budgetUpperLimit: int.tryParse(budgetUpperLimit.text) ?? 0,
-                fixedQuestion: fixedQuestion.value,
+                fixedQuestion: fixedQuestions,
                 minutes: parsedMinutes,
               ),
             );
@@ -245,6 +251,41 @@ class CreateEventScreen extends HookConsumerWidget {
               TextField(
                 controller: allergiesEtc,
                 decoration: const InputDecoration(labelText: 'その他のアレルギー等'),
+              ),
+              // 固定質問の入力セクション
+              Column(
+                children: [
+                  for (var i = 0; i < questionControllers.value.length; i++)
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: questionControllers.value[i],
+                            decoration: InputDecoration(
+                              labelText: '質問 ${i + 1}',
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            questionControllers.value = List.from(
+                              questionControllers.value,
+                            )..removeAt(i);
+                          },
+                        ),
+                      ],
+                    ),
+                  ElevatedButton(
+                    onPressed: () {
+                      questionControllers.value = [
+                        ...questionControllers.value,
+                        TextEditingController(),
+                      ];
+                    },
+                    child: const Text('カスタムの質問を追加'),
+                  ),
+                ],
               ),
               ElevatedButton(onPressed: submit, child: const Text('イベントを作成')),
             ],
