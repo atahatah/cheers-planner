@@ -21,3 +21,13 @@ class CreateEventRoute extends GoRouteData {
     return const CreateEventScreen();
   }
 }
+
+class ManagementRoute extends GoRouteData {
+  const ManagementRoute(this.eventId);
+  final String eventId;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return ManagementScreen(eventId: eventId);
+  }
+}

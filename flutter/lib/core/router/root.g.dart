@@ -86,6 +86,11 @@ RouteBase get $mainShellRouteData => StatefulShellRouteData.$route(
 
               factory: $CreateEventRouteExtension._fromState,
             ),
+            GoRouteData.$route(
+              path: 'management/:eventId',
+
+              factory: $ManagementRouteExtension._fromState,
+            ),
           ],
         ),
       ],
@@ -142,6 +147,24 @@ extension $CreateEventRouteExtension on CreateEventRoute {
       const CreateEventRoute();
 
   String get location => GoRouteData.$location('/events/create');
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $ManagementRouteExtension on ManagementRoute {
+  static ManagementRoute _fromState(GoRouterState state) =>
+      ManagementRoute(state.pathParameters['eventId']!);
+
+  String get location => GoRouteData.$location(
+    '/events/management/${Uri.encodeComponent(eventId)}',
+  );
 
   void go(BuildContext context) => context.go(location);
 
