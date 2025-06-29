@@ -4,7 +4,6 @@ import 'package:cheers_planner/core/firebase/auth_repo.dart';
 import 'package:cheers_planner/core/router/root.dart';
 import 'package:cheers_planner/features/create/event_entry.dart';
 import 'package:cheers_planner/features/create/event_entry_repo.dart';
-import 'package:cheers_planner/features/create/geolocator_repo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -23,9 +22,6 @@ class CreateEventScreen extends HookConsumerWidget {
     final minutes = useTextEditingController(text: '60');
     // 固定質問用のTextEditingControllerリスト
     final questionControllers = useState<List<TextEditingController>>([]);
-
-    final getCurrentLocation = useMemoized(getCurrentLatLng);
-    final currentPosition = useFuture(getCurrentLocation);
 
     final deleteCandidateDateTime = useCallback((DateTime candidateDateTime) {
       candidateDateTimes.value = List.from(candidateDateTimes.value)
