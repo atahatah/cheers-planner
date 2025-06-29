@@ -9,11 +9,11 @@ class EventListScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final eventEntryRepo = ref.watch(eventEntryRepoProvider);
+    final eventEntriesRepo = ref.watch(eventEntriesRepoProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('Event List')),
       body: FirestoreListView(
-        query: eventEntryRepo.listViewQuery(),
+        query: eventEntriesRepo.listViewQuery(),
         itemBuilder: (context, snapshot) {
           final event = snapshot.data();
           return ListTile(

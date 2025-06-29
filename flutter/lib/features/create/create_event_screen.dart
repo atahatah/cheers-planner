@@ -39,8 +39,8 @@ class CreateEventScreen extends HookConsumerWidget {
       try {
         loading.value = true;
         final uid = ref.read(requireUserProvider).uid;
-        await ref
-            .read(eventEntryRepoProvider)
+        final id = await ref
+            .read(eventEntriesRepoProvider)
             .add(
               EventEntry(
                 eventName: eventName.text,
@@ -52,7 +52,7 @@ class CreateEventScreen extends HookConsumerWidget {
                 participantId: [uid],
               ),
             );
-        const EventListRoute().go(context);
+        ManagementRoute(id).go(context);
       } on NotSignedInException {
         ref.read(snackBarRepoProvider).show('ログインしていません。ログインしてください。');
       } on FirebaseException {

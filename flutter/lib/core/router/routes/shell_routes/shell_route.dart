@@ -15,8 +15,12 @@ part of '../../root.dart';
     ),
     TypedStatefulShellBranch<VoteShellBranchData>(
       routes: <TypedRoute<RouteData>>[
-        TypedGoRoute<VotedListRoute>(path: '/vote'),
-        TypedGoRoute<VoteRoute>(path: 'vote/:eventId'),
+        TypedGoRoute<VotedListRoute>(
+          path: '/vote',
+          routes: <TypedRoute<RouteData>>[
+            TypedGoRoute<VoteRoute>(path: ':eventId'),
+          ],
+        ),
       ],
     ),
     TypedStatefulShellBranch<SettingsShellBranchData>(
