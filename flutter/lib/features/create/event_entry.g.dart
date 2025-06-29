@@ -31,10 +31,6 @@ _EventEntry _$EventEntryFromJson(Map<String, dynamic> json) =>
           'organizerId',
           (v) => (v as List<dynamic>).map((e) => e as String).toList(),
         ),
-        participantId: $checkedConvert(
-          'participantId',
-          (v) => (v as List<dynamic>).map((e) => e as String).toList(),
-        ),
         budgetUpperLimit: $checkedConvert(
           'budgetUpperLimit',
           (v) => (v as num).toInt(),
@@ -61,7 +57,6 @@ Map<String, dynamic> _$EventEntryToJson(_EventEntry instance) =>
       'candidateAreas': instance.candidateAreas.map((e) => e.toJson()).toList(),
       'allergiesEtc': instance.allergiesEtc,
       'organizerId': instance.organizerId,
-      'participantId': instance.participantId,
       'budgetUpperLimit': instance.budgetUpperLimit,
       'fixedQuestion': instance.fixedQuestion,
       'minutes': instance.minutes,

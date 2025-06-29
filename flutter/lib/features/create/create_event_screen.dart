@@ -91,7 +91,6 @@ class CreateEventScreen extends HookConsumerWidget {
                 candidateAreas: areasController.areas,
                 allergiesEtc: allergiesEtc.text,
                 organizerId: [uid],
-                participantId: [uid],
                 budgetUpperLimit: int.tryParse(budgetUpperLimit.text) ?? 0,
                 fixedQuestion: fixedQuestions,
                 minutes: parsedMinutes,
