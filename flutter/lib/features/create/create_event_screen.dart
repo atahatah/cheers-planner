@@ -100,12 +100,7 @@ class CreateEventScreen extends HookConsumerWidget {
                 purpose: eventName.text,
                 dueDate: deadline.value ?? DateTime.now(),
                 candidateDateTimes: candidateDateTimes.value
-                    .map(
-                      (e) => CandidateDateTime(
-                        start: e,
-                        end: e.add(Duration(minutes: parsedMinutes)),
-                      ),
-                    )
+                    .map((e) => CandidateDateTime(start: e))
                     .toList(),
                 candidateAreas: areasController.areas,
                 allergiesEtc: allergiesEtc.text,
@@ -150,27 +145,20 @@ class CreateEventScreen extends HookConsumerWidget {
                       : '締切: ${deadline.value!.toLocal()}',
                 ),
               ),
-              ValueListenableBuilder(
-                valueListenable: minutes,
-                builder: (context, value, child) {
-                  return Column(
-                    children: [
-                      for (final candidateDateTime in candidateDateTimes.value)
-                        Row(
-                          children: [
-                            Text(
-                              '${candidateDateTime.toLocal()} - ${candidateDateTime.add(Duration(minutes: int.tryParse(minutes.text) ?? 0)).toLocal()}',
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () =>
-                                  deleteCandidateDateTime(candidateDateTime),
-                            ),
-                          ],
+              Column(
+                children: [
+                  for (final candidateDateTime in candidateDateTimes.value)
+                    Row(
+                      children: [
+                        Text('${candidateDateTime.toLocal()}'),
+                        IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () =>
+                              deleteCandidateDateTime(candidateDateTime),
                         ),
-                    ],
-                  );
-                },
+                      ],
+                    ),
+                ],
               ),
               ElevatedButton(
                 onPressed: addCandidateDateTime,

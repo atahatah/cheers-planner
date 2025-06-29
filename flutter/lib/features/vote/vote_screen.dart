@@ -1,5 +1,4 @@
 import 'package:cheers_planner/core/app/snackbar_repo.dart';
-import 'package:cheers_planner/core/hooks/google_map_controller_hook.dart';
 import 'package:cheers_planner/core/router/root.dart';
 import 'package:cheers_planner/features/create/event_entry.dart';
 import 'package:cheers_planner/features/create/event_entry_repo.dart';
@@ -7,7 +6,6 @@ import 'package:cheers_planner/features/vote/participant.dart';
 import 'package:cheers_planner/features/vote/participant_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class VoteScreen extends HookConsumerWidget {
@@ -50,9 +48,7 @@ class VoteBody extends HookConsumerWidget {
     final allergiesController = useTextEditingController();
     // 選択用状態
     final desiredDates = useState<List<DateTime>>([]);
-    // 地図コントローラと選択状態
-    final mapController = useGoogleMapController();
-    final selectedAreaIds = useState<Set<int>>({});
+    final desiredLocations = useState<List<String>>([]);
     final answerControllers = useMemoized(() {
       return Map<String, TextEditingController>.fromEntries(
         value.fixedQuestion.map((q) => MapEntry(q, TextEditingController())),
@@ -84,12 +80,7 @@ class VoteBody extends HookConsumerWidget {
         positionOrGrade: positionController.text,
         desiredBudget: int.tryParse(budgetController.text) ?? 0,
         desiredDates: desiredDates.value,
-        desiredLocations: selectedAreaIds.value
-            .map(
-              (i) =>
-                  '${value.candidateAreas[i].location.latitude},${value.candidateAreas[i].location.longitude}',
-            )
-            .toList(),
+        desiredLocations: desiredLocations.value,
         fixedQuestionAnswers: value.fixedQuestion
             .map(
               (q) => QuestionAnswer(
@@ -143,7 +134,9 @@ class VoteBody extends HookConsumerWidget {
             const Text('日時候補', style: TextStyle(fontWeight: FontWeight.bold)),
             for (final cd in value.candidateDateTimes)
               CheckboxListTile(
-                title: Text('${cd.start.toLocal()} - ${cd.end.toLocal()}'),
+                title: Text(
+                  '${cd.start.toLocal()} - ${cd.start.add(Duration(minutes: value.minutes)).toLocal()}',
+                ),
                 value: desiredDates.value.contains(cd.start),
                 onChanged: (selected) {
                   final list = List<DateTime>.from(desiredDates.value);
@@ -156,58 +149,31 @@ class VoteBody extends HookConsumerWidget {
                 },
               ),
             const SizedBox(height: 16),
-            // 候補場所マーカーをタップして選択
+            // 場所候補を文字列で追加
             const Text('場所候補', style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(
-              height: 200,
-              width: double.infinity,
-              child: GoogleMap(
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(
-                    value.candidateAreas.first.location.latitude,
-                    value.candidateAreas.first.location.longitude,
-                  ),
-                  zoom: 12,
-                ),
-                onMapCreated: mapController.onMapCreated,
-                markers: {
-                  for (var i = 0; i < value.candidateAreas.length; i++)
-                    Marker(
-                      markerId: MarkerId('area_$i'),
-                      position: LatLng(
-                        value.candidateAreas[i].location.latitude,
-                        value.candidateAreas[i].location.longitude,
-                      ),
-                      icon: BitmapDescriptor.defaultMarkerWithHue(
-                        selectedAreaIds.value.contains(i)
-                            ? BitmapDescriptor.hueGreen
-                            : BitmapDescriptor.hueRed,
-                      ),
-                      onTap: () {
-                        final set = Set<int>.from(selectedAreaIds.value);
-                        if (set.contains(i))
-                          set.remove(i);
-                        else
-                          set.add(i);
-                        selectedAreaIds.value = set;
-                      },
-                    ),
-                },
-                circles: {
-                  for (final i in selectedAreaIds.value)
-                    Circle(
-                      circleId: CircleId('selected_area_$i'),
-                      center: LatLng(
-                        value.candidateAreas[i].location.latitude,
-                        value.candidateAreas[i].location.longitude,
-                      ),
-                      radius: value.candidateAreas[i].radius.toDouble(),
-                      strokeColor: Colors.green.withOpacity(0.8),
-                      fillColor: Colors.green.withOpacity(0.3),
-                    ),
-                },
-              ),
+            TextField(
+              decoration: const InputDecoration(labelText: '場所候補を入力'),
+              onSubmitted: (value) {
+                if (value.isNotEmpty) {
+                  desiredLocations.value = List.from(desiredLocations.value)
+                    ..add(value);
+                }
+              },
             ),
+            for (final location in desiredLocations.value)
+              Row(
+                children: [
+                  Expanded(child: Text(location)),
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      desiredLocations.value = List.from(desiredLocations.value)
+                        ..remove(location);
+                    },
+                  ),
+                ],
+              ),
+
             const SizedBox(height: 16),
             // 質問への回答
             for (final q in value.fixedQuestion)

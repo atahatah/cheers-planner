@@ -79,10 +79,6 @@ _CandidateDateTime _$CandidateDateTimeFromJson(Map<String, dynamic> json) =>
           'start',
           (v) => const DateTimeToTimestampConverter().fromJson(v),
         ),
-        end: $checkedConvert(
-          'end',
-          (v) => const DateTimeToTimestampConverter().fromJson(v),
-        ),
       );
       return val;
     });
@@ -90,7 +86,6 @@ _CandidateDateTime _$CandidateDateTimeFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$CandidateDateTimeToJson(_CandidateDateTime instance) =>
     <String, dynamic>{
       'start': const DateTimeToTimestampConverter().toJson(instance.start),
-      'end': const DateTimeToTimestampConverter().toJson(instance.end),
     };
 
 _CandidateArea _$CandidateAreaFromJson(Map<String, dynamic> json) =>

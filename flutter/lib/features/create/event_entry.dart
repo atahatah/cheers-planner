@@ -34,7 +34,6 @@ sealed class EventEntry with _$EventEntry {
 sealed class CandidateDateTime with _$CandidateDateTime {
   const factory CandidateDateTime({
     @DateTimeToTimestampConverter() required DateTime start,
-    @DateTimeToTimestampConverter() required DateTime end,
   }) = _CandidateDateTime;
 
   factory CandidateDateTime.fromJson(Map<String, dynamic> json) =>

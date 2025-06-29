@@ -218,7 +218,7 @@ as int,
 /// @nodoc
 mixin _$CandidateDateTime {
 
-@DateTimeToTimestampConverter() DateTime get start;@DateTimeToTimestampConverter() DateTime get end;
+@DateTimeToTimestampConverter() DateTime get start;
 /// Create a copy of CandidateDateTime
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -231,16 +231,16 @@ $CandidateDateTimeCopyWith<CandidateDateTime> get copyWith => _$CandidateDateTim
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CandidateDateTime&&(identical(other.start, start) || other.start == start)&&(identical(other.end, end) || other.end == end));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CandidateDateTime&&(identical(other.start, start) || other.start == start));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,start,end);
+int get hashCode => Object.hash(runtimeType,start);
 
 @override
 String toString() {
-  return 'CandidateDateTime(start: $start, end: $end)';
+  return 'CandidateDateTime(start: $start)';
 }
 
 
@@ -251,7 +251,7 @@ abstract mixin class $CandidateDateTimeCopyWith<$Res>  {
   factory $CandidateDateTimeCopyWith(CandidateDateTime value, $Res Function(CandidateDateTime) _then) = _$CandidateDateTimeCopyWithImpl;
 @useResult
 $Res call({
-@DateTimeToTimestampConverter() DateTime start,@DateTimeToTimestampConverter() DateTime end
+@DateTimeToTimestampConverter() DateTime start
 });
 
 
@@ -268,10 +268,9 @@ class _$CandidateDateTimeCopyWithImpl<$Res>
 
 /// Create a copy of CandidateDateTime
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? start = null,Object? end = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? start = null,}) {
   return _then(_self.copyWith(
 start: null == start ? _self.start : start // ignore: cast_nullable_to_non_nullable
-as DateTime,end: null == end ? _self.end : end // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));
 }
@@ -283,11 +282,10 @@ as DateTime,
 @JsonSerializable()
 
 class _CandidateDateTime implements CandidateDateTime {
-  const _CandidateDateTime({@DateTimeToTimestampConverter() required this.start, @DateTimeToTimestampConverter() required this.end});
+  const _CandidateDateTime({@DateTimeToTimestampConverter() required this.start});
   factory _CandidateDateTime.fromJson(Map<String, dynamic> json) => _$CandidateDateTimeFromJson(json);
 
 @override@DateTimeToTimestampConverter() final  DateTime start;
-@override@DateTimeToTimestampConverter() final  DateTime end;
 
 /// Create a copy of CandidateDateTime
 /// with the given fields replaced by the non-null parameter values.
@@ -302,16 +300,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CandidateDateTime&&(identical(other.start, start) || other.start == start)&&(identical(other.end, end) || other.end == end));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CandidateDateTime&&(identical(other.start, start) || other.start == start));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,start,end);
+int get hashCode => Object.hash(runtimeType,start);
 
 @override
 String toString() {
-  return 'CandidateDateTime(start: $start, end: $end)';
+  return 'CandidateDateTime(start: $start)';
 }
 
 
@@ -322,7 +320,7 @@ abstract mixin class _$CandidateDateTimeCopyWith<$Res> implements $CandidateDate
   factory _$CandidateDateTimeCopyWith(_CandidateDateTime value, $Res Function(_CandidateDateTime) _then) = __$CandidateDateTimeCopyWithImpl;
 @override @useResult
 $Res call({
-@DateTimeToTimestampConverter() DateTime start,@DateTimeToTimestampConverter() DateTime end
+@DateTimeToTimestampConverter() DateTime start
 });
 
 
@@ -339,10 +337,9 @@ class __$CandidateDateTimeCopyWithImpl<$Res>
 
 /// Create a copy of CandidateDateTime
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? start = null,Object? end = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? start = null,}) {
   return _then(_CandidateDateTime(
 start: null == start ? _self.start : start // ignore: cast_nullable_to_non_nullable
-as DateTime,end: null == end ? _self.end : end // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));
 }
