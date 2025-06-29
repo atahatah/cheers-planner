@@ -1,4 +1,6 @@
 import 'package:cheers_planner/core/auth/user_entry.dart';
+import 'package:cheers_planner/features/create/event_entry.dart';
+import 'package:cheers_planner/features/vote/participant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -19,5 +21,49 @@ DocumentReference<UserEntry> userDocument(Ref ref, String uid) {
         fromFirestore: (snapshot, _) =>
             UserEntry.fromJson(snapshot.data()!..['id'] = snapshot.id),
         toFirestore: (model, _) => model.toJson()..remove('id'),
+      );
+}
+
+@riverpod
+DocumentReference<EventEntry> eventDocument(Ref ref, String eventId) {
+  final firestore = ref.watch(firestoreProvider);
+  return firestore
+      .doc('events/$eventId')
+      .withConverter<EventEntry>(
+        fromFirestore: (snapshot, _) =>
+            EventEntry.fromJson(snapshot.data()!..['id'] = snapshot.id),
+        toFirestore: (model, _) => model.toJson()..remove('id'),
+      );
+}
+
+@riverpod
+CollectionReference<EventEntry> eventsCollection(Ref ref) {
+  final firestore = ref.watch(firestoreProvider);
+  return firestore
+      .collection('events')
+      .withConverter<EventEntry>(
+        fromFirestore: (snapshot, _) =>
+            EventEntry.fromJson(snapshot.data()!..['id'] = snapshot.id),
+        toFirestore: (model, _) => model.toJson()..remove('id'),
+      );
+}
+
+@riverpod
+CollectionReference<EventParticipant> participantsCollection(
+  Ref ref,
+  String eventId,
+) {
+  final firestore = ref.watch(firestoreProvider);
+  return firestore
+      .collection('events/$eventId/participants')
+      .withConverter<EventParticipant>(
+        fromFirestore: (snapshot, _) => EventParticipant.fromJson(
+          snapshot.data()!
+            ..['id'] = snapshot.id
+            ..['eventId'] = eventId,
+        ),
+        toFirestore: (model, _) => model.toJson()
+          ..remove('id')
+          ..remove('eventId'),
       );
 }

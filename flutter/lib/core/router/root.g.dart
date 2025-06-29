@@ -77,18 +77,42 @@ RouteBase get $mainShellRouteData => StatefulShellRouteData.$route(
     StatefulShellBranchData.$branch(
       routes: [
         GoRouteData.$route(
-          path: '/counter',
+          path: '/events',
 
-          factory: $CounterRouteExtension._fromState,
+          factory: $EventListRouteExtension._fromState,
+          routes: [
+            GoRouteData.$route(
+              path: 'create',
+
+              factory: $CreateEventRouteExtension._fromState,
+            ),
+            GoRouteData.$route(
+              path: 'management/:eventId',
+
+              factory: $ManagementRouteExtension._fromState,
+            ),
+          ],
         ),
       ],
     ),
     StatefulShellBranchData.$branch(
       routes: [
         GoRouteData.$route(
-          path: '/chat',
+          path: '/vote',
 
-          factory: $ChatRouteExtension._fromState,
+          factory: $VotedListRouteExtension._fromState,
+          routes: [
+            GoRouteData.$route(
+              path: 'voting/:eventId',
+
+              factory: $VoteRouteExtension._fromState,
+            ),
+            GoRouteData.$route(
+              path: 'result/:eventId',
+
+              factory: $ResultRouteExtension._fromState,
+            ),
+          ],
         ),
       ],
     ),
@@ -109,10 +133,11 @@ extension $MainShellRouteDataExtension on MainShellRouteData {
       const MainShellRouteData();
 }
 
-extension $CounterRouteExtension on CounterRoute {
-  static CounterRoute _fromState(GoRouterState state) => const CounterRoute();
+extension $EventListRouteExtension on EventListRoute {
+  static EventListRoute _fromState(GoRouterState state) =>
+      const EventListRoute();
 
-  String get location => GoRouteData.$location('/counter');
+  String get location => GoRouteData.$location('/events');
 
   void go(BuildContext context) => context.go(location);
 
@@ -124,10 +149,79 @@ extension $CounterRouteExtension on CounterRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $ChatRouteExtension on ChatRoute {
-  static ChatRoute _fromState(GoRouterState state) => const ChatRoute();
+extension $CreateEventRouteExtension on CreateEventRoute {
+  static CreateEventRoute _fromState(GoRouterState state) =>
+      const CreateEventRoute();
 
-  String get location => GoRouteData.$location('/chat');
+  String get location => GoRouteData.$location('/events/create');
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $ManagementRouteExtension on ManagementRoute {
+  static ManagementRoute _fromState(GoRouterState state) =>
+      ManagementRoute(state.pathParameters['eventId']!);
+
+  String get location => GoRouteData.$location(
+    '/events/management/${Uri.encodeComponent(eventId)}',
+  );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $VotedListRouteExtension on VotedListRoute {
+  static VotedListRoute _fromState(GoRouterState state) =>
+      const VotedListRoute();
+
+  String get location => GoRouteData.$location('/vote');
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $VoteRouteExtension on VoteRoute {
+  static VoteRoute _fromState(GoRouterState state) =>
+      VoteRoute(state.pathParameters['eventId']!);
+
+  String get location =>
+      GoRouteData.$location('/vote/voting/${Uri.encodeComponent(eventId)}');
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $ResultRouteExtension on ResultRoute {
+  static ResultRoute _fromState(GoRouterState state) =>
+      ResultRoute(state.pathParameters['eventId']!);
+
+  String get location =>
+      GoRouteData.$location('/vote/result/${Uri.encodeComponent(eventId)}');
 
   void go(BuildContext context) => context.go(location);
 
@@ -158,7 +252,7 @@ extension $SettingsRouteExtension on SettingsRoute {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'164520009d12e9b8bbce32d3bd1edc6954ee62cc';
+String _$routerHash() => r'1c079257b510a8a110492d876ca83af8ef57d973';
 
 /// See also [router].
 @ProviderFor(router)

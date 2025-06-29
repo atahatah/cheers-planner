@@ -5,9 +5,13 @@ import 'package:cheers_planner/core/auth/app_auth_state.dart';
 import 'package:cheers_planner/features/auth/register_screen.dart';
 import 'package:cheers_planner/features/auth/sign_in_screen.dart';
 import 'package:cheers_planner/features/auth/sign_up_screen.dart';
-import 'package:cheers_planner/features/chat/chat_screen.dart';
-import 'package:cheers_planner/features/counter/counter_screen.dart';
+import 'package:cheers_planner/features/create/create_event_screen.dart';
+import 'package:cheers_planner/features/create/event_list_screen.dart';
+import 'package:cheers_planner/features/create/management_screen.dart';
 import 'package:cheers_planner/features/settings/settings_screen.dart';
+import 'package:cheers_planner/features/vote/result_screen.dart';
+import 'package:cheers_planner/features/vote/vote_screen.dart';
+import 'package:cheers_planner/features/vote/voted_list_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -16,10 +20,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'root.g.dart';
 part 'routes/auth.dart';
-part 'routes/shell_routes/chat.dart';
-part 'routes/shell_routes/counter.dart';
+part 'routes/shell_routes/create.dart';
 part 'routes/shell_routes/settings.dart';
 part 'routes/shell_routes/shell_route.dart';
+part 'routes/shell_routes/vote.dart';
 
 @riverpod
 GoRouter router(Ref ref) {
@@ -42,16 +46,19 @@ GoRouter router(Ref ref) {
                   final decoded = utf8.decode(base64Url.decode(token));
                   return decoded;
                 }
-                return const CounterRoute().location;
+                return const VotedListRoute().location;
               }
               return null;
             case NotRegistered():
-              return '${const RegisterRoute().location}?redirect=${base64Url.encode(utf8.encode(path!))}';
-            case NotSignedIn():
-              if (path?.startsWith('/auth') ?? false) {
+              if (path?.startsWith(const RegisterRoute().location) ?? false) {
                 return null;
               }
-              return '${const SignUpRoute().location}?redirect=${base64Url.encode(utf8.encode(path!))}';
+              return '${const RegisterRoute().location}?redirect=${base64Url.encode(utf8.encode(state.uri.toString()))}';
+            case NotSignedIn():
+              if (path?.startsWith(const SignUpRoute().location) ?? false) {
+                return null;
+              }
+              return '${const SignUpRoute().location}?redirect=${base64Url.encode(utf8.encode(state.uri.toString()))}';
           }
         case AsyncLoading():
         case AsyncError():
