@@ -9,13 +9,21 @@ part 'event_entry.g.dart';
 sealed class EventEntry with _$EventEntry {
   const factory EventEntry({
     String? id,
-    required String eventName,
+    String? aiRecArea,
+    String? aiRecDate,
+    String? aiRecStore,
+    required String purpose,
     @DateTimeToTimestampConverter() required DateTime dueDate,
-    required List<(DateTime start, DateTime end)> candidateDateTimes,
-    required List<String> candidateAreas,
+    @ListToMapConverter<CandidateDateTime>(prefix: 'datetime')
+    required List<CandidateDateTime> candidateDateTimes,
+    @ListToMapConverter<CandidateArea>(prefix: 'area')
+    required List<CandidateArea> candidateAreas,
     required String allergiesEtc,
     required List<String> organizerId,
     required List<String> participantId,
+    required int budgetUpperLimit,
+    required List<String> fixedQuestion,
+    required int minutes,
   }) = _EventEntry;
 
   factory EventEntry.fromJson(Map<String, dynamic> json) =>
@@ -39,7 +47,6 @@ sealed class CandidateDateTime with _$CandidateDateTime {
 sealed class CandidateArea with _$CandidateArea {
   const factory CandidateArea({
     String? id,
-    String? eventId,
     @GeoPointToJsonConverter() required GeoPoint location,
 
     /// 半径 m
@@ -48,36 +55,4 @@ sealed class CandidateArea with _$CandidateArea {
 
   factory CandidateArea.fromJson(Map<String, dynamic> json) =>
       _$CandidateAreaFromJson(json);
-}
-
-@freezed
-sealed class EventResult with _$EventResult {
-  const factory EventResult({
-    String? id,
-    String? eventId,
-    @DateTimeToTimestampConverter() required DateTime optimalDate,
-    @DateTimeToTimestampConverter() required DateTime optimalEnd,
-  }) = _EventResult;
-
-  factory EventResult.fromJson(Map<String, dynamic> json) =>
-      _$EventResultFromJson(json);
-}
-
-@freezed
-sealed class OptimalRestaurant with _$OptimalRestaurant {
-  const factory OptimalRestaurant({
-    String? id,
-    String? eventId,
-    String? resultId,
-    required String name,
-    required String formattedAddress,
-    required int rating,
-    required int priceLevel,
-    required String menuHighlights,
-    required String accessInfo,
-    required String placeId,
-  }) = _OptimalRestaurant;
-
-  factory OptimalRestaurant.fromJson(Map<String, dynamic> json) =>
-      _$OptimalRestaurantFromJson(json);
 }

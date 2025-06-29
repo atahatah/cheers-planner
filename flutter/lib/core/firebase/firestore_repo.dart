@@ -89,26 +89,6 @@ CollectionReference<CandidateArea> candidateAreasCollection(
 }
 
 @riverpod
-CollectionReference<EventResult> eventResultsCollection(
-  Ref ref,
-  String eventId,
-) {
-  final firestore = ref.watch(firestoreProvider);
-  return firestore
-      .collection('events/$eventId/results')
-      .withConverter<EventResult>(
-        fromFirestore: (snapshot, _) => EventResult.fromJson(
-          snapshot.data()!
-            ..['id'] = snapshot.id
-            ..['eventId'] = eventId,
-        ),
-        toFirestore: (model, _) => model.toJson()
-          ..remove('id')
-          ..remove('eventId'),
-      );
-}
-
-@riverpod
 CollectionReference<EventParticipant> participantsCollection(
   Ref ref,
   String eventId,

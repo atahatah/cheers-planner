@@ -10,7 +10,10 @@ _EventEntry _$EventEntryFromJson(Map<String, dynamic> json) =>
     $checkedCreate('_EventEntry', json, ($checkedConvert) {
       final val = _EventEntry(
         id: $checkedConvert('id', (v) => v as String?),
-        eventName: $checkedConvert('eventName', (v) => v as String),
+        aiRecArea: $checkedConvert('aiRecArea', (v) => v as String?),
+        aiRecDate: $checkedConvert('aiRecDate', (v) => v as String?),
+        aiRecStore: $checkedConvert('aiRecStore', (v) => v as String?),
+        purpose: $checkedConvert('purpose', (v) => v as String),
         dueDate: $checkedConvert(
           'dueDate',
           (v) => const DateTimeToTimestampConverter().fromJson(v),
@@ -18,20 +21,14 @@ _EventEntry _$EventEntryFromJson(Map<String, dynamic> json) =>
         candidateDateTimes: $checkedConvert(
           'candidateDateTimes',
           (v) => (v as List<dynamic>)
-              .map(
-                (e) => _$recordConvert(
-                  e,
-                  ($jsonValue) => (
-                    DateTime.parse($jsonValue[r'$1'] as String),
-                    DateTime.parse($jsonValue[r'$2'] as String),
-                  ),
-                ),
-              )
+              .map((e) => CandidateDateTime.fromJson(e as Map<String, dynamic>))
               .toList(),
         ),
         candidateAreas: $checkedConvert(
           'candidateAreas',
-          (v) => (v as List<dynamic>).map((e) => e as String).toList(),
+          (v) => (v as List<dynamic>)
+              .map((e) => CandidateArea.fromJson(e as Map<String, dynamic>))
+              .toList(),
         ),
         allergiesEtc: $checkedConvert('allergiesEtc', (v) => v as String),
         organizerId: $checkedConvert(
@@ -42,6 +39,15 @@ _EventEntry _$EventEntryFromJson(Map<String, dynamic> json) =>
           'participantId',
           (v) => (v as List<dynamic>).map((e) => e as String).toList(),
         ),
+        budgetUpperLimit: $checkedConvert(
+          'budgetUpperLimit',
+          (v) => (v as num).toInt(),
+        ),
+        fixedQuestion: $checkedConvert(
+          'fixedQuestion',
+          (v) => (v as List<dynamic>).map((e) => e as String).toList(),
+        ),
+        minutes: $checkedConvert('minutes', (v) => (v as num).toInt()),
       );
       return val;
     });
@@ -49,24 +55,22 @@ _EventEntry _$EventEntryFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$EventEntryToJson(_EventEntry instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'eventName': instance.eventName,
+      'aiRecArea': instance.aiRecArea,
+      'aiRecDate': instance.aiRecDate,
+      'aiRecStore': instance.aiRecStore,
+      'purpose': instance.purpose,
       'dueDate': const DateTimeToTimestampConverter().toJson(instance.dueDate),
       'candidateDateTimes': instance.candidateDateTimes
-          .map(
-            (e) => <String, dynamic>{
-              r'$1': e.$1.toIso8601String(),
-              r'$2': e.$2.toIso8601String(),
-            },
-          )
+          .map((e) => e.toJson())
           .toList(),
-      'candidateAreas': instance.candidateAreas,
+      'candidateAreas': instance.candidateAreas.map((e) => e.toJson()).toList(),
       'allergiesEtc': instance.allergiesEtc,
       'organizerId': instance.organizerId,
       'participantId': instance.participantId,
+      'budgetUpperLimit': instance.budgetUpperLimit,
+      'fixedQuestion': instance.fixedQuestion,
+      'minutes': instance.minutes,
     };
-
-$Rec _$recordConvert<$Rec>(Object? value, $Rec Function(Map) convert) =>
-    convert(value as Map<String, dynamic>);
 
 _CandidateDateTime _$CandidateDateTimeFromJson(Map<String, dynamic> json) =>
     $checkedCreate('_CandidateDateTime', json, ($checkedConvert) {
@@ -97,7 +101,6 @@ _CandidateArea _$CandidateAreaFromJson(Map<String, dynamic> json) =>
     $checkedCreate('_CandidateArea', json, ($checkedConvert) {
       final val = _CandidateArea(
         id: $checkedConvert('id', (v) => v as String?),
-        eventId: $checkedConvert('eventId', (v) => v as String?),
         location: $checkedConvert(
           'location',
           (v) => const GeoPointToJsonConverter().fromJson(v as GeoPoint),
@@ -110,70 +113,6 @@ _CandidateArea _$CandidateAreaFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$CandidateAreaToJson(_CandidateArea instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'eventId': instance.eventId,
       'location': const GeoPointToJsonConverter().toJson(instance.location),
       'radius': instance.radius,
-    };
-
-_EventResult _$EventResultFromJson(Map<String, dynamic> json) =>
-    $checkedCreate('_EventResult', json, ($checkedConvert) {
-      final val = _EventResult(
-        id: $checkedConvert('id', (v) => v as String?),
-        eventId: $checkedConvert('eventId', (v) => v as String?),
-        optimalDate: $checkedConvert(
-          'optimalDate',
-          (v) => const DateTimeToTimestampConverter().fromJson(v),
-        ),
-        optimalEnd: $checkedConvert(
-          'optimalEnd',
-          (v) => const DateTimeToTimestampConverter().fromJson(v),
-        ),
-      );
-      return val;
-    });
-
-Map<String, dynamic> _$EventResultToJson(_EventResult instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'eventId': instance.eventId,
-      'optimalDate': const DateTimeToTimestampConverter().toJson(
-        instance.optimalDate,
-      ),
-      'optimalEnd': const DateTimeToTimestampConverter().toJson(
-        instance.optimalEnd,
-      ),
-    };
-
-_OptimalRestaurant _$OptimalRestaurantFromJson(Map<String, dynamic> json) =>
-    $checkedCreate('_OptimalRestaurant', json, ($checkedConvert) {
-      final val = _OptimalRestaurant(
-        id: $checkedConvert('id', (v) => v as String?),
-        eventId: $checkedConvert('eventId', (v) => v as String?),
-        resultId: $checkedConvert('resultId', (v) => v as String?),
-        name: $checkedConvert('name', (v) => v as String),
-        formattedAddress: $checkedConvert(
-          'formattedAddress',
-          (v) => v as String,
-        ),
-        rating: $checkedConvert('rating', (v) => (v as num).toInt()),
-        priceLevel: $checkedConvert('priceLevel', (v) => (v as num).toInt()),
-        menuHighlights: $checkedConvert('menuHighlights', (v) => v as String),
-        accessInfo: $checkedConvert('accessInfo', (v) => v as String),
-        placeId: $checkedConvert('placeId', (v) => v as String),
-      );
-      return val;
-    });
-
-Map<String, dynamic> _$OptimalRestaurantToJson(_OptimalRestaurant instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'eventId': instance.eventId,
-      'resultId': instance.resultId,
-      'name': instance.name,
-      'formattedAddress': instance.formattedAddress,
-      'rating': instance.rating,
-      'priceLevel': instance.priceLevel,
-      'menuHighlights': instance.menuHighlights,
-      'accessInfo': instance.accessInfo,
-      'placeId': instance.placeId,
     };

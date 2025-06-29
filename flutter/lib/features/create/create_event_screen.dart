@@ -17,11 +17,12 @@ class CreateEventScreen extends HookConsumerWidget {
     final loading = useState(false);
     final eventName = useTextEditingController();
     final deadline = useState<DateTime?>(null);
-    final candidateDateTimes = useState<List<(DateTime start, DateTime end)>>(
-      [],
-    );
-    final candidateAreas = useState<List<String>>([]);
+    final candidateDateTimes = useState<List<CandidateDateTime>>([]);
+    final candidateAreas = useState<List<CandidateArea>>([]);
     final allergiesEtc = useTextEditingController();
+    final budgetUpperLimit = useTextEditingController();
+    final fixedQuestion = useState<List<String>>([]);
+    final minutes = useTextEditingController();
 
     final selectDeadline = useCallback(() async {
       final selected = await showDatePicker(
@@ -43,13 +44,16 @@ class CreateEventScreen extends HookConsumerWidget {
             .read(eventEntriesRepoProvider)
             .add(
               EventEntry(
-                eventName: eventName.text,
+                purpose: eventName.text,
                 dueDate: deadline.value ?? DateTime.now(),
                 candidateDateTimes: candidateDateTimes.value,
                 candidateAreas: candidateAreas.value,
                 allergiesEtc: allergiesEtc.text,
                 organizerId: [uid],
                 participantId: [uid],
+                budgetUpperLimit: int.tryParse(budgetUpperLimit.text) ?? 0,
+                fixedQuestion: fixedQuestion.value,
+                minutes: int.tryParse(minutes.text) ?? 0,
               ),
             );
         ManagementRoute(id).go(context);
@@ -106,10 +110,10 @@ class CreateEventScreen extends HookConsumerWidget {
                 child: ListView.builder(
                   itemCount: candidateDateTimes.value.length,
                   itemBuilder: (context, index) {
-                    final (start, end) = candidateDateTimes.value[index];
+                    final candidate = candidateDateTimes.value[index];
                     return ListTile(
                       title: Text(
-                        'From ${start.toLocal()} to ${end.toLocal()}',
+                        'From ${candidate.start.toLocal()} to ${candidate.end.toLocal()}',
                       ),
                     );
                   },
@@ -119,9 +123,24 @@ class CreateEventScreen extends HookConsumerWidget {
                 child: ListView.builder(
                   itemCount: candidateAreas.value.length,
                   itemBuilder: (context, index) {
-                    return ListTile(title: Text(candidateAreas.value[index]));
+                    return ListTile(
+                      title: Text(candidateAreas.value[index].toString()),
+                    );
                   },
                 ),
+              ),
+              // 追加の質問を入力するためのテキストフィールド
+              TextField(
+                controller: budgetUpperLimit,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Budget Upper Limit',
+                ),
+              ),
+              TextField(
+                controller: minutes,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(labelText: 'Minutes'),
               ),
               TextField(
                 controller: allergiesEtc,

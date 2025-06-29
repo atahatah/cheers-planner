@@ -29,24 +29,6 @@ Future<EventEntry> eventEntry(Ref ref, String eventId) {
   });
 }
 
-@riverpod
-CandidateDateTimeRepo candidateDateTimeRepo(Ref ref, String eventId) {
-  final col = ref.watch(candidateDatesCollectionProvider(eventId));
-  return CandidateDateTimeRepo(col);
-}
-
-@riverpod
-CandidateAreaRepo candidateAreaRepo(Ref ref, String eventId) {
-  final col = ref.watch(candidateAreasCollectionProvider(eventId));
-  return CandidateAreaRepo(col);
-}
-
-@riverpod
-EventResultRepo eventResultRepo(Ref ref, String eventId) {
-  final col = ref.watch(eventResultsCollectionProvider(eventId));
-  return EventResultRepo(col);
-}
-
 class EventEntriesRepo {
   EventEntriesRepo(this._col);
 
@@ -92,55 +74,4 @@ class NoSuchEventException implements Exception {
 
   @override
   String toString() => 'No such event with ID: $eventId';
-}
-
-class CandidateDateTimeRepo {
-  CandidateDateTimeRepo(this._col);
-
-  final CollectionReference<CandidateDateTime> _col;
-
-  Future<void> add(CandidateDateTime candidate) {
-    return _col.add(candidate);
-  }
-
-  Future<CandidateDateTime?> get(String id) async {
-    final snapshot = await _col.doc(id).get();
-    return snapshot.data();
-  }
-
-  Future<void> delete(String id) => _col.doc(id).delete();
-}
-
-class CandidateAreaRepo {
-  CandidateAreaRepo(this._col);
-
-  final CollectionReference<CandidateArea> _col;
-
-  Future<void> add(CandidateArea candidate) {
-    return _col.add(candidate);
-  }
-
-  Future<CandidateArea?> get(String id) async {
-    final snapshot = await _col.doc(id).get();
-    return snapshot.data();
-  }
-
-  Future<void> delete(String id) => _col.doc(id).delete();
-}
-
-class EventResultRepo {
-  EventResultRepo(this._col);
-
-  final CollectionReference<EventResult> _col;
-
-  Future<void> add(EventResult result) {
-    return _col.add(result);
-  }
-
-  Future<EventResult?> get(String id) async {
-    final snapshot = await _col.doc(id).get();
-    return snapshot.data();
-  }
-
-  Future<void> delete(String id) => _col.doc(id).delete();
 }

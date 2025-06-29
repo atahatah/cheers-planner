@@ -24,7 +24,7 @@ class ManagementScreen extends HookConsumerWidget {
         body: Center(child: Text('エラーが発生しました: $error')),
       ),
       AsyncData(:final value) => Scaffold(
-        appBar: AppBar(title: Text(value.eventName)),
+        appBar: AppBar(title: Text(value.purpose)),
         body: ManagementBody(value: value),
       ),
       _ => const SizedBox.shrink(),
