@@ -4,6 +4,7 @@ import 'package:cheers_planner/core/firebase/auth_repo.dart';
 import 'package:cheers_planner/core/router/root.dart';
 import 'package:cheers_planner/features/create/event_entry.dart';
 import 'package:cheers_planner/features/create/event_entry_repo.dart';
+import 'package:cheers_planner/features/create/event_draft_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -22,6 +23,25 @@ class CreateEventScreen extends HookConsumerWidget {
     final minutes = useTextEditingController(text: '60');
     // 固定質問用のTextEditingControllerリスト
     final questionControllers = useState<List<TextEditingController>>([]);
+
+    final draft = ref.watch(eventDraftProvider);
+    useEffect(() {
+      if (draft.purpose.isNotEmpty) {
+        eventName.text = draft.purpose;
+        candidateDateTimes.value = draft.candidateDateTimes
+            .map((e) => e.start)
+            .toList();
+        allergiesEtc.text = draft.allergiesEtc;
+        budgetUpperLimit.text = draft.budgetUpperLimit == 0
+            ? ''
+            : draft.budgetUpperLimit.toString();
+        minutes.text = draft.minutes.toString();
+        questionControllers.value = [
+          for (final q in draft.fixedQuestion) TextEditingController(text: q),
+        ];
+      }
+      return null;
+    }, [draft]);
 
     final deleteCandidateDateTime = useCallback((DateTime candidateDateTime) {
       candidateDateTimes.value = List.from(candidateDateTimes.value)
@@ -60,6 +80,30 @@ class CreateEventScreen extends HookConsumerWidget {
         candidateDateTime,
       ];
     }, [context, candidateDateTimes]);
+
+    void openConsult() {
+      final parsedMinutes = int.tryParse(minutes.text) ?? 0;
+      final fixedQuestions = questionControllers.value
+          .map((c) => c.text)
+          .where((t) => t.isNotEmpty)
+          .toList();
+      ref
+          .read(eventDraftProvider.notifier)
+          .update(
+            EventEntry(
+              purpose: eventName.text,
+              candidateDateTimes: candidateDateTimes.value
+                  .map((e) => CandidateDateTime(start: e))
+                  .toList(),
+              allergiesEtc: allergiesEtc.text,
+              organizerId: const [],
+              budgetUpperLimit: int.tryParse(budgetUpperLimit.text) ?? 0,
+              fixedQuestion: fixedQuestions,
+              minutes: parsedMinutes,
+            ),
+          );
+      const ConsultEventRoute().push<void>(context);
+    }
 
     Future<void> submit() async {
       try {
@@ -179,6 +223,10 @@ class CreateEventScreen extends HookConsumerWidget {
                     child: const Text('カスタムの質問を追加'),
                   ),
                 ],
+              ),
+              ElevatedButton(
+                onPressed: openConsult,
+                child: const Text('Geminiと相談'),
               ),
               ElevatedButton(onPressed: submit, child: const Text('イベントを作成')),
             ],
