@@ -74,6 +74,12 @@ class EventEntryRepo {
     });
   }
 
+  Future<void> removeParticipant(String eventId, String participantId) {
+    return _doc.update({
+      'participantId': FieldValue.arrayRemove([participantId]),
+    });
+  }
+
   Future<void> delete() => _doc.delete();
 }
 

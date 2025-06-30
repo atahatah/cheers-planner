@@ -63,7 +63,9 @@ class VoteBody extends HookConsumerWidget {
     void addCustomQA() {
       final q = customQuestionController.text;
       final a = customAnswerController.text;
-      if (q.isEmpty || a.isEmpty) return;
+      if (q.isEmpty || a.isEmpty) {
+        return;
+      }
       customQuestions.value = [
         ...customQuestions.value,
         QuestionAnswer(question: q, answer: a),
