@@ -67,6 +67,33 @@ class ManagementBody extends HookConsumerWidget {
             },
             child: const Text('レコメンドを生成'),
           ),
+          ElevatedButton(
+            onPressed: () async {
+              final shouldDelete = await showDialog<bool>(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('イベントを削除'),
+                  content: const Text('このイベントを削除しますか？'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, false),
+                      child: const Text('キャンセル'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, true),
+                      child: const Text('削除'),
+                    ),
+                  ],
+                ),
+              );
+              if (shouldDelete ?? false) {
+                await ref.read(eventEntryRepoProvider(value.id!)).delete();
+                ref.read(snackBarRepoProvider).show('イベントを削除しました');
+                const EventListRoute().go(context);
+              }
+            },
+            child: const Text('イベントを削除'),
+          ),
         ],
       ),
     );
