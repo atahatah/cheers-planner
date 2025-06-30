@@ -1,5 +1,4 @@
 import axios from "axios";
-import * as functions from "firebase-functions";
 import * as logger from "firebase-functions/logger";
 import { LocationCandidate, Restaurant } from "../types/common";
 import { ErrorCodes, PlacesAPIError } from "../utils/errorHandler";
@@ -9,16 +8,14 @@ import {
 } from "./geminiService";
 
 /**
- * Firebase Functions ConfigからGoogle Places APIキーを取得
+ * 環境変数からGoogle Places APIキーを取得
  * @return {string} APIキー
  */
 function getApiKey(): string {
-  const config = functions.config();
-  const key = config.places?.api_key;
+  const key = process.env.GOOGLE_PLACES_API_KEY;
   if (!key) {
     throw new Error(
-      "PLACES_API_KEY is not configured. Please set it using: " +
-      "firebase functions:config:set places.api_key=\"YOUR_KEY\""
+      "GOOGLE_PLACES_API_KEY is not configured. Please set it in .env file."
     );
   }
   return key;
