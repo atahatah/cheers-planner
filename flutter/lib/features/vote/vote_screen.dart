@@ -1,13 +1,11 @@
-import 'package:cheers_planner/core/app/snackbar_repo.dart';
-import 'package:cheers_planner/core/firebase/auth_repo.dart';
 import 'package:cheers_planner/core/router/root.dart';
 import 'package:cheers_planner/features/create/event_entry.dart';
 import 'package:cheers_planner/features/create/event_entry_repo.dart';
 import 'package:cheers_planner/features/vote/participant.dart';
-import 'package:cheers_planner/features/vote/participant_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class VoteScreen extends HookConsumerWidget {
   const VoteScreen({super.key, required this.eventId});
@@ -74,8 +72,8 @@ class VoteBody extends HookConsumerWidget {
       customAnswerController.clear();
     }
 
-    // 投票送信
-    Future<void> submit() async {
+    // 入力内容を確認画面へ
+    void confirmVote() {
       final participant = EventParticipant(
         eventId: value.id,
         name: nameController.text,
@@ -95,13 +93,9 @@ class VoteBody extends HookConsumerWidget {
         customQuestions: customQuestions.value,
         allergiesEtc: allergiesController.text,
       );
-      // 参加者情報を Firestore に保存
-      final eid = value.id!;
-      final uid = ref.read(requireUserProvider).uid;
-      await ref.read(participantRepoProvider(eid)).set(uid, participant);
-      await ref.read(eventEntryRepoProvider(eid)).addParticipant(eid, uid);
-      ref.read(snackBarRepoProvider).show('投票が完了しました！');
-      const VotedListRoute().go(context);
+      GoRouter.of(
+        context,
+      ).push(VoteConfirmRoute(value.id!).location, extra: participant);
     }
 
     return Center(
@@ -225,7 +219,7 @@ class VoteBody extends HookConsumerWidget {
               decoration: const InputDecoration(labelText: 'アレルギー等'),
             ),
             const SizedBox(height: 24),
-            ElevatedButton(onPressed: submit, child: const Text('投票する')),
+            ElevatedButton(onPressed: confirmVote, child: const Text('入力完了')),
           ],
         ),
       ),

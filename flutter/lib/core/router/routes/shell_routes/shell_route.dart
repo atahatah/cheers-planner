@@ -20,6 +20,7 @@ part of '../../root.dart';
           path: '/vote',
           routes: <TypedRoute<RouteData>>[
             TypedGoRoute<VoteRoute>(path: 'voting/:eventId'),
+            TypedGoRoute<VoteConfirmRoute>(path: 'voting/:eventId/confirm'),
             TypedGoRoute<ResultRoute>(path: 'result/:eventId'),
           ],
         ),

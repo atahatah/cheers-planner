@@ -15,6 +15,8 @@ import 'package:cheers_planner/features/settings/settings_screen.dart';
 import 'package:cheers_planner/features/vote/result_screen.dart';
 import 'package:cheers_planner/features/vote/vote_screen.dart';
 import 'package:cheers_planner/features/vote/voted_list_screen.dart';
+import 'package:cheers_planner/features/vote/vote_confirm_screen.dart';
+import 'package:cheers_planner/features/vote/participant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
