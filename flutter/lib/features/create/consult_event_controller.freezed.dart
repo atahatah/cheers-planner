@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ConsultEventState {
 
- ChatState get chatState; EventEntry get event; EventEntry? get proposed;
+ ChatState get chatState; EventEntry? get event; EventEntry? get proposed;
 /// Create a copy of ConsultEventState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -46,11 +46,11 @@ abstract mixin class $ConsultEventStateCopyWith<$Res>  {
   factory $ConsultEventStateCopyWith(ConsultEventState value, $Res Function(ConsultEventState) _then) = _$ConsultEventStateCopyWithImpl;
 @useResult
 $Res call({
- ChatState chatState, EventEntry event, EventEntry? proposed
+ ChatState chatState, EventEntry? event, EventEntry? proposed
 });
 
 
-$ChatStateCopyWith<$Res> get chatState;$EventEntryCopyWith<$Res> get event;$EventEntryCopyWith<$Res>? get proposed;
+$ChatStateCopyWith<$Res> get chatState;$EventEntryCopyWith<$Res>? get event;$EventEntryCopyWith<$Res>? get proposed;
 
 }
 /// @nodoc
@@ -63,11 +63,11 @@ class _$ConsultEventStateCopyWithImpl<$Res>
 
 /// Create a copy of ConsultEventState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? chatState = null,Object? event = null,Object? proposed = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? chatState = null,Object? event = freezed,Object? proposed = freezed,}) {
   return _then(_self.copyWith(
 chatState: null == chatState ? _self.chatState : chatState // ignore: cast_nullable_to_non_nullable
-as ChatState,event: null == event ? _self.event : event // ignore: cast_nullable_to_non_nullable
-as EventEntry,proposed: freezed == proposed ? _self.proposed : proposed // ignore: cast_nullable_to_non_nullable
+as ChatState,event: freezed == event ? _self.event : event // ignore: cast_nullable_to_non_nullable
+as EventEntry?,proposed: freezed == proposed ? _self.proposed : proposed // ignore: cast_nullable_to_non_nullable
 as EventEntry?,
   ));
 }
@@ -84,9 +84,12 @@ $ChatStateCopyWith<$Res> get chatState {
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$EventEntryCopyWith<$Res> get event {
-  
-  return $EventEntryCopyWith<$Res>(_self.event, (value) {
+$EventEntryCopyWith<$Res>? get event {
+    if (_self.event == null) {
+    return null;
+  }
+
+  return $EventEntryCopyWith<$Res>(_self.event!, (value) {
     return _then(_self.copyWith(event: value));
   });
 }/// Create a copy of ConsultEventState
@@ -113,7 +116,7 @@ class _ConsultEventState implements ConsultEventState {
   
 
 @override final  ChatState chatState;
-@override final  EventEntry event;
+@override final  EventEntry? event;
 @override final  EventEntry? proposed;
 
 /// Create a copy of ConsultEventState
@@ -146,11 +149,11 @@ abstract mixin class _$ConsultEventStateCopyWith<$Res> implements $ConsultEventS
   factory _$ConsultEventStateCopyWith(_ConsultEventState value, $Res Function(_ConsultEventState) _then) = __$ConsultEventStateCopyWithImpl;
 @override @useResult
 $Res call({
- ChatState chatState, EventEntry event, EventEntry? proposed
+ ChatState chatState, EventEntry? event, EventEntry? proposed
 });
 
 
-@override $ChatStateCopyWith<$Res> get chatState;@override $EventEntryCopyWith<$Res> get event;@override $EventEntryCopyWith<$Res>? get proposed;
+@override $ChatStateCopyWith<$Res> get chatState;@override $EventEntryCopyWith<$Res>? get event;@override $EventEntryCopyWith<$Res>? get proposed;
 
 }
 /// @nodoc
@@ -163,11 +166,11 @@ class __$ConsultEventStateCopyWithImpl<$Res>
 
 /// Create a copy of ConsultEventState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? chatState = null,Object? event = null,Object? proposed = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? chatState = null,Object? event = freezed,Object? proposed = freezed,}) {
   return _then(_ConsultEventState(
 chatState: null == chatState ? _self.chatState : chatState // ignore: cast_nullable_to_non_nullable
-as ChatState,event: null == event ? _self.event : event // ignore: cast_nullable_to_non_nullable
-as EventEntry,proposed: freezed == proposed ? _self.proposed : proposed // ignore: cast_nullable_to_non_nullable
+as ChatState,event: freezed == event ? _self.event : event // ignore: cast_nullable_to_non_nullable
+as EventEntry?,proposed: freezed == proposed ? _self.proposed : proposed // ignore: cast_nullable_to_non_nullable
 as EventEntry?,
   ));
 }
@@ -185,9 +188,12 @@ $ChatStateCopyWith<$Res> get chatState {
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$EventEntryCopyWith<$Res> get event {
-  
-  return $EventEntryCopyWith<$Res>(_self.event, (value) {
+$EventEntryCopyWith<$Res>? get event {
+    if (_self.event == null) {
+    return null;
+  }
+
+  return $EventEntryCopyWith<$Res>(_self.event!, (value) {
     return _then(_self.copyWith(event: value));
   });
 }/// Create a copy of ConsultEventState

@@ -2,12 +2,13 @@ import 'package:cheers_planner/core/app/snackbar_repo.dart';
 import 'package:cheers_planner/core/firebase/auth_exception.dart';
 import 'package:cheers_planner/core/firebase/auth_repo.dart';
 import 'package:cheers_planner/core/router/root.dart';
+import 'package:cheers_planner/features/create/consult_event_controller.dart';
 import 'package:cheers_planner/features/create/event_entry.dart';
-import 'package:go_router/go_router.dart';
 import 'package:cheers_planner/features/create/event_entry_repo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CreateEventScreen extends HookConsumerWidget {
@@ -23,6 +24,25 @@ class CreateEventScreen extends HookConsumerWidget {
     final minutes = useTextEditingController(text: '60');
     // 固定質問用のTextEditingControllerリスト
     final questionControllers = useState<List<TextEditingController>>([]);
+
+    ref.listen(consultEventControllerProvider.select((e) => e.event), (
+      _,
+      event,
+    ) {
+      if (event != null) {
+        // 相談結果が更新されたら、入力フィールドに反映
+        eventName.text = event.purpose;
+        candidateDateTimes.value = event.candidateDateTimes
+            .map((e) => e.start)
+            .toList();
+        allergiesEtc.text = event.allergiesEtc;
+        budgetUpperLimit.text = event.budgetUpperLimit.toString();
+        minutes.text = event.minutes.toString();
+        questionControllers.value = event.fixedQuestion
+            .map((q) => TextEditingController(text: q))
+            .toList();
+      }
+    });
 
     final deleteCandidateDateTime = useCallback((DateTime candidateDateTime) {
       candidateDateTimes.value = List.from(candidateDateTimes.value)

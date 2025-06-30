@@ -1,6 +1,6 @@
+import 'package:cheers_planner/features/chat/chat.dart';
 import 'package:cheers_planner/features/create/consult_event_controller.dart';
 import 'package:cheers_planner/features/create/event_entry.dart';
-import 'package:cheers_planner/features/chat/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -12,8 +12,8 @@ class ConsultEventScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(consultEventControllerProvider(entry));
-    final notifier = ref.read(consultEventControllerProvider(entry).notifier);
+    final state = ref.watch(consultEventControllerProvider);
+    final notifier = ref.read(consultEventControllerProvider.notifier);
     final textController = useTextEditingController();
     final scrollController = useScrollController();
 
@@ -29,7 +29,9 @@ class ConsultEventScreen extends HookConsumerWidget {
     }, [state.chatState.messages, scrollController]);
 
     useEffect(() {
-      notifier.startConsult();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifier.startConsult(entry);
+      });
       return null;
     }, const []);
 
@@ -43,17 +45,28 @@ class ConsultEventScreen extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('イベント相談')),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          ref.read(consultEventControllerProvider.notifier).clearAll();
+          ref.read(consultEventControllerProvider.notifier).startConsult(entry);
+        },
+        child: const Icon(Icons.clear_all),
+      ),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('イベント名: ${state.event.purpose}'),
-                Text('予算上限: ${state.event.budgetUpperLimit}'),
-                Text('長さ: ${state.event.minutes}分'),
-                Text('その他: ${state.event.allergiesEtc}'),
+              children: <Widget>[
+                Text('イベント名: ${state.event?.purpose}'),
+                Text(
+                  '候補日時: ${state.event?.candidateDateTimes.map((e) => e.start.toIso8601String()).join(', ')}',
+                ),
+                Text('予算上限: ${state.event?.budgetUpperLimit}'),
+                Text('長さ: ${state.event?.minutes}分'),
+                Text('参加者への質問: ${state.event?.fixedQuestion.join(' / ')}'),
+                Text('その他: ${state.event?.allergiesEtc}'),
               ],
             ),
           ),
@@ -66,8 +79,12 @@ class ConsultEventScreen extends HookConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('提案されたイベント名: ${state.proposed!.purpose}'),
+                    Text(
+                      '候補日時: ${state.proposed!.candidateDateTimes.map((e) => e.start.toIso8601String()).join(', ')}',
+                    ),
                     Text('予算上限: ${state.proposed!.budgetUpperLimit}'),
                     Text('長さ: ${state.proposed!.minutes}分'),
+                    Text('参加者への質問: ${state.event?.fixedQuestion.join(' / ')}'),
                     Text('その他: ${state.proposed!.allergiesEtc}'),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
