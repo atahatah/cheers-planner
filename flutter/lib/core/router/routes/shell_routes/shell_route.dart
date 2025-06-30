@@ -8,6 +8,7 @@ part of '../../root.dart';
           path: '/events',
           routes: <TypedRoute<RouteData>>[
             TypedGoRoute<CreateEventRoute>(path: 'create'),
+            TypedGoRoute<ConsultEventRoute>(path: 'consult'),
             TypedGoRoute<ManagementRoute>(path: 'management/:eventId'),
           ],
         ),

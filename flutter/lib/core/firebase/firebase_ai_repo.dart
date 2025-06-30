@@ -42,15 +42,19 @@ class GenerativeAIModel extends _$GenerativeAIModel {
 
 mixin GeminiModelRepo {
   Future<String?> generateResponse(String prompt);
-  ChatSessionRepo startChat();
+  ChatSessionRepo startChat({List<Tool>? tools});
 }
 
 class _GeminiModelRepoImpl implements GeminiModelRepo {
   _GeminiModelRepoImpl({
     required FirebaseAI firebaseAI,
     required GenerativeAIModels model,
-  }) : _model = firebaseAI.generativeModel(model: model.fullName);
+  }) : _firebaseAI = firebaseAI,
+       _modelName = model,
+       _model = firebaseAI.generativeModel(model: model.fullName);
 
+  final FirebaseAI _firebaseAI;
+  final GenerativeAIModels _modelName;
   final GenerativeModel _model;
 
   @override
@@ -61,8 +65,11 @@ class _GeminiModelRepoImpl implements GeminiModelRepo {
   }
 
   @override
-  ChatSessionRepo startChat() {
-    return _ChatSessionRepoImpl(model: this);
+  ChatSessionRepo startChat({List<Tool>? tools}) {
+    final m = tools != null && tools.isNotEmpty
+        ? _firebaseAI.generativeModel(model: _modelName.fullName, tools: tools)
+        : _model;
+    return _ChatSessionRepoImpl(m.startChat());
   }
 }
 
@@ -71,7 +78,8 @@ class _GeminiEchoMockImpl implements GeminiModelRepo {
   Future<String?> generateResponse(String prompt) async => prompt;
 
   @override
-  ChatSessionRepo startChat() => _ChatSessionRepoEchoMockImpl();
+  ChatSessionRepo startChat({List<Tool>? tools}) =>
+      _ChatSessionRepoEchoMockImpl();
 }
 
 mixin ChatSessionRepo {
@@ -80,10 +88,8 @@ mixin ChatSessionRepo {
 }
 
 class _ChatSessionRepoImpl implements ChatSessionRepo {
-  _ChatSessionRepoImpl({required this.model})
-    : _session = model._model.startChat();
+  _ChatSessionRepoImpl(this._session);
 
-  final _GeminiModelRepoImpl model;
   final ChatSession _session;
 
   @override

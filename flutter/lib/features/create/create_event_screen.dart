@@ -3,6 +3,7 @@ import 'package:cheers_planner/core/firebase/auth_exception.dart';
 import 'package:cheers_planner/core/firebase/auth_repo.dart';
 import 'package:cheers_planner/core/router/root.dart';
 import 'package:cheers_planner/features/create/event_entry.dart';
+import 'package:go_router/go_router.dart';
 import 'package:cheers_planner/features/create/event_entry_repo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -179,6 +180,29 @@ class CreateEventScreen extends HookConsumerWidget {
                     child: const Text('カスタムの質問を追加'),
                   ),
                 ],
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  final draft = EventEntry(
+                    purpose: eventName.text,
+                    candidateDateTimes: candidateDateTimes.value
+                        .map((e) => CandidateDateTime(start: e))
+                        .toList(),
+                    allergiesEtc: allergiesEtc.text,
+                    organizerId: const [],
+                    budgetUpperLimit: int.tryParse(budgetUpperLimit.text) ?? 0,
+                    fixedQuestion: questionControllers.value
+                        .map((c) => c.text)
+                        .where((t) => t.isNotEmpty)
+                        .toList(),
+                    minutes: int.tryParse(minutes.text) ?? 60,
+                  );
+                  context.push(
+                    const ConsultEventRoute().location,
+                    extra: draft,
+                  );
+                },
+                child: const Text('Geminiと相談'),
               ),
               ElevatedButton(onPressed: submit, child: const Text('イベントを作成')),
             ],
