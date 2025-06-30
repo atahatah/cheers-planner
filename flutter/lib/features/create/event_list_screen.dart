@@ -21,6 +21,31 @@ class EventListScreen extends HookConsumerWidget {
           return ListTile(
             title: Text(event.purpose),
             onTap: () => ManagementRoute(event.id!).go(context),
+            trailing: IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () async {
+                final shouldDelete = await showDialog<bool>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('イベントを削除'),
+                    content: const Text('このイベントを削除しますか？'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        child: const Text('キャンセル'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        child: const Text('削除'),
+                      ),
+                    ],
+                  ),
+                );
+                if (shouldDelete ?? false) {
+                  await ref.read(eventEntryRepoProvider(event.id!)).delete();
+                }
+              },
+            ),
           );
         },
         emptyBuilder: (context) =>
