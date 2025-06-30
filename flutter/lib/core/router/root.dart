@@ -2,11 +2,17 @@ import 'dart:convert';
 
 import 'package:cheers_planner/core/auth/app_auth_controller.dart';
 import 'package:cheers_planner/core/auth/app_auth_state.dart';
+import 'package:cheers_planner/features/auth/register_screen.dart';
+import 'package:cheers_planner/features/auth/sign_in_screen.dart';
+import 'package:cheers_planner/features/auth/sign_up_screen.dart';
 import 'package:cheers_planner/features/create/create_event_screen.dart';
 import 'package:cheers_planner/features/create/event_list_screen.dart';
 import 'package:cheers_planner/features/create/management_screen.dart';
 import 'package:cheers_planner/features/exec_ai/exec_ai_screen.dart';
 import 'package:cheers_planner/features/settings/settings_screen.dart';
+import 'package:cheers_planner/features/vote/result_screen.dart';
+import 'package:cheers_planner/features/vote/vote_screen.dart';
+import 'package:cheers_planner/features/vote/voted_list_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -15,6 +21,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'root.g.dart';
 part 'routes/auth.dart';
+part 'routes/shell_routes/create.dart';
+part 'routes/shell_routes/exec_ai.dart';
 part 'routes/shell_routes/settings.dart';
 part 'routes/shell_routes/shell_route.dart';
 part 'routes/shell_routes/vote.dart';

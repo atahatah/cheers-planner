@@ -48,6 +48,7 @@ export const executeAI = functions.onCall(
   {
     // エミュレータ使用時はリージョン指定なし、本番環境時はリージョン指定
     ...(isEmulator ? {} : { region: "asia-northeast1" }),
+    timeoutSeconds: 540, // 9分のタイムアウト
     cors: [
       // 本番環境
       "https://cheers-planner.web.app",
@@ -164,6 +165,7 @@ export const healthCheck = functions.onRequest(
   {
     // エミュレータ使用時はリージョン指定なし、本番環境時はリージョン指定
     ...(isEmulator ? {} : { region: "asia-northeast1" }),
+    timeoutSeconds: 60, // 1分のタイムアウト（軽い処理なので短め）
     cors: [
       // 本番環境
       "https://cheers-planner.web.app",
@@ -189,6 +191,7 @@ export const generateLocationCandidatesStep = functions.onCall(
   {
     // エミュレータ使用時はリージョン指定なし、本番環境時はリージョン指定
     ...(isEmulator ? {} : { region: "asia-northeast1" }),
+    timeoutSeconds: 540, // 9分のタイムアウト
     cors: [
       // 本番環境
       "https://cheers-planner.web.app",
@@ -340,6 +343,7 @@ export const generateKeywordsStep = functions.onCall(
   {
     // エミュレータ使用時はリージョン指定なし、本番環境時はリージョン指定
     ...(isEmulator ? {} : { region: "asia-northeast1" }),
+    timeoutSeconds: 540, // 9分のタイムアウト
     cors: [
       // 本番環境
       "https://cheers-planner.web.app",
@@ -468,6 +472,7 @@ export const searchRestaurantsStep = functions.onCall(
   {
     // エミュレータ使用時はリージョン指定なし、本番環境時はリージョン指定
     ...(isEmulator ? {} : { region: "asia-northeast1" }),
+    timeoutSeconds: 540, // 9分のタイムアウト
     cors: [
       // 本番環境
       "https://cheers-planner.web.app",
@@ -625,8 +630,7 @@ export const optimizeRestaurantsStep = functions.onCall(
   {
     // エミュレータ使用時はリージョン指定なし、本番環境時はリージョン指定
     ...(isEmulator ? {} : { region: "asia-northeast1" }),
-    timeoutSeconds: 300, // 5分のタイムアウト
-    memory: "1GiB", // より多くのメモリを割り当て
+    timeoutSeconds: 540, // 9分のタイムアウト
     cors: [
       // 本番環境
       "https://cheers-planner.web.app",
@@ -791,24 +795,8 @@ function generateSearchKeywords(
     participantCount: participants.length,
   });
 
-  // 参加者の要望を分析
-  const locationRequests = participants
-    .flatMap((p) => p.desiredLocations || [])
-    .filter((loc) => loc);
-  const allergyInfo = participants
-    .map((p) => p.allergiesEtc)
-    .filter((allergy) => allergy && allergy !== "特になし");
-  // budgetの集計
-  const budgetSum = participants.reduce(
-    (sum, p) => sum + (p.desiredBudget || 0),
-    0
-  );
-  const averageBudget =
-    participants.length > 0 ? budgetSum / participants.length : 0;
-
   // 年齢層や役職の分析
   const positions = participants.map((p) => p.positionOrGrade);
-  const uniquePositions = [...new Set(positions)];
 
   // キーワードの生成ロジック
   const baseKeywords = ["居酒屋", "レストラン"];
