@@ -84,17 +84,29 @@ RouteBase get $mainShellRouteData => StatefulShellRouteData.$route(
             GoRouteData.$route(
               path: 'create',
 
-              factory: $CreateEventRouteExtension._fromState,
+              factory: $CreateRouteExtension._fromState,
             ),
             GoRouteData.$route(
               path: 'consult',
 
-              factory: $ConsultEventRouteExtension._fromState,
+              factory: $ConsultRouteExtension._fromState,
             ),
             GoRouteData.$route(
               path: 'management/:eventId',
 
               factory: $ManagementRouteExtension._fromState,
+              routes: [
+                GoRouteData.$route(
+                  path: 'recommend',
+
+                  factory: $RecommendRouteExtension._fromState,
+                ),
+                GoRouteData.$route(
+                  path: 'date_summary',
+
+                  factory: $DateSummaryRouteExtension._fromState,
+                ),
+              ],
             ),
           ],
         ),
@@ -118,15 +130,6 @@ RouteBase get $mainShellRouteData => StatefulShellRouteData.$route(
               factory: $ResultRouteExtension._fromState,
             ),
           ],
-        ),
-      ],
-    ),
-    StatefulShellBranchData.$branch(
-      routes: [
-        GoRouteData.$route(
-          path: '/execAi',
-
-          factory: $ExecAiRouteExtension._fromState,
         ),
       ],
     ),
@@ -163,9 +166,8 @@ extension $EventListRouteExtension on EventListRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $CreateEventRouteExtension on CreateEventRoute {
-  static CreateEventRoute _fromState(GoRouterState state) =>
-      const CreateEventRoute();
+extension $CreateRouteExtension on CreateRoute {
+  static CreateRoute _fromState(GoRouterState state) => const CreateRoute();
 
   String get location => GoRouteData.$location('/events/create');
 
@@ -179,9 +181,8 @@ extension $CreateEventRouteExtension on CreateEventRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $ConsultEventRouteExtension on ConsultEventRoute {
-  static ConsultEventRoute _fromState(GoRouterState state) =>
-      const ConsultEventRoute();
+extension $ConsultRouteExtension on ConsultRoute {
+  static ConsultRoute _fromState(GoRouterState state) => const ConsultRoute();
 
   String get location => GoRouteData.$location('/events/consult');
 
@@ -201,6 +202,42 @@ extension $ManagementRouteExtension on ManagementRoute {
 
   String get location => GoRouteData.$location(
     '/events/management/${Uri.encodeComponent(eventId)}',
+  );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $RecommendRouteExtension on RecommendRoute {
+  static RecommendRoute _fromState(GoRouterState state) =>
+      RecommendRoute(state.pathParameters['eventId']!);
+
+  String get location => GoRouteData.$location(
+    '/events/management/${Uri.encodeComponent(eventId)}/recommend',
+  );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $DateSummaryRouteExtension on DateSummaryRoute {
+  static DateSummaryRoute _fromState(GoRouterState state) =>
+      DateSummaryRoute(state.pathParameters['eventId']!);
+
+  String get location => GoRouteData.$location(
+    '/events/management/${Uri.encodeComponent(eventId)}/date_summary',
   );
 
   void go(BuildContext context) => context.go(location);
@@ -252,21 +289,6 @@ extension $ResultRouteExtension on ResultRoute {
 
   String get location =>
       GoRouteData.$location('/vote/result/${Uri.encodeComponent(eventId)}');
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-extension $ExecAiRouteExtension on ExecAiRoute {
-  static ExecAiRoute _fromState(GoRouterState state) => const ExecAiRoute();
-
-  String get location => GoRouteData.$location('/execAi');
 
   void go(BuildContext context) => context.go(location);
 

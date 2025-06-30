@@ -7,9 +7,15 @@ part of '../../root.dart';
         TypedGoRoute<EventListRoute>(
           path: '/events',
           routes: <TypedRoute<RouteData>>[
-            TypedGoRoute<CreateEventRoute>(path: 'create'),
-            TypedGoRoute<ConsultEventRoute>(path: 'consult'),
-            TypedGoRoute<ManagementRoute>(path: 'management/:eventId'),
+            TypedGoRoute<CreateRoute>(path: 'create'),
+            TypedGoRoute<ConsultRoute>(path: 'consult'),
+            TypedGoRoute<ManagementRoute>(
+              path: 'management/:eventId',
+              routes: <TypedRoute<RouteData>>[
+                TypedGoRoute<RecommendRoute>(path: 'recommend'),
+                TypedGoRoute<DateSummaryRoute>(path: 'date_summary'),
+              ],
+            ),
           ],
         ),
       ],
@@ -23,11 +29,6 @@ part of '../../root.dart';
             TypedGoRoute<ResultRoute>(path: 'result/:eventId'),
           ],
         ),
-      ],
-    ),
-    TypedStatefulShellBranch<ExecAiShellBranchData>(
-      routes: <TypedRoute<RouteData>>[
-        TypedGoRoute<ExecAiRoute>(path: '/execAi'),
       ],
     ),
     TypedStatefulShellBranch<SettingsShellBranchData>(
@@ -60,7 +61,6 @@ class _NavItem {
 const _navItems = <_NavItem>[
   _NavItem(Icons.event, 'Create'),
   _NavItem(Icons.padding, 'Vote'),
-  _NavItem(Icons.smart_toy, 'ExecAI'),
   _NavItem(Icons.settings, 'Settings'),
 ];
 

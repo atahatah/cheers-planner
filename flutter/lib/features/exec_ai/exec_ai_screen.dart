@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ExecAiScreen extends StatefulWidget {
-  const ExecAiScreen({super.key});
+  const ExecAiScreen({super.key, this.eventId});
+
+  final String? eventId;
 
   @override
   State<ExecAiScreen> createState() => _ExecAiScreenState();
@@ -50,7 +52,8 @@ class _ExecAiScreenState extends State<ExecAiScreen> {
       _isInitializing = true;
     });
     try {
-      final eventId = await _getTestEventId();
+      // widget.eventIdが存在する場合はそれを使用、そうでなければ_getTestEventIdを呼び出し
+      final eventId = widget.eventId ?? await _getTestEventId();
       if (eventId != null) {
         final eventDoc = await FirebaseFirestore.instance
             .collection('events')
@@ -284,9 +287,7 @@ class _ExecAiScreenState extends State<ExecAiScreen> {
         throw Exception('テストイベントが見つかりません');
       }
 
-      final callable = functions.httpsCallable(
-        'optimizeRestaurantSelectionStep',
-      );
+      final callable = functions.httpsCallable('optimizeRestaurantsStep');
       final result = await callable.call({'eventId': _eventId});
       final data = result.data as Map<String, dynamic>;
 
@@ -1846,39 +1847,6 @@ class _ExecAiScreenState extends State<ExecAiScreen> {
                   ),
                 ),
               ),
-
-              const SizedBox(height: 16),
-
-              // デバッグ用ボタン
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: _testFirebaseConnection,
-                      icon: const Icon(Icons.cloud),
-                      label: const Text('Firebase接続テスト'),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        backgroundColor: Colors.blue.shade300,
-                        foregroundColor: Colors.white,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: _createTestData,
-                      icon: const Icon(Icons.add_circle),
-                      label: const Text('テストデータ作成'),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        backgroundColor: Colors.orange,
-                        foregroundColor: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
         ),
@@ -1907,7 +1875,6 @@ class _ExecAiScreenState extends State<ExecAiScreen> {
       );
     }
 
-    final eventName = _eventData!['eventName'] ?? '名称未設定';
     final purpose = _eventData!['purpose'] ?? '目的未設定';
     final budget = _eventData!['budgetUpperLimit'] ?? 0;
 
@@ -1924,8 +1891,7 @@ class _ExecAiScreenState extends State<ExecAiScreen> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const Divider(height: 20),
-            _buildSummaryRow(Icons.event, 'イベント名', eventName.toString()),
-            _buildSummaryRow(Icons.flag, '目的', purpose.toString()),
+            _buildSummaryRow(Icons.flag, 'イベント名', purpose.toString()),
             _buildSummaryRow(Icons.wallet_giftcard, '予算（上限）', '$budget 円/人'),
             if (_eventId != null)
               _buildSummaryRow(Icons.vpn_key, 'イベントID', _eventId!),

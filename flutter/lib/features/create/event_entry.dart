@@ -9,9 +9,7 @@ part 'event_entry.g.dart';
 sealed class EventEntry with _$EventEntry {
   const factory EventEntry({
     String? id,
-    String? aiRecArea,
-    String? aiRecDate,
-    String? aiRecStore,
+    Map<String, dynamic>? aiResults,
     required String purpose,
     @ListToMapConverter<CandidateDateTime>(prefix: 'datetime')
     required List<CandidateDateTime> candidateDateTimes,

@@ -56,18 +56,62 @@ class ConsultEventScreen extends HookConsumerWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text('イベント名: ${state.event?.purpose}'),
-                Text(
-                  '候補日時: ${state.event?.candidateDateTimes.map((e) => e.start.toIso8601String()).join(', ')}',
+            child: Card(
+              elevation: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.event,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'イベント概要',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    _buildInfoRow(
+                      context,
+                      'イベント名',
+                      state.event?.purpose ?? '未設定',
+                    ),
+                    _buildInfoRow(
+                      context,
+                      '候補日時',
+                      state.event == null
+                          ? '-'
+                          : state.event!.candidateDateTimes
+                                .map((e) => _fmt(e.start))
+                                .join(' / '),
+                    ),
+                    _buildInfoRow(
+                      context,
+                      '予算上限',
+                      '${state.event?.budgetUpperLimit ?? '-'} 円',
+                    ),
+                    _buildInfoRow(
+                      context,
+                      '長さ',
+                      '${state.event?.minutes ?? '-'} 分',
+                    ),
+                    if (state.event?.fixedQuestion.isNotEmpty == true)
+                      _buildInfoRow(
+                        context,
+                        '質問',
+                        state.event!.fixedQuestion.join(' / '),
+                      ),
+                    if (state.event?.allergiesEtc?.isNotEmpty == true)
+                      _buildInfoRow(context, 'その他', state.event!.allergiesEtc!),
+                  ],
                 ),
-                Text('予算上限: ${state.event?.budgetUpperLimit}'),
-                Text('長さ: ${state.event?.minutes}分'),
-                Text('参加者への質問: ${state.event?.fixedQuestion.join(' / ')}'),
-                Text('その他: ${state.event?.allergiesEtc}'),
-              ],
+              ),
             ),
           ),
           if (state.proposed != null) ...[
@@ -112,10 +156,7 @@ class ConsultEventScreen extends HookConsumerWidget {
               itemCount: state.chatState.messages.length,
               itemBuilder: (context, index) {
                 final message = state.chatState.messages[index];
-                return ListTile(
-                  title: Text(message.message),
-                  subtitle: Text(message.role == Role.user ? 'あなた' : 'Gemini'),
-                );
+                return _buildChatBubble(context, message);
               },
             ),
           ),
@@ -138,6 +179,72 @@ class ConsultEventScreen extends HookConsumerWidget {
                   onPressed: sendMessage,
                 ),
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // --- UI Helper Widgets ---
+  Widget _buildInfoRow(BuildContext context, String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '$label: ',
+            style: Theme.of(
+              context,
+            ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          Expanded(
+            child: Text(value, style: Theme.of(context).textTheme.bodyMedium),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _fmt(DateTime dt) {
+    return '${dt.month}/${dt.day} ${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+  }
+
+  Widget _buildChatBubble(BuildContext context, ChatMessage message) {
+    final isUser = message.role == Role.user;
+    final bubbleColor = isUser
+        ? Theme.of(context).colorScheme.primaryContainer
+        : Theme.of(context).colorScheme.surfaceContainerHighest;
+    final align = isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start;
+    final radius = BorderRadius.only(
+      topLeft: const Radius.circular(12),
+      topRight: const Radius.circular(12),
+      bottomLeft: isUser ? const Radius.circular(12) : const Radius.circular(0),
+      bottomRight: isUser
+          ? const Radius.circular(0)
+          : const Radius.circular(12),
+    );
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      child: Column(
+        crossAxisAlignment: align,
+        children: [
+          Container(
+            constraints: const BoxConstraints(maxWidth: 280),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            decoration: BoxDecoration(color: bubbleColor, borderRadius: radius),
+            child: Text(
+              message.message,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            isUser ? 'あなた' : 'Gemini',
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: Theme.of(context).colorScheme.outline,
             ),
           ),
         ],

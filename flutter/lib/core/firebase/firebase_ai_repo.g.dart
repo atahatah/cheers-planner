@@ -326,7 +326,7 @@ class _GeminiFunctionCallSessionProviderElement
       (origin as GeminiFunctionCallSessionProvider).instruction;
 }
 
-String _$generativeAIModelHash() => r'43fea863f6be09441a7d725f30411e7f52517fa3';
+String _$generativeAIModelHash() => r'b6901c489a10c15012a0b6e27c43ff5bc2417218';
 
 /// See also [GenerativeAIModel].
 @ProviderFor(GenerativeAIModel)

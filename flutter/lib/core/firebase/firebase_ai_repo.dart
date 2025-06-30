@@ -32,7 +32,7 @@ enum GenerativeAIModels {
 class GenerativeAIModel extends _$GenerativeAIModel {
   @override
   GenerativeAIModels build() {
-    return GenerativeAIModels.gemini20flush;
+    return GenerativeAIModels.gemini25Flash;
   }
 
   void set(GenerativeAIModels model) {
