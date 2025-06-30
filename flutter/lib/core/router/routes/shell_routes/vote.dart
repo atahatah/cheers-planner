@@ -32,3 +32,14 @@ class ResultRoute extends GoRouteData {
     return ResultScreen(eventId: eventId);
   }
 }
+
+class VoteConfirmRoute extends GoRouteData {
+  const VoteConfirmRoute(this.eventId);
+  final String eventId;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    final participant = state.extra as EventParticipant;
+    return VoteConfirmScreen(eventId: eventId, participant: participant);
+  }
+}
