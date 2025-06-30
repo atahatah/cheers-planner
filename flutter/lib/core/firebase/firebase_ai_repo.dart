@@ -49,9 +49,15 @@ class _GeminiModelRepoImpl implements GeminiModelRepo {
   _GeminiModelRepoImpl({
     required FirebaseAI firebaseAI,
     required GenerativeAIModels model,
+    String? instruction,
   }) : _firebaseAI = firebaseAI,
        _modelName = model,
-       _model = firebaseAI.generativeModel(model: model.fullName);
+       _model = firebaseAI.generativeModel(
+         model: model.fullName,
+         systemInstruction: instruction == null
+             ? null
+             : Content('system', [TextPart(instruction)]),
+       );
 
   final FirebaseAI _firebaseAI;
   final GenerativeAIModels _modelName;
@@ -150,24 +156,32 @@ class IsGeminiEchoMock extends _$IsGeminiEchoMock {
 }
 
 @riverpod
-GeminiModelRepo geminiModelRepo(Ref ref) {
+GeminiModelRepo geminiModelRepo(Ref ref, {String? instruction}) {
   final firebaseAI = ref.watch(firebaseAiProvider);
   final model = ref.watch(generativeAIModelProvider);
   final isGeminiEchoMock = ref.watch(isGeminiEchoMockProvider);
   if (isGeminiEchoMock) {
     return _GeminiEchoMockImpl();
   }
-  return _GeminiModelRepoImpl(firebaseAI: firebaseAI, model: model);
+  return _GeminiModelRepoImpl(
+    firebaseAI: firebaseAI,
+    model: model,
+    instruction: instruction,
+  );
 }
 
 @riverpod
 ChatSessionRepo geminiChatSession(Ref ref) {
-  final gemini = ref.watch(geminiModelRepoProvider);
+  final gemini = ref.watch(geminiModelRepoProvider());
   return gemini.startChat();
 }
 
 @riverpod
-ChatSessionRepo geminiFunctionCallSession(Ref ref, List<Tool> tools) {
-  final gemini = ref.watch(geminiModelRepoProvider);
+ChatSessionRepo geminiFunctionCallSession(
+  Ref ref,
+  List<Tool> tools, {
+  String? instruction,
+}) {
+  final gemini = ref.watch(geminiModelRepoProvider(instruction: instruction));
   return gemini.startChat(tools: tools);
 }

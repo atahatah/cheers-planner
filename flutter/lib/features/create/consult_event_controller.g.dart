@@ -7,7 +7,7 @@ part of 'consult_event_controller.dart';
 // **************************************************************************
 
 String _$consultEventControllerHash() =>
-    r'37a77a3cffb631379a13aca29b16b39248501d1b';
+    r'a4a578e68da3f8d42783b5e48260c1e0f50366d3';
 
 /// See also [ConsultEventController].
 @ProviderFor(ConsultEventController)

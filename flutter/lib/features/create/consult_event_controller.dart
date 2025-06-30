@@ -89,8 +89,9 @@ $summary
 
 付加情報:
 - 今日の日付は ${DateTime.now().toIso8601String()} です。
+
 ''';
-    await sendMessage(prompt);
+    await _sendSystemMessage(prompt);
   }
 
   Future<void> sendMessage(String message) async {
@@ -100,20 +101,58 @@ $summary
       throw ChatAlreadyWaitingForResponseException(message);
     }
 
-    // ユーザーメッセージに関数呼び出しを促す指示を追加
-    final enhancedMessage = '''$message
+    // ユーザーメッセージの場合：チャット履歴に追加してから送信
+    await _sendMessageInternal(
+      message: message,
+      addToHistory: true,
+      enhanceWithSystemPrompt: true,
+    );
+  }
 
-重要: 改善提案をする場合は、必ずupdateEvent関数を使って具体的な変更内容を示してください。テキストでの説明だけでなく、関数呼び出しによる実際の変更案を提示してください。''';
+  // システムメッセージ用（チャット履歴に表示しない）
+  Future<void> _sendSystemMessage(String message) async {
+    final value = state;
+    final chatState = value.chatState;
+    if (chatState.isLoading) {
+      throw ChatAlreadyWaitingForResponseException(message);
+    }
 
+    // システムメッセージの場合：チャット履歴に追加せずに送信
+    await _sendMessageInternal(
+      message: message,
+      addToHistory: false,
+      enhanceWithSystemPrompt: false,
+    );
+  }
+
+  // 共通のメッセージ送信処理
+  Future<void> _sendMessageInternal({
+    required String message,
+    required bool addToHistory,
+    required bool enhanceWithSystemPrompt,
+  }) async {
+    final value = state;
+    final chatState = value.chatState;
+
+    // AIに送信するメッセージを構築
+    final aiMessage = enhanceWithSystemPrompt
+        ? '''$message
+
+重要: 改善提案をする場合は、必ずupdateEvent関数を使って具体的な変更内容を示してください。テキストでの説明だけでなく、関数呼び出しによる実際の変更案を提示してください。'''
+        : message;
+
+    // チャット履歴の更新
     var newChatState = chatState.copyWith(
       isLoading: true,
       messages: [
         ...chatState.messages,
-        ChatMessage.completedMessage(
-          role: Role.user,
-          message: message, // 元のメッセージを表示用に保持
-          sentAt: DateTime.now(),
-        ),
+        // ユーザーメッセージの場合のみチャット履歴に追加
+        if (addToHistory)
+          ChatMessage.completedMessage(
+            role: Role.user,
+            message: message,
+            sentAt: DateTime.now(),
+          ),
         ChatMessage.receivingMessage(
           role: Role.model,
           message: '',
@@ -124,7 +163,7 @@ $summary
     state = value.copyWith(chatState: newChatState);
 
     final responses = newChatState.session.sendMessageStream(
-      Content.text(enhancedMessage), // 拡張メッセージを送信
+      Content.text(aiMessage),
     );
     final buffer = StringBuffer();
     EventEntry? proposed;
@@ -175,15 +214,74 @@ $summary
     state = state.copyWith(chatState: newChatState, proposed: proposed);
   }
 
-  void applyProposed() {
+  Future<void> applyProposed() async {
     final proposed = state.proposed;
     if (proposed != null) {
+      // 提案を適用
       state = state.copyWith(event: proposed, proposed: null);
+
+      // Geminiに承認を伝え、次の提案を求める
+      final updatedEvent = proposed;
+      final summary = [
+        '目的: ${updatedEvent.purpose}',
+        '日程候補: ${updatedEvent.candidateDateTimes.map((e) => e.start.toIso8601String()).join(', ')}',
+        '予算上限: ${updatedEvent.budgetUpperLimit}円',
+        '長さ: ${updatedEvent.minutes}分',
+        if (updatedEvent.allergiesEtc.isNotEmpty)
+          'その他: ${updatedEvent.allergiesEtc}',
+        if (updatedEvent.fixedQuestion.isNotEmpty)
+          '全員への質問: ${updatedEvent.fixedQuestion.join(' / ')}',
+      ].join('\n');
+
+      final nextPrompt =
+          '''前回の提案を承認いただきありがとうございます。
+
+更新されたイベント内容:
+$summary
+
+次の改善提案をお願いします:
+1. この企画の別の改善点を1つ提案してください
+2. 改善案を提示する際は、必ずupdateEvent関数を使って具体的な変更内容を示してください
+3. 一度に複数の改善点を提案せず、1つずつ段階的に進めてください
+
+改善案がある場合は、updateEvent関数を呼び出して変更内容を具体的に示してください。''';
+
+      await _sendSystemMessage(nextPrompt);
     }
   }
 
-  void clearProposed() {
+  Future<void> clearProposed() async {
+    final currentEvent = state.event;
     state = state.copyWith(proposed: null);
+
+    // Geminiに取り消しを伝え、別の提案を求める
+    if (currentEvent != null) {
+      final summary = [
+        '目的: ${currentEvent.purpose}',
+        '日程候補: ${currentEvent.candidateDateTimes.map((e) => e.start.toIso8601String()).join(', ')}',
+        '予算上限: ${currentEvent.budgetUpperLimit}円',
+        '長さ: ${currentEvent.minutes}分',
+        if (currentEvent.allergiesEtc.isNotEmpty)
+          'その他: ${currentEvent.allergiesEtc}',
+        if (currentEvent.fixedQuestion.isNotEmpty)
+          '全員への質問: ${currentEvent.fixedQuestion.join(' / ')}',
+      ].join('\n');
+
+      final retryPrompt =
+          '''前回の提案は採用されませんでした。
+
+現在のイベント内容:
+$summary
+
+別の改善提案をお願いします:
+1. 前回とは異なる改善点を1つ提案してください
+2. 改善案を提示する際は、必ずupdateEvent関数を使って具体的な変更内容を示してください
+3. 一度に複数の改善点を提案せず、1つずつ段階的に進めてください
+
+改善案がある場合は、updateEvent関数を呼び出して変更内容を具体的に示してください。''';
+
+      await _sendSystemMessage(retryPrompt);
+    }
   }
 
   void clearAll() {

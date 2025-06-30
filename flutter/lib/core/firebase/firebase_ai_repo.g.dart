@@ -23,42 +23,7 @@ final firebaseAiProvider = AutoDisposeProvider<FirebaseAI>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef FirebaseAiRef = AutoDisposeProviderRef<FirebaseAI>;
-String _$geminiModelRepoHash() => r'4e93966f4c34cc1e8078eda121de71dbe5e6e40e';
-
-/// See also [geminiModelRepo].
-@ProviderFor(geminiModelRepo)
-final geminiModelRepoProvider = AutoDisposeProvider<GeminiModelRepo>.internal(
-  geminiModelRepo,
-  name: r'geminiModelRepoProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$geminiModelRepoHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef GeminiModelRepoRef = AutoDisposeProviderRef<GeminiModelRepo>;
-String _$geminiChatSessionHash() => r'648bba245e117797f50d913cd40ad3edc29983f4';
-
-/// See also [geminiChatSession].
-@ProviderFor(geminiChatSession)
-final geminiChatSessionProvider = AutoDisposeProvider<ChatSessionRepo>.internal(
-  geminiChatSession,
-  name: r'geminiChatSessionProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$geminiChatSessionHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef GeminiChatSessionRef = AutoDisposeProviderRef<ChatSessionRepo>;
-String _$geminiFunctionCallSessionHash() =>
-    r'0f7b8fb8b17868af104dbae0ffa4b56ac4ded22a';
+String _$geminiModelRepoHash() => r'62a4a09d37a499dbd6072e2044983be8fe5be8a5';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -81,6 +46,147 @@ class _SystemHash {
   }
 }
 
+/// See also [geminiModelRepo].
+@ProviderFor(geminiModelRepo)
+const geminiModelRepoProvider = GeminiModelRepoFamily();
+
+/// See also [geminiModelRepo].
+class GeminiModelRepoFamily extends Family<GeminiModelRepo> {
+  /// See also [geminiModelRepo].
+  const GeminiModelRepoFamily();
+
+  /// See also [geminiModelRepo].
+  GeminiModelRepoProvider call({String? instruction}) {
+    return GeminiModelRepoProvider(instruction: instruction);
+  }
+
+  @override
+  GeminiModelRepoProvider getProviderOverride(
+    covariant GeminiModelRepoProvider provider,
+  ) {
+    return call(instruction: provider.instruction);
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'geminiModelRepoProvider';
+}
+
+/// See also [geminiModelRepo].
+class GeminiModelRepoProvider extends AutoDisposeProvider<GeminiModelRepo> {
+  /// See also [geminiModelRepo].
+  GeminiModelRepoProvider({String? instruction})
+    : this._internal(
+        (ref) => geminiModelRepo(
+          ref as GeminiModelRepoRef,
+          instruction: instruction,
+        ),
+        from: geminiModelRepoProvider,
+        name: r'geminiModelRepoProvider',
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$geminiModelRepoHash,
+        dependencies: GeminiModelRepoFamily._dependencies,
+        allTransitiveDependencies:
+            GeminiModelRepoFamily._allTransitiveDependencies,
+        instruction: instruction,
+      );
+
+  GeminiModelRepoProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.instruction,
+  }) : super.internal();
+
+  final String? instruction;
+
+  @override
+  Override overrideWith(
+    GeminiModelRepo Function(GeminiModelRepoRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GeminiModelRepoProvider._internal(
+        (ref) => create(ref as GeminiModelRepoRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        instruction: instruction,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeProviderElement<GeminiModelRepo> createElement() {
+    return _GeminiModelRepoProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GeminiModelRepoProvider && other.instruction == instruction;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, instruction.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin GeminiModelRepoRef on AutoDisposeProviderRef<GeminiModelRepo> {
+  /// The parameter `instruction` of this provider.
+  String? get instruction;
+}
+
+class _GeminiModelRepoProviderElement
+    extends AutoDisposeProviderElement<GeminiModelRepo>
+    with GeminiModelRepoRef {
+  _GeminiModelRepoProviderElement(super.provider);
+
+  @override
+  String? get instruction => (origin as GeminiModelRepoProvider).instruction;
+}
+
+String _$geminiChatSessionHash() => r'85e7277db60af0292e96f93e814f99ea2cb81827';
+
+/// See also [geminiChatSession].
+@ProviderFor(geminiChatSession)
+final geminiChatSessionProvider = AutoDisposeProvider<ChatSessionRepo>.internal(
+  geminiChatSession,
+  name: r'geminiChatSessionProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$geminiChatSessionHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GeminiChatSessionRef = AutoDisposeProviderRef<ChatSessionRepo>;
+String _$geminiFunctionCallSessionHash() =>
+    r'8a1be485870d3304c922aee5ab3a073d06641708';
+
 /// See also [geminiFunctionCallSession].
 @ProviderFor(geminiFunctionCallSession)
 const geminiFunctionCallSessionProvider = GeminiFunctionCallSessionFamily();
@@ -91,15 +197,18 @@ class GeminiFunctionCallSessionFamily extends Family<ChatSessionRepo> {
   const GeminiFunctionCallSessionFamily();
 
   /// See also [geminiFunctionCallSession].
-  GeminiFunctionCallSessionProvider call(List<Tool> tools) {
-    return GeminiFunctionCallSessionProvider(tools);
+  GeminiFunctionCallSessionProvider call(
+    List<Tool> tools, {
+    String? instruction,
+  }) {
+    return GeminiFunctionCallSessionProvider(tools, instruction: instruction);
   }
 
   @override
   GeminiFunctionCallSessionProvider getProviderOverride(
     covariant GeminiFunctionCallSessionProvider provider,
   ) {
-    return call(provider.tools);
+    return call(provider.tools, instruction: provider.instruction);
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -121,11 +230,12 @@ class GeminiFunctionCallSessionFamily extends Family<ChatSessionRepo> {
 class GeminiFunctionCallSessionProvider
     extends AutoDisposeProvider<ChatSessionRepo> {
   /// See also [geminiFunctionCallSession].
-  GeminiFunctionCallSessionProvider(List<Tool> tools)
+  GeminiFunctionCallSessionProvider(List<Tool> tools, {String? instruction})
     : this._internal(
         (ref) => geminiFunctionCallSession(
           ref as GeminiFunctionCallSessionRef,
           tools,
+          instruction: instruction,
         ),
         from: geminiFunctionCallSessionProvider,
         name: r'geminiFunctionCallSessionProvider',
@@ -136,6 +246,7 @@ class GeminiFunctionCallSessionProvider
         allTransitiveDependencies:
             GeminiFunctionCallSessionFamily._allTransitiveDependencies,
         tools: tools,
+        instruction: instruction,
       );
 
   GeminiFunctionCallSessionProvider._internal(
@@ -146,9 +257,11 @@ class GeminiFunctionCallSessionProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.tools,
+    required this.instruction,
   }) : super.internal();
 
   final List<Tool> tools;
+  final String? instruction;
 
   @override
   Override overrideWith(
@@ -164,6 +277,7 @@ class GeminiFunctionCallSessionProvider
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         tools: tools,
+        instruction: instruction,
       ),
     );
   }
@@ -175,13 +289,16 @@ class GeminiFunctionCallSessionProvider
 
   @override
   bool operator ==(Object other) {
-    return other is GeminiFunctionCallSessionProvider && other.tools == tools;
+    return other is GeminiFunctionCallSessionProvider &&
+        other.tools == tools &&
+        other.instruction == instruction;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, tools.hashCode);
+    hash = _SystemHash.combine(hash, instruction.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -192,6 +309,9 @@ class GeminiFunctionCallSessionProvider
 mixin GeminiFunctionCallSessionRef on AutoDisposeProviderRef<ChatSessionRepo> {
   /// The parameter `tools` of this provider.
   List<Tool> get tools;
+
+  /// The parameter `instruction` of this provider.
+  String? get instruction;
 }
 
 class _GeminiFunctionCallSessionProviderElement
@@ -201,6 +321,9 @@ class _GeminiFunctionCallSessionProviderElement
 
   @override
   List<Tool> get tools => (origin as GeminiFunctionCallSessionProvider).tools;
+  @override
+  String? get instruction =>
+      (origin as GeminiFunctionCallSessionProvider).instruction;
 }
 
 String _$generativeAIModelHash() => r'43fea863f6be09441a7d725f30411e7f52517fa3';
