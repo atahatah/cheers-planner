@@ -5,6 +5,7 @@ import 'package:cheers_planner/core/auth/app_auth_state.dart';
 import 'package:cheers_planner/features/auth/register_screen.dart';
 import 'package:cheers_planner/features/auth/sign_in_screen.dart';
 import 'package:cheers_planner/features/auth/sign_up_screen.dart';
+import 'package:cheers_planner/features/create/consult_event_screen.dart';
 import 'package:cheers_planner/features/create/create_event_screen.dart';
 import 'package:cheers_planner/features/create/event_list_screen.dart';
 import 'package:cheers_planner/features/create/management_screen.dart';
