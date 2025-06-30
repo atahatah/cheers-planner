@@ -66,14 +66,6 @@ class _GeminiModelRepoImpl implements GeminiModelRepo {
   }
 }
 
-class _GeminiEchoMockImpl implements GeminiModelRepo {
-  @override
-  Future<String?> generateResponse(String prompt) async => prompt;
-
-  @override
-  ChatSessionRepo startChat() => _ChatSessionRepoEchoMockImpl();
-}
-
 mixin ChatSessionRepo {
   Future<GenerateContentResponse> sendMessage(Content message);
   Stream<GenerateContentResponse> sendMessageStream(Content message);
@@ -95,61 +87,9 @@ class _ChatSessionRepoImpl implements ChatSessionRepo {
       _session.sendMessageStream(message);
 }
 
-class _ChatSessionRepoEchoMockImpl implements ChatSessionRepo {
-  _ChatSessionRepoEchoMockImpl();
-  final responseDelay = 100;
-
-  @override
-  Future<GenerateContentResponse> sendMessage(Content message) async {
-    return GenerateContentResponse([
-      Candidate(message, null, null, null, null),
-    ], null);
-  }
-
-  @override
-  Stream<GenerateContentResponse> sendMessageStream(Content message) async* {
-    final textMessage = message.parts.whereType<TextPart>().firstOrNull?.text;
-    if (textMessage == null) {
-      yield GenerateContentResponse([
-        Candidate(
-          Content.text('No text messages contained'),
-          null,
-          null,
-          null,
-          null,
-        ),
-      ], null);
-      return;
-    }
-
-    for (final char in textMessage.split('')) {
-      await Future<void>.delayed(Duration(milliseconds: responseDelay));
-      yield GenerateContentResponse([
-        Candidate(Content.text(char), null, null, null, null),
-      ], null);
-    }
-  }
-}
-
-@riverpod
-class IsGeminiEchoMock extends _$IsGeminiEchoMock {
-  @override
-  bool build() {
-    return false;
-  }
-
-  void set(bool newState) {
-    state = newState;
-  }
-}
-
 @riverpod
 GeminiModelRepo geminiModelRepo(Ref ref) {
   final firebaseAI = ref.watch(firebaseAiProvider);
   final model = ref.watch(generativeAIModelProvider);
-  final isGeminiEchoMock = ref.watch(isGeminiEchoMockProvider);
-  if (isGeminiEchoMock) {
-    return _GeminiEchoMockImpl();
-  }
   return _GeminiModelRepoImpl(firebaseAI: firebaseAI, model: model);
 }

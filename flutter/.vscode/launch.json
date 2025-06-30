@@ -16,7 +16,8 @@
             "type": "dart",
             "program": "lib/main.dart",
             "args": [
-                "--dart-define=USE_FIREBASE_EMULATORS=true"
+                "--dart-define=USE_FIREBASE_EMULATORS=true",
+                "--web-renderer html"
             ]
         },
         {

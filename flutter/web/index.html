@@ -33,9 +33,9 @@
   <title>cheers_planner</title>
   <link rel="manifest" href="manifest.json">
 
-  <!-- Google Map-->
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmaxj4ytFk7_TsdH60wTFQmM13hzyUruQ&libraries=drawing">
+  <!-- Flutter Web Renderer Configuration for CORS -->
+  <script type="text/javascript">
+    window.flutterWebRenderer = "html";
   </script>
 </head>
 
@@ -43,9 +43,10 @@
   <script src="flutter_bootstrap.js" async></script>
   <script>
     (async function () {
-      let token = false;
+      let appCheckToken = false;
+      
       if (/\?firstIssue=true/.test(window.location.search)) {
-        token = true;
+        appCheckToken = true;
       }
       try {
         if (
@@ -55,16 +56,25 @@
           const response = await fetch('.env');
           if (response.ok) {
             const text = await response.text();
-            const match = text.match(/^FIREBASE_APPCHECK_DEBUG_TOKEN=(.*)$/m);
-            if (match && match[1].trim() !== '') {
-              token = match[1].trim();
+            
+            // Firebase App Check Debug Token
+            const appCheckMatch = text.match(/^FIREBASE_APPCHECK_DEBUG_TOKEN=(.*)$/m);
+            if (appCheckMatch && appCheckMatch[1].trim() !== '') {
+              appCheckToken = appCheckMatch[1].trim();
             }
+            
+            
+            console.log('✅ Environment variables loaded from .env');
+            console.log('🔑 Firebase App Check token:', appCheckToken ? 'Found' : 'Not found');
+
           }
         }
       } catch (e) {
-        // ignore errors
+        console.log('⚠️ Warning: .env file not accessible:', e);
       }
-      self.FIREBASE_APPCHECK_DEBUG_TOKEN = token;
+      
+      // Global variables for Flutter app
+      self.FIREBASE_APPCHECK_DEBUG_TOKEN = appCheckToken;
     })();
   </script>
 </body>

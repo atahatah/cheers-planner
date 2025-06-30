@@ -23,7 +23,7 @@ final firebaseAiProvider = AutoDisposeProvider<FirebaseAI>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef FirebaseAiRef = AutoDisposeProviderRef<FirebaseAI>;
-String _$geminiModelRepoHash() => r'4e93966f4c34cc1e8078eda121de71dbe5e6e40e';
+String _$geminiModelRepoHash() => r'9069b18c099e92b176d2e330a5a890d79622a296';
 
 /// See also [geminiModelRepo].
 @ProviderFor(geminiModelRepo)
@@ -56,21 +56,5 @@ final generativeAIModelProvider =
     );
 
 typedef _$GenerativeAIModel = AutoDisposeNotifier<GenerativeAIModels>;
-String _$isGeminiEchoMockHash() => r'd0cb08b68a1769faede4b926a0bf5536121b8ac2';
-
-/// See also [IsGeminiEchoMock].
-@ProviderFor(IsGeminiEchoMock)
-final isGeminiEchoMockProvider =
-    AutoDisposeNotifierProvider<IsGeminiEchoMock, bool>.internal(
-      IsGeminiEchoMock.new,
-      name: r'isGeminiEchoMockProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$isGeminiEchoMockHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
-
-typedef _$IsGeminiEchoMock = AutoDisposeNotifier<bool>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

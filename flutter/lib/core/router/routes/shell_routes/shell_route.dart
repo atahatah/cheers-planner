@@ -24,6 +24,11 @@ part of '../../root.dart';
         ),
       ],
     ),
+    TypedStatefulShellBranch<ExecAiShellBranchData>(
+      routes: <TypedRoute<RouteData>>[
+        TypedGoRoute<ExecAiRoute>(path: '/execAi'),
+      ],
+    ),
     TypedStatefulShellBranch<SettingsShellBranchData>(
       routes: <TypedRoute<RouteData>>[
         TypedGoRoute<SettingsRoute>(path: '/settings'),
@@ -54,6 +59,7 @@ class _NavItem {
 const _navItems = <_NavItem>[
   _NavItem(Icons.event, 'Create'),
   _NavItem(Icons.padding, 'Vote'),
+  _NavItem(Icons.smart_toy, 'ExecAI'),
   _NavItem(Icons.settings, 'Settings'),
 ];
 
