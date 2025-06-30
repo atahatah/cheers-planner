@@ -15,7 +15,7 @@ sealed class EventEntry with _$EventEntry {
     required String purpose,
     @ListToMapConverter<CandidateDateTime>(prefix: 'datetime')
     required List<CandidateDateTime> candidateDateTimes,
-    required String allergiesEtc,
+    required String? allergiesEtc,
     required List<String> organizerId,
     @Default([]) List<String> participantId,
     required int budgetUpperLimit,

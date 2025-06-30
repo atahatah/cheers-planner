@@ -69,7 +69,7 @@ class ConsultEventController extends _$ConsultEventController {
       '日程候補: ${entry.candidateDateTimes.map((e) => e.start.toIso8601String()).join(', ')}',
       '予算上限: ${entry.budgetUpperLimit}円',
       '長さ: ${entry.minutes}分',
-      if (entry.allergiesEtc.isNotEmpty) 'その他: ${entry.allergiesEtc}',
+      if (entry.allergiesEtc?.isNotEmpty == true) 'その他: ${entry.allergiesEtc}',
       if (entry.fixedQuestion.isNotEmpty)
         '全員への質問: ${entry.fixedQuestion.join(' / ')}',
     ].join('\n');
@@ -227,7 +227,7 @@ $summary
         '日程候補: ${updatedEvent.candidateDateTimes.map((e) => e.start.toIso8601String()).join(', ')}',
         '予算上限: ${updatedEvent.budgetUpperLimit}円',
         '長さ: ${updatedEvent.minutes}分',
-        if (updatedEvent.allergiesEtc.isNotEmpty)
+        if (updatedEvent.allergiesEtc?.isNotEmpty == true)
           'その他: ${updatedEvent.allergiesEtc}',
         if (updatedEvent.fixedQuestion.isNotEmpty)
           '全員への質問: ${updatedEvent.fixedQuestion.join(' / ')}',
@@ -261,7 +261,7 @@ $summary
         '日程候補: ${currentEvent.candidateDateTimes.map((e) => e.start.toIso8601String()).join(', ')}',
         '予算上限: ${currentEvent.budgetUpperLimit}円',
         '長さ: ${currentEvent.minutes}分',
-        if (currentEvent.allergiesEtc.isNotEmpty)
+        if (currentEvent.allergiesEtc?.isNotEmpty == true)
           'その他: ${currentEvent.allergiesEtc}',
         if (currentEvent.fixedQuestion.isNotEmpty)
           '全員への質問: ${currentEvent.fixedQuestion.join(' / ')}',

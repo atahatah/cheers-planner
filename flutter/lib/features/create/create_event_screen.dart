@@ -35,7 +35,7 @@ class CreateEventScreen extends HookConsumerWidget {
         candidateDateTimes.value = event.candidateDateTimes
             .map((e) => e.start)
             .toList();
-        allergiesEtc.text = event.allergiesEtc;
+        allergiesEtc.text = event.allergiesEtc ?? '';
         budgetUpperLimit.text = event.budgetUpperLimit.toString();
         minutes.text = event.minutes.toString();
         questionControllers.value = event.fixedQuestion
