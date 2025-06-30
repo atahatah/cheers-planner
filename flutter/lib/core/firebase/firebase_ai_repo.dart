@@ -159,3 +159,15 @@ GeminiModelRepo geminiModelRepo(Ref ref) {
   }
   return _GeminiModelRepoImpl(firebaseAI: firebaseAI, model: model);
 }
+
+@riverpod
+ChatSessionRepo geminiChatSession(Ref ref) {
+  final gemini = ref.watch(geminiModelRepoProvider);
+  return gemini.startChat();
+}
+
+@riverpod
+ChatSessionRepo geminiFunctionCallSession(Ref ref, List<Tool> tools) {
+  final gemini = ref.watch(geminiModelRepoProvider);
+  return gemini.startChat(tools: tools);
+}

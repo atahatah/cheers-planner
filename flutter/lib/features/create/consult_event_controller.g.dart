@@ -7,7 +7,7 @@ part of 'consult_event_controller.dart';
 // **************************************************************************
 
 String _$consultEventControllerHash() =>
-    r'207ab4c7e903aded39d2602bfeeeae1b2b1223e5';
+    r'0f7922f70305cbb5b9ff57e26c8fe6893e4028eb';
 
 /// Copied from Dart SDK
 class _SystemHash {

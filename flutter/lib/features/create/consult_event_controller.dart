@@ -49,11 +49,10 @@ class ConsultEventController extends _$ConsultEventController {
 
   @override
   ConsultEventState build(EventEntry initialEvent) {
-    final gemini = ref.watch(geminiModelRepoProvider);
-    final session = gemini.startChat(
-      tools: [
+    final session = ref.watch(
+      geminiFunctionCallSessionProvider([
         Tool.functionDeclarations([_updateEventTool]),
-      ],
+      ]),
     );
     final chatState = ChatState(session: session);
     return ConsultEventState(chatState: chatState, event: initialEvent);
