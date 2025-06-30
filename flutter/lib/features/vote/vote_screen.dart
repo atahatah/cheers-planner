@@ -42,19 +42,23 @@ class VoteBody extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // --- フォームコントローラと状態管理 ---
+    final formKey = useMemoized(GlobalKey<FormState>.new);
     final nameController = useTextEditingController();
     final phoneController = useTextEditingController();
     final positionController = useTextEditingController();
     final budgetController = useTextEditingController();
     final allergiesController = useTextEditingController();
+
     // 選択用状態
     final desiredDates = useState<List<DateTime>>([]);
     final desiredLocations = useState<List<String>>([]);
+
+    // 質問への回答用コントローラを生成
     final answerControllers = useMemoized(() {
-      return Map<String, TextEditingController>.fromEntries(
-        value.fixedQuestion.map((q) => MapEntry(q, TextEditingController())),
-      );
+      return {for (final q in value.fixedQuestion) q: TextEditingController()};
     }, [value.fixedQuestion]);
+
+    // カスタムQA
     final customQuestionController = useTextEditingController();
     final customAnswerController = useTextEditingController();
     final customQuestions = useState<List<QuestionAnswer>>([]);
@@ -104,130 +108,317 @@ class VoteBody extends HookConsumerWidget {
       const VotedListRoute().go(context);
     }
 
-    return Center(
+    return Form(
+      key: formKey,
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // 名前
-            TextField(
-              controller: nameController,
-              decoration: const InputDecoration(labelText: '名前'),
-            ),
-            const SizedBox(height: 8),
-            // 電話番号
-            TextField(
-              controller: phoneController,
-              keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(labelText: '電話番号'),
-            ),
-            const SizedBox(height: 8),
-            // 学年/役職
-            TextField(
-              controller: positionController,
-              decoration: const InputDecoration(labelText: '学年/役職'),
-            ),
-            const SizedBox(height: 8),
-            // 希望予算
-            TextField(
-              controller: budgetController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: '希望予算'),
-            ),
-            const SizedBox(height: 16),
-            // 候補日時から選択
-            const Text('日時候補', style: TextStyle(fontWeight: FontWeight.bold)),
-            for (final cd in value.candidateDateTimes)
-              CheckboxListTile(
-                title: Text(
-                  '${cd.start.toLocal()} - ${cd.start.add(Duration(minutes: value.minutes)).toLocal()}',
+            // ----- 基本情報カード -----
+            Card(
+              elevation: 2,
+              margin: const EdgeInsets.only(bottom: 16),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '基本情報',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 12),
+                    _buildTextForm(
+                      controller: nameController,
+                      label: '名前',
+                      validator: (v) =>
+                          v == null || v.isEmpty ? '必須項目です' : null,
+                    ),
+                    const SizedBox(height: 12),
+                    _buildTextForm(
+                      controller: phoneController,
+                      label: '電話番号',
+                      keyboardType: TextInputType.phone,
+                    ),
+                    const SizedBox(height: 12),
+                    _buildTextForm(
+                      controller: positionController,
+                      label: '学年/役職',
+                    ),
+                  ],
                 ),
-                value: desiredDates.value.contains(cd.start),
-                onChanged: (selected) {
-                  final list = List<DateTime>.from(desiredDates.value);
-                  if (selected == true) {
-                    list.add(cd.start);
-                  } else {
-                    list.remove(cd.start);
-                  }
-                  desiredDates.value = list;
-                },
               ),
-            const SizedBox(height: 16),
-            // 場所候補を文字列で追加
-            const Text('場所候補', style: TextStyle(fontWeight: FontWeight.bold)),
-            TextField(
-              decoration: const InputDecoration(labelText: '場所候補を入力'),
-              onSubmitted: (value) {
-                if (value.isNotEmpty) {
-                  desiredLocations.value = List.from(desiredLocations.value)
-                    ..add(value);
-                }
-              },
             ),
-            for (final location in desiredLocations.value)
-              Row(
-                children: [
-                  Expanded(child: Text(location)),
-                  IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () {
-                      desiredLocations.value = List.from(desiredLocations.value)
-                        ..remove(location);
-                    },
+
+            // ----- 予算 & アレルギー -----
+            Card(
+              elevation: 2,
+              margin: const EdgeInsets.only(bottom: 16),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '予算・アレルギー',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 12),
+                    _buildTextForm(
+                      controller: budgetController,
+                      label: '希望予算 (円/人)',
+                      keyboardType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 12),
+                    _buildTextForm(
+                      controller: allergiesController,
+                      label: 'アレルギー・その他',
+                      maxLines: 2,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // ----- 日時候補 -----
+            Card(
+              elevation: 2,
+              margin: const EdgeInsets.only(bottom: 16),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '日時を選択',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 12),
+                    for (final cd in value.candidateDateTimes)
+                      CheckboxListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(
+                          '${_formatDateTime(cd.start)} – ${_formatDateTime(cd.start.add(Duration(minutes: value.minutes)))}',
+                        ),
+                        value: desiredDates.value.contains(cd.start),
+                        onChanged: (selected) {
+                          final list = List<DateTime>.from(desiredDates.value);
+                          if (selected == true) {
+                            list.add(cd.start);
+                          } else {
+                            list.remove(cd.start);
+                          }
+                          desiredDates.value = list;
+                        },
+                      ),
+                    if (desiredDates.value.isEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Text(
+                          '※ 少なくとも1つ選択してください',
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.error,
+                              ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+
+            // ----- 場所候補 -----
+            Card(
+              elevation: 2,
+              margin: const EdgeInsets.only(bottom: 16),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '場所候補',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        for (final loc in desiredLocations.value)
+                          Chip(
+                            label: Text(loc),
+                            onDeleted: () {
+                              desiredLocations.value = List.from(
+                                desiredLocations.value,
+                              )..remove(loc);
+                            },
+                          ),
+                        ActionChip(
+                          label: const Text('追加'),
+                          avatar: const Icon(Icons.add, size: 16),
+                          onPressed: () async {
+                            final text = await _showAddDialog(context);
+                            if (text != null && text.isNotEmpty) {
+                              desiredLocations.value = List.from(
+                                desiredLocations.value,
+                              )..add(text);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // ----- 固定質問への回答 -----
+            if (value.fixedQuestion.isNotEmpty)
+              Card(
+                elevation: 2,
+                margin: const EdgeInsets.only(bottom: 16),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'アンケート',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 12),
+                      for (final q in value.fixedQuestion)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: _buildTextForm(
+                            controller: answerControllers[q]!,
+                            label: q,
+                          ),
+                        ),
+                    ],
                   ),
-                ],
+                ),
               ),
 
-            const SizedBox(height: 16),
-            // 質問への回答
-            for (final q in value.fixedQuestion)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: TextField(
-                  controller: answerControllers[q],
-                  decoration: InputDecoration(labelText: q),
+            // ----- カスタム質問 -----
+            Card(
+              elevation: 2,
+              margin: const EdgeInsets.only(bottom: 24),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'カスタム質問',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 12),
+                    _buildTextForm(
+                      controller: customQuestionController,
+                      label: '質問',
+                    ),
+                    const SizedBox(height: 8),
+                    _buildTextForm(
+                      controller: customAnswerController,
+                      label: '回答',
+                    ),
+                    const SizedBox(height: 8),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: ElevatedButton.icon(
+                        onPressed: addCustomQA,
+                        icon: const Icon(Icons.add),
+                        label: const Text('追加'),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    for (final qa in customQuestions.value)
+                      ListTile(
+                        title: Text(qa.question),
+                        subtitle: Text(qa.answer),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () => customQuestions.value = List.from(
+                            customQuestions.value,
+                          )..remove(qa),
+                        ),
+                      ),
+                  ],
                 ),
               ),
-            const SizedBox(height: 16),
-            // カスタム質問追加
-            TextField(
-              controller: customQuestionController,
-              decoration: const InputDecoration(labelText: '追加質問'),
             ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: customAnswerController,
-              decoration: const InputDecoration(labelText: '回答'),
-            ),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: addCustomQA,
-              child: const Text('カスタム質問を追加'),
-            ),
-            for (final qa in customQuestions.value)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('${qa.question}: ${qa.answer}'),
-                  IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () =>
-                        customQuestions.value = List.from(customQuestions.value)
-                          ..remove(qa),
-                  ),
-                ],
+
+            // ----- 送信ボタン -----
+            ElevatedButton.icon(
+              onPressed: () {
+                if (formKey.currentState?.validate() != true) return;
+                if (desiredDates.value.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('日時を少なくとも1つ選択してください')),
+                  );
+                  return;
+                }
+                submit();
+              },
+              icon: const Icon(Icons.how_to_vote),
+              label: const Text('投票する'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16),
               ),
-            const SizedBox(height: 16),
-            // アレルギー等
-            TextField(
-              controller: allergiesController,
-              decoration: const InputDecoration(labelText: 'アレルギー等'),
             ),
-            const SizedBox(height: 24),
-            ElevatedButton(onPressed: submit, child: const Text('投票する')),
           ],
         ),
+      ),
+    );
+  }
+
+  // --- ヘルパーWidget / メソッド ---
+  Widget _buildTextForm({
+    required TextEditingController controller,
+    required String label,
+    TextInputType? keyboardType,
+    String? Function(String?)? validator,
+    int maxLines = 1,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      maxLines: maxLines,
+      decoration: InputDecoration(
+        labelText: label,
+        border: const OutlineInputBorder(),
+      ),
+      validator: validator,
+    );
+  }
+
+  String _formatDateTime(DateTime dt) {
+    return '${dt.month}/${dt.day} ${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+  }
+
+  Future<String?> _showAddDialog(BuildContext context) async {
+    final controller = TextEditingController();
+    return showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('場所を追加'),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(hintText: '例: 新宿'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('キャンセル'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, controller.text),
+            child: const Text('追加'),
+          ),
+        ],
       ),
     );
   }

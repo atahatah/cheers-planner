@@ -17,6 +17,7 @@ class CreateEventScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final loading = useState(false);
+    final formKey = useMemoized(GlobalKey<FormState>.new);
     final eventName = useTextEditingController();
     final candidateDateTimes = useState<List<DateTime>>([]);
     final allergiesEtc = useTextEditingController();
@@ -127,105 +128,211 @@ class CreateEventScreen extends HookConsumerWidget {
       body: Stack(
         alignment: Alignment.center,
         children: [
-          Column(
-            children: [
-              TextField(
-                controller: eventName,
-                decoration: const InputDecoration(labelText: 'イベント名'),
-              ),
-              Column(
+          Form(
+            key: formKey,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  for (final candidateDateTime in candidateDateTimes.value)
-                    Row(
-                      children: [
-                        Text('${candidateDateTime.toLocal()}'),
-                        IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () =>
-                              deleteCandidateDateTime(candidateDateTime),
-                        ),
-                      ],
-                    ),
-                ],
-              ),
-              ElevatedButton(
-                onPressed: addCandidateDateTime,
-                child: const Text('日程候補を追加'),
-              ),
-              TextField(
-                controller: budgetUpperLimit,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: '予算の上限(円)'),
-              ),
-              TextField(
-                controller: minutes,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: '長さ(分)'),
-              ),
-              TextField(
-                controller: allergiesEtc,
-                decoration: const InputDecoration(labelText: 'その他のアレルギー等'),
-              ),
-              // 固定質問の入力セクション
-              Column(
-                children: [
-                  for (var i = 0; i < questionControllers.value.length; i++)
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: questionControllers.value[i],
-                            decoration: InputDecoration(
-                              labelText: '質問 ${i + 1}',
-                            ),
+                  // ------- 基本情報 -------
+                  Card(
+                    elevation: 2,
+                    margin: const EdgeInsets.only(bottom: 16),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '基本情報',
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            questionControllers.value = List.from(
-                              questionControllers.value,
-                            )..removeAt(i);
-                          },
-                        ),
-                      ],
+                          const SizedBox(height: 12),
+                          _buildTextForm(
+                            controller: eventName,
+                            label: 'イベント名',
+                            validator: (v) =>
+                                v == null || v.isEmpty ? '必須項目です' : null,
+                          ),
+                          const SizedBox(height: 12),
+                          _buildTextForm(
+                            controller: budgetUpperLimit,
+                            label: '予算の上限(円)',
+                            keyboardType: TextInputType.number,
+                          ),
+                          const SizedBox(height: 12),
+                          _buildTextForm(
+                            controller: minutes,
+                            label: '長さ(分)',
+                            keyboardType: TextInputType.number,
+                          ),
+                          const SizedBox(height: 12),
+                          _buildTextForm(
+                            controller: allergiesEtc,
+                            label: 'アレルギー・備考',
+                            maxLines: 2,
+                          ),
+                        ],
+                      ),
                     ),
-                  ElevatedButton(
+                  ),
+
+                  // ------- 日時候補 -------
+                  Card(
+                    elevation: 2,
+                    margin: const EdgeInsets.only(bottom: 16),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '日時候補',
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              TextButton.icon(
+                                onPressed: addCandidateDateTime,
+                                icon: const Icon(Icons.add),
+                                label: const Text('追加'),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          if (candidateDateTimes.value.isEmpty)
+                            Text(
+                              '未登録',
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.outline,
+                                  ),
+                            ),
+                          for (final dt in candidateDateTimes.value)
+                            ListTile(
+                              title: Text(_formatDateTime(dt)),
+                              trailing: IconButton(
+                                icon: const Icon(Icons.delete),
+                                onPressed: () => deleteCandidateDateTime(dt),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // ------- 固定質問 -------
+                  Card(
+                    elevation: 2,
+                    margin: const EdgeInsets.only(bottom: 24),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'アンケート質問',
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              TextButton.icon(
+                                onPressed: () {
+                                  questionControllers.value = [
+                                    ...questionControllers.value,
+                                    TextEditingController(),
+                                  ];
+                                },
+                                icon: const Icon(Icons.add),
+                                label: const Text('追加'),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          if (questionControllers.value.isEmpty)
+                            Text(
+                              'なし',
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.outline,
+                                  ),
+                            ),
+                          for (
+                            var i = 0;
+                            i < questionControllers.value.length;
+                            i++
+                          )
+                            ListTile(
+                              title: TextField(
+                                controller: questionControllers.value[i],
+                                decoration: InputDecoration(
+                                  labelText: '質問 ${i + 1}',
+                                ),
+                              ),
+                              trailing: IconButton(
+                                icon: const Icon(Icons.delete),
+                                onPressed: () {
+                                  questionControllers.value = List.from(
+                                    questionControllers.value,
+                                  )..removeAt(i);
+                                },
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // ------- ボタン -------
+                  ElevatedButton.icon(
                     onPressed: () {
-                      questionControllers.value = [
-                        ...questionControllers.value,
-                        TextEditingController(),
-                      ];
+                      final draft = EventEntry(
+                        purpose: eventName.text,
+                        candidateDateTimes: candidateDateTimes.value
+                            .map((e) => CandidateDateTime(start: e))
+                            .toList(),
+                        allergiesEtc: allergiesEtc.text,
+                        organizerId: const [],
+                        budgetUpperLimit:
+                            int.tryParse(budgetUpperLimit.text) ?? 0,
+                        fixedQuestion: questionControllers.value
+                            .map((c) => c.text)
+                            .where((t) => t.isNotEmpty)
+                            .toList(),
+                        minutes: int.tryParse(minutes.text) ?? 60,
+                      );
+                      context.push(const ConsultRoute().location, extra: draft);
                     },
-                    child: const Text('カスタムの質問を追加'),
+                    icon: const Icon(Icons.chat),
+                    label: const Text('Geminiと相談'),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      if (formKey.currentState?.validate() != true) {
+                        return;
+                      }
+                      submit();
+                    },
+                    icon: const Icon(Icons.check_circle),
+                    label: const Text('イベントを作成'),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                    ),
                   ),
                 ],
               ),
-              ElevatedButton(
-                onPressed: () {
-                  final draft = EventEntry(
-                    purpose: eventName.text,
-                    candidateDateTimes: candidateDateTimes.value
-                        .map((e) => CandidateDateTime(start: e))
-                        .toList(),
-                    allergiesEtc: allergiesEtc.text,
-                    organizerId: const [],
-                    budgetUpperLimit: int.tryParse(budgetUpperLimit.text) ?? 0,
-                    fixedQuestion: questionControllers.value
-                        .map((c) => c.text)
-                        .where((t) => t.isNotEmpty)
-                        .toList(),
-                    minutes: int.tryParse(minutes.text) ?? 60,
-                  );
-                  context.push(
-                    const ConsultEventRoute().location,
-                    extra: draft,
-                  );
-                },
-                child: const Text('Geminiと相談'),
-              ),
-              ElevatedButton(onPressed: submit, child: const Text('イベントを作成')),
-            ],
+            ),
           ),
           if (loading.value) ...[
             ModalBarrier(
@@ -237,5 +344,29 @@ class CreateEventScreen extends HookConsumerWidget {
         ],
       ),
     );
+  }
+
+  // ------- ヘルパー -------
+  Widget _buildTextForm({
+    required TextEditingController controller,
+    required String label,
+    TextInputType? keyboardType,
+    int maxLines = 1,
+    String? Function(String?)? validator,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      maxLines: maxLines,
+      decoration: InputDecoration(
+        labelText: label,
+        border: const OutlineInputBorder(),
+      ),
+      validator: validator,
+    );
+  }
+
+  String _formatDateTime(DateTime dt) {
+    return '${dt.month}/${dt.day} ${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
   }
 }

@@ -13,17 +13,16 @@ class EventListRoute extends GoRouteData {
   }
 }
 
-class CreateEventRoute extends GoRouteData {
-  const CreateEventRoute();
+class CreateRoute extends GoRouteData {
+  const CreateRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const CreateEventScreen();
-  }
+  Widget build(BuildContext context, GoRouterState state) =>
+      const CreateEventScreen();
 }
 
-class ConsultEventRoute extends GoRouteData {
-  const ConsultEventRoute();
+class ConsultRoute extends GoRouteData {
+  const ConsultRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
@@ -37,7 +36,24 @@ class ManagementRoute extends GoRouteData {
   final String eventId;
 
   @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return ManagementScreen(eventId: eventId);
-  }
+  Widget build(BuildContext context, GoRouterState state) =>
+      ManagementScreen(eventId: eventId);
+}
+
+class DateSummaryRoute extends GoRouteData {
+  const DateSummaryRoute(this.eventId);
+  final String eventId;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      DateSummaryScreen(eventId: eventId);
+}
+
+class RecommendRoute extends GoRouteData {
+  const RecommendRoute(this.eventId);
+  final String eventId;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      ExecAiScreen(eventId: eventId);
 }
