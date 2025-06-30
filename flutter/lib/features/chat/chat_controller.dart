@@ -10,8 +10,8 @@ part 'chat_controller.g.dart';
 class ChatController extends _$ChatController {
   @override
   ChatState build() {
-    final gemini = ref.watch(geminiModelRepoProvider);
-    return ChatState(session: gemini.startChat());
+    final session = ref.watch(geminiChatSessionProvider);
+    return ChatState(session: session);
   }
 
   Future<void> addMessage(String message) async {
@@ -67,7 +67,7 @@ class ChatController extends _$ChatController {
   }
 
   void clearMessages() {
-    final gemini = ref.read(geminiModelRepoProvider);
-    state = ChatState(session: gemini.startChat());
+    final session = ref.read(geminiChatSessionProvider);
+    state = ChatState(session: session);
   }
 }

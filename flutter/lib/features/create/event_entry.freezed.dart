@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$EventEntry {
 
- String? get id; String? get aiRecArea; String? get aiRecDate; String? get aiRecStore; String get purpose;@ListToMapConverter<CandidateDateTime>(prefix: 'datetime') List<CandidateDateTime> get candidateDateTimes; String get allergiesEtc; List<String> get organizerId; List<String> get participantId; int get budgetUpperLimit; List<String> get fixedQuestion; int get minutes;
+ String? get id; String? get aiRecArea; String? get aiRecDate; String? get aiRecStore; String get purpose;@ListToMapConverter<CandidateDateTime>(prefix: 'datetime') List<CandidateDateTime> get candidateDateTimes; String? get allergiesEtc; List<String> get organizerId; List<String> get participantId; int get budgetUpperLimit; List<String> get fixedQuestion; int get minutes;
 /// Create a copy of EventEntry
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $EventEntryCopyWith<$Res>  {
   factory $EventEntryCopyWith(EventEntry value, $Res Function(EventEntry) _then) = _$EventEntryCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? aiRecArea, String? aiRecDate, String? aiRecStore, String purpose,@ListToMapConverter<CandidateDateTime>(prefix: 'datetime') List<CandidateDateTime> candidateDateTimes, String allergiesEtc, List<String> organizerId, List<String> participantId, int budgetUpperLimit, List<String> fixedQuestion, int minutes
+ String? id, String? aiRecArea, String? aiRecDate, String? aiRecStore, String purpose,@ListToMapConverter<CandidateDateTime>(prefix: 'datetime') List<CandidateDateTime> candidateDateTimes, String? allergiesEtc, List<String> organizerId, List<String> participantId, int budgetUpperLimit, List<String> fixedQuestion, int minutes
 });
 
 
@@ -66,7 +66,7 @@ class _$EventEntryCopyWithImpl<$Res>
 
 /// Create a copy of EventEntry
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? aiRecArea = freezed,Object? aiRecDate = freezed,Object? aiRecStore = freezed,Object? purpose = null,Object? candidateDateTimes = null,Object? allergiesEtc = null,Object? organizerId = null,Object? participantId = null,Object? budgetUpperLimit = null,Object? fixedQuestion = null,Object? minutes = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? aiRecArea = freezed,Object? aiRecDate = freezed,Object? aiRecStore = freezed,Object? purpose = null,Object? candidateDateTimes = null,Object? allergiesEtc = freezed,Object? organizerId = null,Object? participantId = null,Object? budgetUpperLimit = null,Object? fixedQuestion = null,Object? minutes = null,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,aiRecArea: freezed == aiRecArea ? _self.aiRecArea : aiRecArea // ignore: cast_nullable_to_non_nullable
@@ -74,8 +74,8 @@ as String?,aiRecDate: freezed == aiRecDate ? _self.aiRecDate : aiRecDate // igno
 as String?,aiRecStore: freezed == aiRecStore ? _self.aiRecStore : aiRecStore // ignore: cast_nullable_to_non_nullable
 as String?,purpose: null == purpose ? _self.purpose : purpose // ignore: cast_nullable_to_non_nullable
 as String,candidateDateTimes: null == candidateDateTimes ? _self.candidateDateTimes : candidateDateTimes // ignore: cast_nullable_to_non_nullable
-as List<CandidateDateTime>,allergiesEtc: null == allergiesEtc ? _self.allergiesEtc : allergiesEtc // ignore: cast_nullable_to_non_nullable
-as String,organizerId: null == organizerId ? _self.organizerId : organizerId // ignore: cast_nullable_to_non_nullable
+as List<CandidateDateTime>,allergiesEtc: freezed == allergiesEtc ? _self.allergiesEtc : allergiesEtc // ignore: cast_nullable_to_non_nullable
+as String?,organizerId: null == organizerId ? _self.organizerId : organizerId // ignore: cast_nullable_to_non_nullable
 as List<String>,participantId: null == participantId ? _self.participantId : participantId // ignore: cast_nullable_to_non_nullable
 as List<String>,budgetUpperLimit: null == budgetUpperLimit ? _self.budgetUpperLimit : budgetUpperLimit // ignore: cast_nullable_to_non_nullable
 as int,fixedQuestion: null == fixedQuestion ? _self.fixedQuestion : fixedQuestion // ignore: cast_nullable_to_non_nullable
@@ -106,7 +106,7 @@ class _EventEntry implements EventEntry {
   return EqualUnmodifiableListView(_candidateDateTimes);
 }
 
-@override final  String allergiesEtc;
+@override final  String? allergiesEtc;
  final  List<String> _organizerId;
 @override List<String> get organizerId {
   if (_organizerId is EqualUnmodifiableListView) return _organizerId;
@@ -164,7 +164,7 @@ abstract mixin class _$EventEntryCopyWith<$Res> implements $EventEntryCopyWith<$
   factory _$EventEntryCopyWith(_EventEntry value, $Res Function(_EventEntry) _then) = __$EventEntryCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? aiRecArea, String? aiRecDate, String? aiRecStore, String purpose,@ListToMapConverter<CandidateDateTime>(prefix: 'datetime') List<CandidateDateTime> candidateDateTimes, String allergiesEtc, List<String> organizerId, List<String> participantId, int budgetUpperLimit, List<String> fixedQuestion, int minutes
+ String? id, String? aiRecArea, String? aiRecDate, String? aiRecStore, String purpose,@ListToMapConverter<CandidateDateTime>(prefix: 'datetime') List<CandidateDateTime> candidateDateTimes, String? allergiesEtc, List<String> organizerId, List<String> participantId, int budgetUpperLimit, List<String> fixedQuestion, int minutes
 });
 
 
@@ -181,7 +181,7 @@ class __$EventEntryCopyWithImpl<$Res>
 
 /// Create a copy of EventEntry
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? aiRecArea = freezed,Object? aiRecDate = freezed,Object? aiRecStore = freezed,Object? purpose = null,Object? candidateDateTimes = null,Object? allergiesEtc = null,Object? organizerId = null,Object? participantId = null,Object? budgetUpperLimit = null,Object? fixedQuestion = null,Object? minutes = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? aiRecArea = freezed,Object? aiRecDate = freezed,Object? aiRecStore = freezed,Object? purpose = null,Object? candidateDateTimes = null,Object? allergiesEtc = freezed,Object? organizerId = null,Object? participantId = null,Object? budgetUpperLimit = null,Object? fixedQuestion = null,Object? minutes = null,}) {
   return _then(_EventEntry(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,aiRecArea: freezed == aiRecArea ? _self.aiRecArea : aiRecArea // ignore: cast_nullable_to_non_nullable
@@ -189,8 +189,8 @@ as String?,aiRecDate: freezed == aiRecDate ? _self.aiRecDate : aiRecDate // igno
 as String?,aiRecStore: freezed == aiRecStore ? _self.aiRecStore : aiRecStore // ignore: cast_nullable_to_non_nullable
 as String?,purpose: null == purpose ? _self.purpose : purpose // ignore: cast_nullable_to_non_nullable
 as String,candidateDateTimes: null == candidateDateTimes ? _self._candidateDateTimes : candidateDateTimes // ignore: cast_nullable_to_non_nullable
-as List<CandidateDateTime>,allergiesEtc: null == allergiesEtc ? _self.allergiesEtc : allergiesEtc // ignore: cast_nullable_to_non_nullable
-as String,organizerId: null == organizerId ? _self._organizerId : organizerId // ignore: cast_nullable_to_non_nullable
+as List<CandidateDateTime>,allergiesEtc: freezed == allergiesEtc ? _self.allergiesEtc : allergiesEtc // ignore: cast_nullable_to_non_nullable
+as String?,organizerId: null == organizerId ? _self._organizerId : organizerId // ignore: cast_nullable_to_non_nullable
 as List<String>,participantId: null == participantId ? _self._participantId : participantId // ignore: cast_nullable_to_non_nullable
 as List<String>,budgetUpperLimit: null == budgetUpperLimit ? _self.budgetUpperLimit : budgetUpperLimit // ignore: cast_nullable_to_non_nullable
 as int,fixedQuestion: null == fixedQuestion ? _self._fixedQuestion : fixedQuestion // ignore: cast_nullable_to_non_nullable

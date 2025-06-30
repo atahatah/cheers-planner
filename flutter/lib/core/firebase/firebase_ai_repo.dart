@@ -42,15 +42,25 @@ class GenerativeAIModel extends _$GenerativeAIModel {
 
 mixin GeminiModelRepo {
   Future<String?> generateResponse(String prompt);
-  ChatSessionRepo startChat();
+  ChatSessionRepo startChat({List<Tool>? tools});
 }
 
 class _GeminiModelRepoImpl implements GeminiModelRepo {
   _GeminiModelRepoImpl({
     required FirebaseAI firebaseAI,
     required GenerativeAIModels model,
-  }) : _model = firebaseAI.generativeModel(model: model.fullName);
+    String? instruction,
+  }) : _firebaseAI = firebaseAI,
+       _modelName = model,
+       _model = firebaseAI.generativeModel(
+         model: model.fullName,
+         systemInstruction: instruction == null
+             ? null
+             : Content('system', [TextPart(instruction)]),
+       );
 
+  final FirebaseAI _firebaseAI;
+  final GenerativeAIModels _modelName;
   final GenerativeModel _model;
 
   @override
@@ -61,9 +71,21 @@ class _GeminiModelRepoImpl implements GeminiModelRepo {
   }
 
   @override
-  ChatSessionRepo startChat() {
-    return _ChatSessionRepoImpl(model: this);
+  ChatSessionRepo startChat({List<Tool>? tools}) {
+    final m = tools != null && tools.isNotEmpty
+        ? _firebaseAI.generativeModel(model: _modelName.fullName, tools: tools)
+        : _model;
+    return _ChatSessionRepoImpl(m.startChat());
   }
+}
+
+class _GeminiEchoMockImpl implements GeminiModelRepo {
+  @override
+  Future<String?> generateResponse(String prompt) async => prompt;
+
+  @override
+  ChatSessionRepo startChat({List<Tool>? tools}) =>
+      _ChatSessionRepoEchoMockImpl();
 }
 
 mixin ChatSessionRepo {
@@ -72,10 +94,8 @@ mixin ChatSessionRepo {
 }
 
 class _ChatSessionRepoImpl implements ChatSessionRepo {
-  _ChatSessionRepoImpl({required this.model})
-    : _session = model._model.startChat();
+  _ChatSessionRepoImpl(this._session);
 
-  final _GeminiModelRepoImpl model;
   final ChatSession _session;
 
   @override
@@ -87,9 +107,81 @@ class _ChatSessionRepoImpl implements ChatSessionRepo {
       _session.sendMessageStream(message);
 }
 
+class _ChatSessionRepoEchoMockImpl implements ChatSessionRepo {
+  _ChatSessionRepoEchoMockImpl();
+  final responseDelay = 100;
+
+  @override
+  Future<GenerateContentResponse> sendMessage(Content message) async {
+    return GenerateContentResponse([
+      Candidate(message, null, null, null, null),
+    ], null);
+  }
+
+  @override
+  Stream<GenerateContentResponse> sendMessageStream(Content message) async* {
+    final textMessage = message.parts.whereType<TextPart>().firstOrNull?.text;
+    if (textMessage == null) {
+      yield GenerateContentResponse([
+        Candidate(
+          Content.text('No text messages contained'),
+          null,
+          null,
+          null,
+          null,
+        ),
+      ], null);
+      return;
+    }
+
+    for (final char in textMessage.split('')) {
+      await Future<void>.delayed(Duration(milliseconds: responseDelay));
+      yield GenerateContentResponse([
+        Candidate(Content.text(char), null, null, null, null),
+      ], null);
+    }
+  }
+}
+
 @riverpod
-GeminiModelRepo geminiModelRepo(Ref ref) {
+class IsGeminiEchoMock extends _$IsGeminiEchoMock {
+  @override
+  bool build() {
+    return false;
+  }
+
+  void set(bool newState) {
+    state = newState;
+  }
+}
+
+@riverpod
+GeminiModelRepo geminiModelRepo(Ref ref, {String? instruction}) {
   final firebaseAI = ref.watch(firebaseAiProvider);
   final model = ref.watch(generativeAIModelProvider);
-  return _GeminiModelRepoImpl(firebaseAI: firebaseAI, model: model);
+  final isGeminiEchoMock = ref.watch(isGeminiEchoMockProvider);
+  if (isGeminiEchoMock) {
+    return _GeminiEchoMockImpl();
+  }
+  return _GeminiModelRepoImpl(
+    firebaseAI: firebaseAI,
+    model: model,
+    instruction: instruction,
+  );
+}
+
+@riverpod
+ChatSessionRepo geminiChatSession(Ref ref) {
+  final gemini = ref.watch(geminiModelRepoProvider());
+  return gemini.startChat();
+}
+
+@riverpod
+ChatSessionRepo geminiFunctionCallSession(
+  Ref ref,
+  List<Tool> tools, {
+  String? instruction,
+}) {
+  final gemini = ref.watch(geminiModelRepoProvider(instruction: instruction));
+  return gemini.startChat(tools: tools);
 }

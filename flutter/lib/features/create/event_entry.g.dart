@@ -22,7 +22,7 @@ _EventEntry _$EventEntryFromJson(Map<String, dynamic> json) => $checkedCreate(
             .map((e) => CandidateDateTime.fromJson(e as Map<String, dynamic>))
             .toList(),
       ),
-      allergiesEtc: $checkedConvert('allergiesEtc', (v) => v as String),
+      allergiesEtc: $checkedConvert('allergiesEtc', (v) => v as String?),
       organizerId: $checkedConvert(
         'organizerId',
         (v) => (v as List<dynamic>).map((e) => e as String).toList(),
