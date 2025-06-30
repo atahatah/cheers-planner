@@ -49,14 +49,8 @@ export const executeAI = functions.onCall(
     // エミュレータ使用時はリージョン指定なし、本番環境時はリージョン指定
     ...(isEmulator ? {} : { region: "asia-northeast1" }),
     timeoutSeconds: 540, // 9分のタイムアウト
-    cors: [
-      // 本番環境
-      "https://cheers-planner.web.app",
-      "https://cheers-planner.firebaseapp.com",
-      // 開発環境
-      /^http:\/\/localhost:\d+$/,
-      /^http:\/\/127\.0\.0\.1:\d+$/,
-    ],
+    // App Check強制モード: トークンが必須
+    enforceAppCheck: true,
   },
   async (request) => {
     try {
@@ -166,14 +160,6 @@ export const healthCheck = functions.onRequest(
     // エミュレータ使用時はリージョン指定なし、本番環境時はリージョン指定
     ...(isEmulator ? {} : { region: "asia-northeast1" }),
     timeoutSeconds: 60, // 1分のタイムアウト（軽い処理なので短め）
-    cors: [
-      // 本番環境
-      "https://cheers-planner.web.app",
-      "https://cheers-planner.firebaseapp.com",
-      // 開発環境
-      /^http:\/\/localhost:\d+$/,
-      /^http:\/\/127\.0\.0\.1:\d+$/,
-    ],
   },
   (req, res) => {
     res.json({
@@ -192,16 +178,8 @@ export const generateLocationCandidatesStep = functions.onCall(
     // エミュレータ使用時はリージョン指定なし、本番環境時はリージョン指定
     ...(isEmulator ? {} : { region: "asia-northeast1" }),
     timeoutSeconds: 540, // 9分のタイムアウト
-    cors: [
-      // 本番環境
-      "https://cheers-planner.web.app",
-      "https://cheers-planner.firebaseapp.com",
-      // 開発環境
-      /^http:\/\/localhost:\d+$/,
-      /^http:\/\/127\.0\.0\.1:\d+$/,
-    ],
-    // App Check警告モード: トークンをチェックするが拒否はしない
-    // enforceAppCheck: false (デフォルト)
+    // App Check強制モード: トークンが必須
+    enforceAppCheck: true,
   },
   async (request) => {
     try {
@@ -344,16 +322,8 @@ export const generateKeywordsStep = functions.onCall(
     // エミュレータ使用時はリージョン指定なし、本番環境時はリージョン指定
     ...(isEmulator ? {} : { region: "asia-northeast1" }),
     timeoutSeconds: 540, // 9分のタイムアウト
-    cors: [
-      // 本番環境
-      "https://cheers-planner.web.app",
-      "https://cheers-planner.firebaseapp.com",
-      // 開発環境
-      /^http:\/\/localhost:\d+$/,
-      /^http:\/\/127\.0\.0\.1:\d+$/,
-    ],
-    // App Check警告モード: トークンをチェックするが拒否はしない
-    // enforceAppCheck: false (デフォルト)
+    // App Check強制モード: トークンが必須
+    enforceAppCheck: true,
   },
   async (request) => {
     try {
@@ -473,16 +443,8 @@ export const searchRestaurantsStep = functions.onCall(
     // エミュレータ使用時はリージョン指定なし、本番環境時はリージョン指定
     ...(isEmulator ? {} : { region: "asia-northeast1" }),
     timeoutSeconds: 540, // 9分のタイムアウト
-    cors: [
-      // 本番環境
-      "https://cheers-planner.web.app",
-      "https://cheers-planner.firebaseapp.com",
-      // 開発環境
-      /^http:\/\/localhost:\d+$/,
-      /^http:\/\/127\.0\.0\.1:\d+$/,
-    ],
-    // App Check警告モード: トークンをチェックするが拒否はしない
-    // enforceAppCheck: false (デフォルト)
+    // App Check強制モード: トークンが必須
+    enforceAppCheck: true,
   },
   async (request) => {
     try {
@@ -631,16 +593,8 @@ export const optimizeRestaurantsStep = functions.onCall(
     // エミュレータ使用時はリージョン指定なし、本番環境時はリージョン指定
     ...(isEmulator ? {} : { region: "asia-northeast1" }),
     timeoutSeconds: 540, // 9分のタイムアウト
-    cors: [
-      // 本番環境
-      "https://cheers-planner.web.app",
-      "https://cheers-planner.firebaseapp.com",
-      // 開発環境
-      /^http:\/\/localhost:\d+$/,
-      /^http:\/\/127\.0\.0\.1:\d+$/,
-    ],
-    // App Check警告モード: トークンをチェックするが拒否はしない
-    // enforceAppCheck: false (デフォルト)
+    // App Check強制モード: トークンが必須
+    enforceAppCheck: true,
   },
   async (request) => {
     try {

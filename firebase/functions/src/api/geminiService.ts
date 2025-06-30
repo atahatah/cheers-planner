@@ -3,7 +3,6 @@ import {
   HarmBlockThreshold,
   HarmCategory,
 } from "@google/generative-ai";
-import * as functions from "firebase-functions";
 import * as logger from "firebase-functions/logger";
 import { Event, LocationCandidate, Participant } from "../types/common";
 import { AIProcessingError, ErrorCodes } from "../utils/errorHandler";
@@ -11,20 +10,30 @@ import { AIProcessingError, ErrorCodes } from "../utils/errorHandler";
 // --- Gemini APIの共通設定 ---
 
 const MODEL_NAME = "gemini-1.5-flash";
+let genAI: GoogleGenerativeAI | undefined;
 
 /**
- * FunctionsのConfigからAPIキーを取得します。
+ * 環境変数からAPIキーを取得します。
  * @return {string} APIキー。
  */
 function getApiKey(): string {
-  const apiKey = functions.config().gemini?.api_key;
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    throw new Error("GEMINI_API_KEY is not configured");
+    throw new Error("GEMINI_API_KEY is not configured in .env");
   }
   return apiKey;
 }
 
-const genAI = new GoogleGenerativeAI(getApiKey());
+/**
+ * Gemini AIクライアントをシングルトンとして取得します。
+ * @return {GoogleGenerativeAI} Gemini AIクライアントインスタンス。
+ */
+function getGenAIClient(): GoogleGenerativeAI {
+  if (!genAI) {
+    genAI = new GoogleGenerativeAI(getApiKey());
+  }
+  return genAI;
+}
 
 const generationConfig = {
   temperature: 0.2,
@@ -63,6 +72,7 @@ export async function generateLocationCandidates(
   participants: Participant[]
 ): Promise<LocationCandidate[]> {
   try {
+    const client = getGenAIClient();
     logger.info("Generating location candidates with Gemini AI");
 
     // プロンプト生成
@@ -70,7 +80,7 @@ export async function generateLocationCandidates(
     logger.debug("Generated prompt:", {prompt});
 
     // Gemini API呼び出し
-    const model = genAI.getGenerativeModel({model: MODEL_NAME});
+    const model = client.getGenerativeModel({model: MODEL_NAME});
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
@@ -242,7 +252,8 @@ function getDefaultLocationCandidates(): LocationCandidate[] {
 /**
  * ユーザーレビューを分析し、良い点と懸念点を抽出します。
  * @param {string[]} reviews - 分析対象のレビューコメントの配列。
- * @return {Promise<{goodPoints: string[], badPoints: string[]}>} 良い点と懸念点のリスト。
+ * @return {Promise<{goodPoints: string[], badPoints: string[]}>}
+ * 良い点と懸念点のリスト。
  */
 export async function analyzeReviewsWithGemini(
   reviews: string[],
@@ -250,54 +261,60 @@ export async function analyzeReviewsWithGemini(
   if (reviews.length === 0) {
     return { goodPoints: [], badPoints: [] };
   }
-
-  const model = genAI.getGenerativeModel({
+  const client = getGenAIClient();
+  const model = client.getGenerativeModel({
     model: MODEL_NAME,
     generationConfig,
     safetySettings,
   });
 
-  const prompt = "以下のレストランに関するユーザーレビューを分析し、" +
-    "このレストランの「良い点」と「懸念点」をそれぞれ3〜5個の箇条書きで" +
-    `簡潔にまとめてください。
-
-レビューが少ない、または内容が偏っている場合でも、` +
-"提供された情報から総合的に判断してください。" +
-`事実に基づき、客観的な表現を心がけてください。
-
-レビュー:
-${reviews.map((r) => `- ${r}`).join("\n")}
-
-出力形式は以下のJSON形式で、日本語で記述してください。
-{
-  "goodPoints": ["良い点1", "良い点2", ...],
-  "badPoints": ["懸念点1", "懸念点2", ...]
-}`;
+  const prompt = createReviewAnalysisPrompt(reviews);
 
   try {
     const result = await model.generateContent(prompt);
     const response = result.response;
-    const jsonString = response.text()
-      .replace(/```json/g, "")
-      .replace(/```/g, "")
-      .trim();
-    const parsed = JSON.parse(jsonString);
+    const text = response.text();
+
+    const cleanedText = text.replace(/```json/g, "").replace(/```/g, "").trim();
+    const parsed = JSON.parse(cleanedText);
+
     return {
       goodPoints: parsed.goodPoints || [],
       badPoints: parsed.badPoints || [],
     };
   } catch (error) {
-    logger.error("Error analyzing reviews with Gemini:", error);
-    throw new AIProcessingError(
-      "Failed to analyze reviews",
-      ErrorCodes.GEMINI_API_ERROR,
-      error,
-    );
+    logger.error("Failed to analyze reviews with Gemini:", error);
+    return {goodPoints: [], badPoints: []}; // エラー時は空の結果を返す
   }
 }
 
 /**
- * ユーザーレビューとレストランのカテゴリ情報から、人気のあるメニュー項目を抽出します。
+ * レビュー分析用のプロンプトを作成します。
+ * @param {string[]} reviews レビューの配列
+ * @return {string} 生成されたプロンプト
+ */
+function createReviewAnalysisPrompt(reviews: string[]): string {
+  const promptParts = [
+    "以下のレストランに関するユーザーレビューを分析し、",
+    "このレストランの「良い点」と「懸念点」をそれぞれ3〜5個の箇条書きで",
+    "簡潔にまとめてください。\n\n",
+    "レビューが少ない、または内容が偏っている場合でも、",
+    "提供された情報から総合的に判断してください。",
+    "事実に基づき、客観的な表現を心がけてください。\n\n",
+    "レビュー:\n",
+    ...reviews.map((r) => `- ${r}`),
+    "\n\n出力形式は以下のJSON形式で、日本語で記述してください。\n",
+    "{\n",
+    "  \"goodPoints\": [\"良い点1\", \"良い点2\", ...],\n",
+    "  \"badPoints\": [\"懸念点1\", \"懸念点2\", ...]\n",
+    "}",
+  ];
+  return promptParts.join("");
+}
+
+/**
+ * ユーザーレビューとレストランのカテゴリ情報から、
+ * 人気のあるメニュー項目を抽出します。
  * @param {string[]} reviews - 分析対象のレビューコメントの配列。
  * @param {string[]} types - レストランのカテゴリ（例: "ramen_restaurant"）。
  * @return {Promise<string[]>} 抽出されたメニュー項目のリスト。
@@ -309,49 +326,56 @@ export async function extractMenuWithGemini(
   if (reviews.length === 0) {
     return [];
   }
-
-  const model = genAI.getGenerativeModel({
+  const client = getGenAIClient();
+  const model = client.getGenerativeModel({
     model: MODEL_NAME,
     generationConfig,
     safetySettings,
   });
 
-  const prompt = "以下のレストランに関するユーザーレビューとカテゴリ情報を分析し、" +
-    "頻繁に言及されている、または特に評価の高いメニュー項目を" +
-    `5つまで特定してください。
-
-単にメニュー名をリストアップするだけでなく、` +
-"「〇〇が人気」「〇〇が美味しいと評判」のように、" +
-"簡潔で自然な日本語の文章で説明してください。" +
-`メニューに関する言及がない場合は、空の配列を返してください。
-
-# レストランのカテゴリ情報
-- ${types.join(", ")}
-
-# ユーザーレビュー
-${reviews.map((r) => `- ${r}`).join("\n")}
-
-# 出力
-以下のJSON形式で、日本語で記述してください。
-{
-  "menuItems": ["メニュー1の説明", "メニュー2の説明", ...]
-}`;
+  const prompt = createMenuExtractionPrompt(reviews, types);
 
   try {
     const result = await model.generateContent(prompt);
     const response = result.response;
-    const jsonString = response.text()
-      .replace(/```json/g, "")
-      .replace(/```/g, "")
-      .trim();
-    const parsed = JSON.parse(jsonString);
+    const text = response.text();
+
+    const cleanedText = text.replace(/```json/g, "").replace(/```/g, "").trim();
+    const parsed = JSON.parse(cleanedText);
     return parsed.menuItems || [];
   } catch (error) {
-    logger.error("Error extracting menu with Gemini:", error);
-    throw new AIProcessingError(
-      "Failed to extract menu items",
-      ErrorCodes.GEMINI_API_ERROR,
-      error,
-    );
+    logger.error("Failed to extract menu with Gemini:", error);
+    return []; // エラー時は空の結果を返す
   }
+}
+
+/**
+ * メニュー抽出用のプロンプトを作成します。
+ * @param {string[]} reviews レビューの配列
+ * @param {string[]} types レストランカテゴリの配列
+ * @return {string} 生成されたプロンプト
+ */
+function createMenuExtractionPrompt(
+  reviews: string[],
+  types: string[],
+): string {
+  const promptParts = [
+    "以下のレストランに関するユーザーレビューとカテゴリ情報を分析し、",
+    "頻繁に言及されている、または特に評価の高いメニュー項目を",
+    "5つまで特定してください。\n\n",
+    "単にメニュー名をリストアップするだけでなく、",
+    "「〇〇が人気」「〇〇が美味しいと評判」のように、",
+    "簡潔で自然な日本語の文章で説明してください。",
+    "メニューに関する言及がない場合は、空の配列を返してください。\n\n",
+    "# レストランのカテゴリ情報\n",
+    `- ${types.join(", ")}\n\n`,
+    "# ユーザーレビュー\n",
+    ...reviews.map((r) => `- ${r}`),
+    "\n\n# 出力\n",
+    "以下のJSON形式で、日本語で記述してください。\n",
+    "{\n",
+    "  \"menuItems\": [\"メニュー1の説明\", \"メニュー2の説明\", ...]\n",
+    "}",
+  ];
+  return promptParts.join("");
 }

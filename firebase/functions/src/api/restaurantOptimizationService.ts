@@ -1,6 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Timestamp } from "firebase-admin/firestore";
-import * as functions from "firebase-functions";
 import * as logger from "firebase-functions/logger";
 import {
   AnalysisCriteria,
@@ -12,24 +11,32 @@ import {
 } from "../types/common";
 import { AIProcessingError, ErrorCodes } from "../utils/errorHandler";
 
+let genAI: GoogleGenerativeAI | undefined;
+
 /**
- * Firebase Functions ConfigからGemini APIキーを取得
+ * 環境変数からGemini APIキーを取得
  * @return {string} Gemini APIキー
  */
 function getGeminiApiKey(): string {
-  const config = functions.config();
-  const key = config.gemini?.api_key;
+  const key = process.env.GEMINI_API_KEY;
   if (!key) {
     throw new Error(
-      "GEMINI_API_KEY is not configured. Please set it using: " +
-        "firebase functions:config:set gemini.api_key=\"YOUR_KEY\""
+      "GEMINI_API_KEY is not configured. Please set it in .env file."
     );
   }
   return key;
 }
 
-const genAI = new GoogleGenerativeAI(getGeminiApiKey());
-const model = genAI.getGenerativeModel({model: "gemini-2.5-flash"});
+/**
+ * Gemini AIクライアントをシングルトンとして取得します。
+ * @return {GoogleGenerativeAI} Gemini AIクライアントインスタンス。
+ */
+function getGenAIClient(): GoogleGenerativeAI {
+  if (!genAI) {
+    genAI = new GoogleGenerativeAI(getGeminiApiKey());
+  }
+  return genAI;
+}
 
 /**
  * レストラン選択最適化のメイン関数
@@ -62,6 +69,8 @@ export async function optimizeRestaurantSelection(
     logger.debug("Generated optimization prompt");
 
     // 4. Gemini AI分析実行
+    const client = getGenAIClient();
+    const model = client.getGenerativeModel({model: "gemini-2.5-flash"});
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
