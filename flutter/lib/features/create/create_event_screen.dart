@@ -106,82 +106,89 @@ class CreateEventScreen extends HookConsumerWidget {
       body: Stack(
         alignment: Alignment.center,
         children: [
-          Column(
-            children: [
-              TextField(
-                controller: eventName,
-                decoration: const InputDecoration(labelText: 'イベント名'),
-              ),
-              Column(
-                children: [
-                  for (final candidateDateTime in candidateDateTimes.value)
-                    Row(
-                      children: [
-                        Text('${candidateDateTime.toLocal()}'),
-                        IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () =>
-                              deleteCandidateDateTime(candidateDateTime),
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextField(
+                  controller: eventName,
+                  decoration: const InputDecoration(labelText: 'イベント名'),
+                ),
+                const SizedBox(height: 16),
+                Column(
+                  children: [
+                    for (final candidateDateTime in candidateDateTimes.value)
+                      Card(
+                        child: ListTile(
+                          title: Text('${candidateDateTime.toLocal()}'),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () =>
+                                deleteCandidateDateTime(candidateDateTime),
+                          ),
                         ),
-                      ],
-                    ),
-                ],
-              ),
-              ElevatedButton(
-                onPressed: addCandidateDateTime,
-                child: const Text('日程候補を追加'),
-              ),
-              TextField(
-                controller: budgetUpperLimit,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: '予算の上限(円)'),
-              ),
-              TextField(
-                controller: minutes,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: '長さ(分)'),
-              ),
-              TextField(
-                controller: allergiesEtc,
-                decoration: const InputDecoration(labelText: 'その他のアレルギー等'),
-              ),
-              // 固定質問の入力セクション
-              Column(
-                children: [
-                  for (var i = 0; i < questionControllers.value.length; i++)
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
+                      ),
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: addCandidateDateTime,
+                  child: const Text('日程候補を追加'),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: budgetUpperLimit,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(labelText: '予算の上限(円)'),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: minutes,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(labelText: '長さ(分)'),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: allergiesEtc,
+                  decoration: const InputDecoration(labelText: 'その他のアレルギー等'),
+                ),
+                const SizedBox(height: 16),
+                Column(
+                  children: [
+                    for (var i = 0; i < questionControllers.value.length; i++)
+                      Card(
+                        child: ListTile(
+                          title: TextField(
                             controller: questionControllers.value[i],
                             decoration: InputDecoration(
                               labelText: '質問 ${i + 1}',
                             ),
                           ),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () {
+                              questionControllers.value = List.from(
+                                questionControllers.value,
+                              )..removeAt(i);
+                            },
+                          ),
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            questionControllers.value = List.from(
-                              questionControllers.value,
-                            )..removeAt(i);
-                          },
-                        ),
-                      ],
+                      ),
+                    ElevatedButton(
+                      onPressed: () {
+                        questionControllers.value = [
+                          ...questionControllers.value,
+                          TextEditingController(),
+                        ];
+                      },
+                      child: const Text('カスタムの質問を追加'),
                     ),
-                  ElevatedButton(
-                    onPressed: () {
-                      questionControllers.value = [
-                        ...questionControllers.value,
-                        TextEditingController(),
-                      ];
-                    },
-                    child: const Text('カスタムの質問を追加'),
-                  ),
-                ],
-              ),
-              ElevatedButton(onPressed: submit, child: const Text('イベントを作成')),
-            ],
+                  ],
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton(onPressed: submit, child: const Text('イベントを作成')),
+              ],
+            ),
           ),
           if (loading.value) ...[
             ModalBarrier(

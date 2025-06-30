@@ -63,7 +63,9 @@ class VoteBody extends HookConsumerWidget {
     void addCustomQA() {
       final q = customQuestionController.text;
       final a = customAnswerController.text;
-      if (q.isEmpty || a.isEmpty) return;
+      if (q.isEmpty || a.isEmpty) {
+        return;
+      }
       customQuestions.value = [
         ...customQuestions.value,
         QuestionAnswer(question: q, answer: a),
@@ -106,53 +108,50 @@ class VoteBody extends HookConsumerWidget {
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // 名前
             TextField(
               controller: nameController,
               decoration: const InputDecoration(labelText: '名前'),
             ),
             const SizedBox(height: 8),
-            // 電話番号
             TextField(
               controller: phoneController,
               keyboardType: TextInputType.phone,
               decoration: const InputDecoration(labelText: '電話番号'),
             ),
             const SizedBox(height: 8),
-            // 学年/役職
             TextField(
               controller: positionController,
               decoration: const InputDecoration(labelText: '学年/役職'),
             ),
             const SizedBox(height: 8),
-            // 希望予算
             TextField(
               controller: budgetController,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(labelText: '希望予算'),
             ),
             const SizedBox(height: 16),
-            // 候補日時から選択
             const Text('日時候補', style: TextStyle(fontWeight: FontWeight.bold)),
             for (final cd in value.candidateDateTimes)
-              CheckboxListTile(
-                title: Text(
-                  '${cd.start.toLocal()} - ${cd.start.add(Duration(minutes: value.minutes)).toLocal()}',
+              Card(
+                child: CheckboxListTile(
+                  title: Text(
+                    '${cd.start.toLocal()} - ${cd.start.add(Duration(minutes: value.minutes)).toLocal()}',
+                  ),
+                  value: desiredDates.value.contains(cd.start),
+                  onChanged: (selected) {
+                    final list = List<DateTime>.from(desiredDates.value);
+                    if (selected == true) {
+                      list.add(cd.start);
+                    } else {
+                      list.remove(cd.start);
+                    }
+                    desiredDates.value = list;
+                  },
                 ),
-                value: desiredDates.value.contains(cd.start),
-                onChanged: (selected) {
-                  final list = List<DateTime>.from(desiredDates.value);
-                  if (selected == true) {
-                    list.add(cd.start);
-                  } else {
-                    list.remove(cd.start);
-                  }
-                  desiredDates.value = list;
-                },
               ),
             const SizedBox(height: 16),
-            // 場所候補を文字列で追加
             const Text('場所候補', style: TextStyle(fontWeight: FontWeight.bold)),
             TextField(
               decoration: const InputDecoration(labelText: '場所候補を入力'),
@@ -163,22 +162,20 @@ class VoteBody extends HookConsumerWidget {
                 }
               },
             ),
-            for (final location in desiredLocations.value)
-              Row(
-                children: [
-                  Expanded(child: Text(location)),
-                  IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () {
+            Wrap(
+              spacing: 8,
+              children: [
+                for (final location in desiredLocations.value)
+                  Chip(
+                    label: Text(location),
+                    onDeleted: () {
                       desiredLocations.value = List.from(desiredLocations.value)
                         ..remove(location);
                     },
                   ),
-                ],
-              ),
-
+              ],
+            ),
             const SizedBox(height: 16),
-            // 質問への回答
             for (final q in value.fixedQuestion)
               Padding(
                 padding: const EdgeInsets.only(bottom: 8),
@@ -188,7 +185,6 @@ class VoteBody extends HookConsumerWidget {
                 ),
               ),
             const SizedBox(height: 16),
-            // カスタム質問追加
             TextField(
               controller: customQuestionController,
               decoration: const InputDecoration(labelText: '追加質問'),
@@ -204,20 +200,18 @@ class VoteBody extends HookConsumerWidget {
               child: const Text('カスタム質問を追加'),
             ),
             for (final qa in customQuestions.value)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('${qa.question}: ${qa.answer}'),
-                  IconButton(
+              Card(
+                child: ListTile(
+                  title: Text('${qa.question}: ${qa.answer}'),
+                  trailing: IconButton(
                     icon: const Icon(Icons.delete),
                     onPressed: () =>
                         customQuestions.value = List.from(customQuestions.value)
                           ..remove(qa),
                   ),
-                ],
+                ),
               ),
             const SizedBox(height: 16),
-            // アレルギー等
             TextField(
               controller: allergiesController,
               decoration: const InputDecoration(labelText: 'アレルギー等'),
